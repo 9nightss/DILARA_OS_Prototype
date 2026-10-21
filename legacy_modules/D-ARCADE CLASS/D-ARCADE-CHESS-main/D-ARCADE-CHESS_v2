@@ -1,0 +1,247 @@
+# ======================================================================================================
+#  ______   ___  _   _ ___ ____ _   _ _____  __        ___   _ ____    _   _ _____ ____  _____  ______  
+# / / / /  / _ \| \ | |_ _/ ___| | | |_   _| \ \      / / | | / ___|  | | | | ____|  _ \| ____| \ \ \ \ 
+#/ / / /  | (_) |  \| || | |  _| |_| | | |    \ \ /\ / /| | | \___ \  | |_| |  _| | |_) |  _|    \ \ \ \
+#\ \ \ \   \__, | |\  || | |_| |  _  | | |     \ V  V / | |_| |___) | |  _  | |___|  _ <| |___   / / / /
+# \_\_\_\    /_/|_| \_|___\____|_| |_| |_|      \_/\_/   \___/|____/  |_| |_|_____|_| \_\_____| /_/_/_/ 
+# ======================================================================================================
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+from PIL import Image, ImageTk
+import winsound
+import time
+
+# --- SETTINGS ---
+BOARD_SIZE = 8
+SQUARE_SIZE = 80
+
+# --- EVALUATION TABLES (The Math) ---
+PAWN_TABLE = [[0,0,0,0,0,0,0,0],[50,50,50,50,50,50,50,50],[10,10,20,30,30,20,10,10],[5,5,10,25,25,10,5,5],[0,0,0,20,20,0,0,0],[5,-5,-10,0,0,-10,-5,5],[5,10,10,-20,-20,10,10,5],[0,0,0,0,0,0,0,0]]
+KNIGHT_TABLE = [[-50,-40,-30,-30,-30,-30,-40,-50],[-40,-20,0,0,0,0,-20,-40],[-30,0,10,15,15,10,0,-30],[-30,5,15,20,20,15,5,-30],[-30,0,15,20,20,15,0,-30],[-30,5,10,15,15,10,5,-30],[-40,-20,0,5,5,0,-20,-40],[-50,-40,-30,-30,-30,-30,-40,-50]]
+BISHOP_TABLE = [[-20,-10,-10,-10,-10,-10,-10,-20],[-10,0,0,0,0,0,0,-10],[-10,0,5,10,10,5,0,-10],[-10,5,5,10,10,5,5,-10],[-10,0,10,10,10,10,0,-10],[-10,10,10,10,10,10,10,-10],[-10,5,0,0,0,0,5,-10],[-20,-10,-10,-10,-10,-10,-10,-20]]
+ROOK_TABLE = [[0,0,0,5,5,0,0,0],[5,10,10,10,10,10,10,5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[-5,0,0,0,0,0,0,-5],[0,0,0,5,5,0,0,0]]
+QUEEN_TABLE = [[-20,-10,-10,-5,-5,-10,-10,-20],[-10,0,0,0,0,0,0,-10],[-10,0,5,5,5,5,0,-10],[-5,0,5,5,5,5,0,-5],[0,0,5,5,5,5,0,-5],[-10,5,5,5,5,5,0,-10],[-10,0,5,0,0,0,0,-10],[-20,-10,-10,-5,-5,-10,-10,-20]]
+KING_TABLE = [[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-30,-40,-40,-50,-50,-40,-40,-30],[-20,-30,-30,-40,-40,-30,-30,-20],[-10,-20,-20,-20,-20,-20,-20,-10],[20, 20,  0,  0,  0,  0, 20, 20],[20, 30, 10,  0,  0, 10, 30, 20]]
+
+PIECE_VALUES = {'pawn': 100, 'knight': 320, 'bishop': 330, 'rook': 500, 'queen': 900, 'king': 20000}
+
+class ChessGame:
+    def __init__(self, root, mode="ai"):
+        self.root = root
+        self.mode = mode
+        self.images = {}
+        
+        # UI Structure
+        self.board_frame = tk.Frame(self.root)
+        self.board_frame.pack()
+        
+        self.control_frame = tk.Frame(self.root, height=50)
+        self.control_frame.pack(fill="x")
+        
+        for i in range(8):
+            self.board_frame.grid_rowconfigure(i, minsize=SQUARE_SIZE)
+            self.board_frame.grid_columnconfigure(i, minsize=SQUARE_SIZE)
+
+        self.restart_btn = tk.Button(self.control_frame, text="RESET GAME", command=self.reset_game, 
+                                     bg="#222", fg="white", font=("Arial", 10, "bold"))
+        self.restart_btn.pack(fill="both", expand=True)
+
+        self.buttons = [[None for _ in range(8)] for _ in range(8)]
+        for r in range(BOARD_SIZE):
+            for c in range(BOARD_SIZE):
+                btn = tk.Button(self.board_frame, command=lambda r=r, c=c: self.on_square_click(r, c))
+                btn.grid(row=r, column=c, sticky="nsew")
+                self.buttons[r][c] = btn
+                
+        self.reset_game()
+
+    def reset_game(self):
+        self.board = [
+            ["b_rook", "b_knight", "b_bishop", "b_queen", "b_king", "b_bishop", "b_knight", "b_rook"],
+            ["b_pawn"] * 8, ["" ] * 8, ["" ] * 8, ["" ] * 8, ["" ] * 8, ["w_pawn"] * 8,
+            ["w_rook", "w_knight", "w_bishop", "w_queen", "w_king", "w_bishop", "w_knight", "w_rook"]
+        ]
+        self.turn = "w"
+        self.selected_square = None
+        self.highlighted = []
+        self.has_moved = {'w_king':False, 'b_king':False, 'w_rook_0':False, 'w_rook_7':False, 'b_rook_0':False, 'b_rook_7':False}
+        self.update_visuals()
+
+    def load_image(self, piece):
+        if piece not in self.images:
+            img = Image.open(f"pieces/{piece}.png").resize((SQUARE_SIZE-10, SQUARE_SIZE-10), Image.Resampling.LANCZOS)
+            self.images[piece] = ImageTk.PhotoImage(img)
+        return self.images[piece]
+
+    def update_visuals(self):
+        for r in range(8):
+            for c in range(8):
+                piece = self.board[r][c]
+                color = "#b22f13" if (r + c) % 2 == 0 else "#363231"
+                if (r, c) in self.highlighted: color = "#7a7a7a"
+                self.buttons[r][c].config(bg=color, image="")
+                if piece: self.buttons[r][c].config(image=self.load_image(piece))
+
+    def get_raw_moves(self, r, c, board):
+        piece = board[r][c]
+        if not piece: return []
+        color, p_type = piece.split("_")
+        moves = []
+        if p_type == "pawn":
+            fwd = -1 if color == 'w' else 1
+            if 0 <= r+fwd < 8 and not board[r+fwd][c]:
+                moves.append((r+fwd, c))
+                start = 6 if color == 'w' else 1
+                if r == start and not board[r+2*fwd][c] and not board[r+fwd][c]: moves.append((r+2*fwd, c))
+            for dc in [-1, 1]:
+                if 0 <= r+fwd < 8 and 0 <= c+dc < 8:
+                    target = board[r+fwd][c+dc]
+                    if target and not target.startswith(color): moves.append((r+fwd, c+dc))
+        elif p_type == "knight":
+            for dr, dc in [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]:
+                nr, nc = r+dr, c+dc
+                if 0 <= nr < 8 and 0 <= nc < 8:
+                    if not board[nr][nc] or not board[nr][nc].startswith(color): moves.append((nr, nc))
+        elif p_type == "king":
+            for dr in [-1,0,1]:
+                for dc in [-1,0,1]:
+                    nr, nc = r+dr, c+dc
+                    if 0 <= nr < 8 and 0 <= nc < 8 and (dr != 0 or dc != 0):
+                        if not board[nr][nc] or not board[nr][nc].startswith(color): moves.append((nr, nc))
+        else:
+            dirs = [(0,1),(0,-1),(1,0),(-1,0)] if p_type=="rook" else [(1,1),(1,-1),(-1,1),(-1,-1)] if p_type=="bishop" else [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
+            for dr, dc in dirs:
+                nr, nc = r+dr, c+dc
+                while 0 <= nr < 8 and 0 <= nc < 8:
+                    if not board[nr][nc]: moves.append((nr, nc))
+                    elif not board[nr][nc].startswith(color): moves.append((nr, nc)); break
+                    else: break
+                    nr, nc = nr+dr, nc+dc
+        return moves
+
+    def is_attacked(self, r, c, color, board):
+        opp = 'b' if color == 'w' else 'w'
+        for row in range(8):
+            for col in range(8):
+                if board[row][col].startswith(opp):
+                    if (r, c) in self.get_raw_moves(row, col, board): return True
+        return False
+
+    def is_in_check(self, color, board):
+        kp = next(( (r,c) for r in range(8) for c in range(8) if board[r][c]==f"{color}_king"), None)
+        return self.is_attacked(kp[0], kp[1], color, board) if kp else False
+
+    def get_legal_moves(self, color, board):
+        legal = []
+        for r in range(8):
+            for c in range(8):
+                if board[r][c].startswith(color):
+                    for er, ec in self.get_raw_moves(r, c, board):
+                        tmp = [row[:] for row in board]; tmp[er][ec], tmp[r][c] = tmp[r][c], ""
+                        if not self.is_in_check(color, tmp): legal.append((r, c, er, ec))
+        # Castling logic
+        row = 7 if color == 'w' else 0
+        if not self.has_moved[f'{color}_king'] and not self.is_in_check(color, board):
+            if not self.has_moved[f'{color}_rook_7'] and not board[row][5] and not board[row][6]:
+                if not self.is_attacked(row, 5, color, board) and not self.is_attacked(row, 6, color, board):
+                    legal.append((row, 4, row, 6))
+            if not self.has_moved[f'{color}_rook_0'] and not board[row][1] and not board[row][2] and not board[row][3]:
+                if not self.is_attacked(row, 2, color, board) and not self.is_attacked(row, 3, color, board):
+                    legal.append((row, 4, row, 2))
+        return legal
+
+    def move_piece(self, sr, sc, er, ec):
+        p = self.board[sr][sc]
+        if p.endswith("_king") and abs(ec-sc) == 2:
+            rook_sc, rook_ec = (7, 5) if ec == 6 else (0, 3)
+            self.board[sr][rook_ec], self.board[sr][rook_sc] = self.board[sr][rook_sc], ""
+        
+        if p == "w_king": self.has_moved['w_king'] = True
+        elif p == "b_king": self.has_moved['b_king'] = True
+        elif p.endswith("_rook"): self.has_moved[f"{p[:1]}_rook_{sc}"] = True
+
+        self.board[er][ec], self.board[sr][sc] = p, ""
+        if p.endswith("_pawn") and (er == 0 or er == 7):
+            res = "queen" if self.turn=='b' and self.mode=="ai" else simpledialog.askstring("Pawn", "Promote to:")
+            self.board[er][ec] = f"{self.turn}_{res if res in ['queen','rook','bishop','knight'] else 'queen'}"
+        
+        winsound.Beep(500, 50)
+        self.check_game_over()
+
+    def check_game_over(self):
+        nt = 'b' if self.turn == 'w' else 'w'
+        if not self.get_legal_moves(nt, self.board):
+            msg = "Checkmate!" if self.is_in_check(nt, self.board) else "Stalemate!"
+            messagebox.showinfo("Game Over", msg)
+
+    def evaluate(self, b):
+        s = 0
+        for r in range(8):
+            for c in range(8):
+                if not b[r][c]: continue
+                clr, typ = b[r][c].split("_")
+                tab = {"pawn":PAWN_TABLE,"knight":KNIGHT_TABLE,"bishop":BISHOP_TABLE,"rook":ROOK_TABLE,"queen":QUEEN_TABLE,"king":KING_TABLE}[typ]
+                val = PIECE_VALUES[typ] + tab[r if clr=='w' else (7-r)][c]
+                s += val if clr=='w' else -val
+        return s
+
+    def minimax(self, b, d, a, bt, m):
+        if d == 0: return self.evaluate(b), None
+        moves = self.get_legal_moves('w' if m else 'b', b)
+        if not moves: return self.evaluate(b), None
+        best_m = None
+        if m:
+            max_v = -1e6
+            for mv in moves:
+                tmp = [row[:] for row in b]; tmp[mv[2]][mv[3]], tmp[mv[0]][mv[1]] = tmp[mv[0]][mv[1]], ""
+                v = self.minimax(tmp, d-1, a, bt, False)[0]
+                if v > max_v: max_v, best_m = v, mv
+                a = max(a, v); 
+                if bt <= a: break
+            return max_v, best_m
+        else:
+            min_v = 1e6
+            for mv in moves:
+                tmp = [row[:] for row in b]; tmp[mv[2]][mv[3]], tmp[mv[0]][mv[1]] = tmp[mv[0]][mv[1]], ""
+                v = self.minimax(tmp, d-1, a, bt, True)[0]
+                if v < min_v: min_v, best_m = v, mv
+                bt = min(bt, v); 
+                if bt <= a: break
+            return min_v, best_m
+
+    def ai_move(self):
+        moves = self.get_legal_moves('b', self.board)
+        if not moves: return
+        scored = []
+        for m in moves:
+            tmp = [row[:] for row in self.board]; tmp[m[2]][m[3]], tmp[m[0]][m[1]] = tmp[m[0]][m[1]], ""
+            scored.append((self.evaluate(tmp), m))
+        scored.sort(key=lambda x: x[0])
+        colors = ["#4B0082", "#8A2BE2", "#9370DB", "#BA55D3", "#DDA0DD"]
+        for i, (s, m) in enumerate(reversed(scored[:5])): self.buttons[m[2]][m[3]].config(bg=colors[i%5])
+        self.root.update()
+        time.sleep(0.6)
+        _, best = self.minimax(self.board, 3, -1e6, 1e6, False)
+        if best: self.move_piece(*best); self.turn = 'w'
+        self.update_visuals()
+
+    def on_square_click(self, r, c):
+        if self.turn == 'b' and self.mode == "ai": return
+        legal = self.get_legal_moves(self.turn, self.board)
+        if self.selected_square:
+            sr, sc = self.selected_square
+            if (sr, sc, r, c) in legal:
+                self.move_piece(sr, sc, r, c); self.turn = 'b'; self.selected_square = None; self.highlighted = []
+                self.update_visuals()
+                if self.mode == "ai": self.root.after(400, self.ai_move)
+            else: self.selected_square = None; self.on_square_click(r, c)
+        elif self.board[r][c].startswith(self.turn):
+            self.selected_square = (r, c)
+            self.highlighted = [(m[2], m[3]) for m in legal if m[0] == r and m[1] == c]
+        self.update_visuals()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Final Mathematical Chess AI")
+    game = ChessGame(root)
+    root.mainloop()

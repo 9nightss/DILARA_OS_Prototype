@@ -1,0 +1,2 @@
+# The shell foundation uses only the Python standard library.
+# Legacy modules have their own dependencies; do not install them globally until their adapters are selected.
