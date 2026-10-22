@@ -13,3 +13,12 @@
 11. **Remaining work.** Build a real EYE camera grid/stream lifecycle, improve process tracking and shutdown, test dependency manifests, inspect legacy utilities/destructive actions, harden resource validation, and validate the full GUI on Windows.
 12. **Motion tessellation + app registration fixes.** Desktop background now animates a restrained triangular tessellation at roughly 8 FPS; app windows and controls are not animated. Apps & Users includes a Browse picker for Python scripts/folders, URL-specific guidance, automatic ID/name suggestions, and registry path/scheme validation. These changes pass syntax and unit tests but still need GUI runtime validation on Windows.
 13. **Packaging.** ZIP is a portable source bundle; it is not yet a signed executable or installer. Verify on a clean Windows environment before distribution.
+
+
+## DILARA Browser integration (current)
+
+- Added a `BROWSER` desktop workspace and sidebar entry. It launches `browser/browser_app.py` as a child process; Qt WebEngine is not embedded into Tkinter.
+- Browser profile, cookies, cache, and history are isolated under `data/users/<username>/browser_data/` through `DILARA_BROWSER_DATA`.
+- The shell records only browser lifecycle metadata, not URLs or search terms.
+- Install optional dependencies from `browser/requirements.txt` to enable the browser. The core shell remains standard-library-only.
+- IPC, cross-process focus, URL handoff to an already-running instance, and graceful close messaging remain future work. The browser is not force-terminated when its shell workspace closes.

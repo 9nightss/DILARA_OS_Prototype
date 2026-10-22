@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
 import math
+import os
 import subprocess
 import sys
 import tkinter as tk
@@ -10,8 +11,10 @@ from pathlib import Path
 from services.activity_log import ActivityLogger, ActivityLogError
 from services.kod8_adapter import Kod8Adapter
 from services.auth import UserStore, AuthError
+from services.vault_manager import VaultManager, VaultError
 from services.app_registry import AppRegistry
 from services.offline_assistant import respond as offline_respond
+from browser.browser_adapter import BrowserAdapter
 
 APP_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = APP_DIR / "config"
@@ -28,6 +31,15 @@ ACCENT = "#4ed6c5"
 ACCENT_2 = "#d17dff"
 WARN = "#f0b56a"
 
+
+def _format_file_size(size: int) -> str:
+    units = ("B", "KB", "MB", "GB", "TB")
+    value = float(size)
+    for unit in units:
+        if value < 1024 or unit == units[-1]:
+            return f"{int(value)} {unit}" if unit == "B" else f"{value:.1f} {unit}"
+        value /= 1024
+
 MODULES = [
     ("DSPACE", "Network atlas", "Country-based resource and site directory."),
     ("CYBERSTORM", "FTP / remote resources", "Country-based FTP and remote-resource directory."),
@@ -37,6 +49,8 @@ MODULES = [
     ("D-LLM", "Language model", "Local/custom assistant and model services."),
     ("D-TERMINAL", "PowerShell console", "Standard-user console; privileged actions should be explicit."),
     ("CHAOS", "Network diagnostics", "Bounded, authorized diagnostics with scope and cancellation."),
+    ("BROWSER", "DILARA Browser", "Custom Chromium-based browser with a dedicated local profile."),
+    ("FILES", "Virtual file system", "Per-user directory tree stored in an encrypted single-file vault."),
 ]
 
 class DesktopWindow:
@@ -80,7 +94,7 @@ class DesktopWindow:
                          activeforeground=TEXT, relief="flat", bd=0, width=3, font=("Segoe UI", 10), cursor="hand2")
 
     def _build_content(self):
-        if self.key in {"DSPACE", "CYBERSTORM", "EYE", "D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS"}:
+        if self.key in {"DSPACE", "CYBERSTORM", "EYE", "D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS", "BROWSER", "FILES"}:
             self.app.build_workspace(self)
             return
         tk.Label(self.body, text=self.key, bg=PANEL, fg=ACCENT, font=("Segoe UI", 22, "bold")).pack(anchor="w")
@@ -158,13 +172,19 @@ class DesktopWindow:
         self.app.refresh_taskbar()
 
 class DilaraApp:
-    def __init__(self, root: tk.Tk, user: dict):
+    def __init__(self, root: tk.Tk, user: dict, vault: VaultManager):
         self.root = root
         self.user = user
-        self.user_dir = APP_DIR / "data" / "users" / user["username"]
+        self.vault = vault
+        if not self.vault.is_open or self.vault.root is None:
+            raise VaultError("Cannot start the desktop without an unlocked user vault.")
+        # User-owned state lives inside the unlocked root so it is sealed with the vault.
+        self.user_dir = self.vault.root / "Applications" / "DILARA"
         self.user_dir.mkdir(parents=True, exist_ok=True)
         self.state_file = self.user_dir / "desktop_state.json"
-        self.app_registry = AppRegistry(APP_DIR)
+        self.app_registry = AppRegistry(self.vault.root / "Applications" / "Registry")
+        # Browser data is separated by DILARA application user; URLs are never activity-logged.
+        self.browser_adapter = BrowserAdapter(self.vault.root / "Applications" / "Browser")
         self.root.title("DILARA // Desktop Environment")
         self.root.geometry("1440x900")
         self.root.minsize(980, 620)
@@ -331,6 +351,219 @@ class DilaraApp:
             self._build_terminal_workspace(win)
         elif key == "CHAOS":
             self._build_chaos_workspace(win)
+        elif key == "BROWSER":
+            self._build_browser_workspace(win)
+        elif key == "FILES":
+            self._build_files_workspace(win)
+
+    def _build_browser_workspace(self, win):
+        body = win.body
+        tk.Label(body, text="DILARA BROWSER // WEB ACCESS", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body,
+                 text="A custom PyQt6 browser using Qt WebEngine (Chromium). It runs as a separate process so its Qt event loop stays isolated from this Tkinter desktop.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=490,
+                 justify="left").pack(anchor="w", pady=(5, 12))
+        tk.Label(body, text="Optional starting address or search", bg=PANEL, fg=MUTED,
+                 font=("Segoe UI", 9)).pack(anchor="w")
+        address = tk.Entry(body, bg="#0a1119", fg=TEXT, insertbackground=TEXT, relief="flat")
+        address.pack(fill="x", pady=(4, 10), ipady=6)
+        status = tk.Label(body, text="STATUS  •  Browser not launched in this session", bg=PANEL,
+                          fg=MUTED, font=("Consolas", 8), wraplength=490, justify="left")
+        status.pack(anchor="w", pady=(0, 10))
+
+        def launch():
+            if self.browser_adapter.is_running():
+                status.configure(text="STATUS  •  Browser process is already running. Use the Windows taskbar to bring its window forward; cross-process focus and URL handoff are not implemented yet.", fg=WARN)
+                return
+            target = address.get().strip() or None
+            try:
+                self.browser_adapter.launch(target)
+                status.configure(text="STATUS  •  Browser launched. Its profile and history are stored under this DILARA user's data folder.", fg=ACCENT)
+                # Log only lifecycle metadata; never include the address or search terms.
+                self._record_activity("browser_launched", "BROWSER")
+            except (OSError, FileNotFoundError, RuntimeError) as exc:
+                status.configure(text=f"STATUS  •  Launch failed: {exc}", fg=WARN)
+                messagebox.showerror("DILARA Browser", f"Could not launch the browser:\n{exc}")
+
+        tk.Button(body, text="Launch DILARA Browser", command=launch, bg=ACCENT,
+                  fg="#071014", activebackground="#7ce7dc", relief="flat",
+                  padx=14, pady=8, font=("Segoe UI Semibold", 9), cursor="hand2").pack(anchor="w")
+        tk.Frame(body, bg=BORDER, height=1).pack(fill="x", pady=14)
+        tk.Label(body, text="CURRENT SCOPE", bg=PANEL, fg=MUTED,
+                 font=("Segoe UI", 8, "bold")).pack(anchor="w")
+        tk.Label(body,
+                 text="Tabs, navigation, search, dedicated profile, local history and privacy controls are provided by the browser app. Bookmarks, download management and password saving are intentionally omitted. Downloads and site feature permissions are blocked by default.",
+                 bg=PANEL, fg=TEXT, font=("Segoe UI", 9), wraplength=490,
+                 justify="left").pack(anchor="w", pady=(5, 8))
+        tk.Label(body,
+                 text="Integration note: this first bridge can launch and track the process, but does not yet provide IPC for focusing an existing browser, opening a URL in an existing instance, or graceful close requests. Closing this DILARA workspace does not force-close the browser.",
+                 bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=490,
+                 justify="left").pack(anchor="w")
+
+    def _build_files_workspace(self, win):
+        """Small tree-based UI backed by the currently unlocked per-user vault."""
+        from tkinter import simpledialog
+        body = win.body
+        root_path = self.vault.root
+        if root_path is None:
+            tk.Label(body, text="VAULT IS LOCKED", bg=PANEL, fg=WARN).pack(anchor="w")
+            return
+        tk.Label(body, text="VIRTUAL ROOT  /  ENCRYPTED USER VAULT", bg=PANEL, fg=MUTED,
+                 font=("Consolas", 8)).pack(anchor="w", pady=(0, 8))
+        path_label = tk.Label(body, text="/", bg=PANEL, fg=ACCENT, font=("Consolas", 9), anchor="w")
+        path_label.pack(fill="x", pady=(0, 7))
+        tree_frame = tk.Frame(body, bg=PANEL)
+        tree_frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(tree_frame, columns=("kind", "size"), show="tree headings", selectmode="browse")
+        tree.heading("#0", text="Name", anchor="w")
+        tree.heading("kind", text="Type", anchor="w")
+        tree.heading("size", text="Size", anchor="e")
+        tree.column("#0", width=270, stretch=True)
+        tree.column("kind", width=90, stretch=False)
+        tree.column("size", width=80, stretch=False, anchor="e")
+        scroll = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scroll.set)
+        tree.pack(side="left", fill="both", expand=True)
+        scroll.pack(side="right", fill="y")
+        paths = {}
+
+        def safe_inside(path):
+            resolved = Path(path).resolve()
+            if not resolved.is_relative_to(root_path.resolve()):
+                raise ValueError("That path is outside the current user's virtual root.")
+            return resolved
+
+        def refresh(select_path=None):
+            for item in tree.get_children():
+                tree.delete(item)
+            paths.clear()
+            path_label.configure(text="/  (user root)")
+            def add_directory(folder, parent_iid=""):
+                try:
+                    children = sorted(folder.iterdir(), key=lambda item: (not item.is_dir(), item.name.casefold()))
+                except OSError:
+                    return
+                for child in children:
+                    if child.is_symlink():
+                        continue
+                    try:
+                        child = safe_inside(child)
+                    except ValueError:
+                        continue
+                    is_dir = child.is_dir()
+                    size = "—" if is_dir else _format_file_size(child.stat().st_size)
+                    iid = f"node{len(paths)}"
+                    paths[iid] = child
+                    tree.insert(parent_iid, "end", iid=iid, text=("▸  " if is_dir else "   ") + child.name,
+                                values=("Folder" if is_dir else child.suffix.lower() or "File", size),
+                                open=(parent_iid == ""))
+                    if is_dir:
+                        add_directory(child, iid)
+            add_directory(root_path)
+            if select_path:
+                for iid, path in paths.items():
+                    if path == select_path:
+                        tree.selection_set(iid); tree.see(iid); break
+
+        def selected_path():
+            selected = tree.selection()
+            if not selected:
+                return root_path
+            return paths.get(selected[0], root_path)
+
+        def target_directory():
+            path = selected_path()
+            return path if path.is_dir() else path.parent
+
+        def new_folder():
+            parent = target_directory()
+            name = simpledialog.askstring("Create folder", "Folder name:", parent=win.frame)
+            if not name:
+                return
+            if name in {".", ".."} or "/" in name or "\\" in name or Path(name).name != name:
+                messagebox.showwarning("Files", "Enter a single folder name, not a path.", parent=win.frame); return
+            try:
+                destination = safe_inside(parent / name)
+                destination.mkdir()
+                refresh(destination)
+            except FileExistsError:
+                messagebox.showwarning("Files", "An item with that name already exists.", parent=win.frame)
+            except (OSError, ValueError) as exc:
+                messagebox.showerror("Files", str(exc), parent=win.frame)
+
+        def edit_file(path, initial_text=None):
+            try:
+                path = safe_inside(path)
+                content = path.read_text(encoding="utf-8") if initial_text is None else initial_text
+            except UnicodeDecodeError:
+                messagebox.showwarning("Files", "This file is not UTF-8 text and cannot be opened in the built-in editor.", parent=win.frame); return
+            except OSError as exc:
+                messagebox.showerror("Files", f"Could not open file: {exc}", parent=win.frame); return
+            editor = tk.Toplevel(self.root)
+            editor.title(f"DILARA Notepad // {path.name}")
+            editor.geometry("760x560")
+            editor.configure(bg=BG)
+            editor.transient(self.root)
+            header = tk.Frame(editor, bg=PANEL_2, padx=12, pady=8); header.pack(fill="x")
+            tk.Label(header, text=str(path.relative_to(root_path)).replace("\\", "/"), bg=PANEL_2, fg=ACCENT,
+                     font=("Consolas", 9)).pack(side="left")
+            text_widget = tk.Text(editor, bg="#080d13", fg=TEXT, insertbackground=TEXT, wrap="none",
+                                  undo=True, relief="flat", font=("Consolas", 10))
+            text_widget.pack(fill="both", expand=True, padx=8, pady=8)
+            text_widget.insert("1.0", content)
+            def save():
+                try:
+                    checked = safe_inside(path)
+                    temp = checked.with_name(checked.name + ".tmp")
+                    temp.write_text(text_widget.get("1.0", "end-1c"), encoding="utf-8")
+                    os.replace(temp, checked)
+                    refresh(checked)
+                    messagebox.showinfo("Notepad", "Saved to the unlocked user vault workspace.", parent=editor)
+                except (OSError, ValueError) as exc:
+                    messagebox.showerror("Notepad", f"Save failed: {exc}", parent=editor)
+            tk.Button(header, text="Save", command=save, bg=ACCENT, fg="#071014", relief="flat", padx=12).pack(side="right")
+            editor.grab_set()
+            editor.focus_set()
+
+        def new_text():
+            parent = target_directory()
+            name = simpledialog.askstring("New text file", "File name (extension optional):", parent=win.frame)
+            if not name:
+                return
+            if name in {".", ".."} or "/" in name or "\\" in name or Path(name).name != name:
+                messagebox.showwarning("Files", "Enter a single file name, not a path.", parent=win.frame); return
+            if not Path(name).suffix:
+                name += ".txt"
+            try:
+                destination = safe_inside(parent / name)
+                with destination.open("x", encoding="utf-8") as handle:
+                    handle.write("")
+                refresh(destination)
+                edit_file(destination, "")
+            except FileExistsError:
+                messagebox.showwarning("Files", "An item with that name already exists.", parent=win.frame)
+            except (OSError, ValueError) as exc:
+                messagebox.showerror("Files", str(exc), parent=win.frame)
+
+        def open_selected(_event=None):
+            path = selected_path()
+            if path.is_dir():
+                try:
+                    path_label.configure(text="/" + path.relative_to(root_path).as_posix().strip("."))
+                except ValueError:
+                    path_label.configure(text="/")
+                return
+            edit_file(path)
+
+        actions = tk.Frame(body, bg=PANEL); actions.pack(fill="x", pady=(8, 0))
+        for label, command in (("New folder", new_folder), ("New text file", new_text), ("Open / edit", open_selected), ("Refresh", lambda: refresh())):
+            tk.Button(actions, text=label, command=command, bg=PANEL_2, fg=TEXT, activebackground=BORDER,
+                      relief="flat", padx=9, pady=6, font=("Segoe UI", 8), cursor="hand2").pack(side="left", padx=(0, 5))
+        tree.bind("<Double-1>", open_selected)
+        refresh()
+        tk.Label(body, text="Files are staged in the active session and encrypted into the user's .dvault container when signing out. Do not force-close DILARA while files are being saved.",
+                 bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=500, justify="left").pack(anchor="w", pady=(8, 0))
 
     def _build_resource_workspace(self, win):
         key = win.key
@@ -356,7 +589,7 @@ class DilaraApp:
         tree.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview); scrollbar.pack(side="right", fill="y")
         tree.configure(yscrollcommand=scrollbar.set)
-        store_path = self.user_dir / ("cameras.json" if key == "EYE" else "ftp_resources.json" if key == "CYBERSTORM" else "dspace_resources.json")
+        store_path = self.user_dir / "resources" / ("cameras.json" if key == "EYE" else "ftp_resources.json" if key == "CYBERSTORM" else "dspace_resources.json")
         def read_items():
             try:
                 raw = json.loads(store_path.read_text(encoding="utf-8"))
@@ -412,7 +645,7 @@ class DilaraApp:
             ("Lightcycle", base/"D-ARCADE-Trolightcycle-main"/"D-ARCADE-Tron-Lightcycle.py", "pygame"),
             ("Maze 1", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGPT.py", "tkinter / source-dependent"),
             ("Maze 2", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ.py", "tkinter / source-dependent"),
-            ("Maze 3", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ2.py", "tkinter / source-dependent")
+            ("Maze 3", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ2.py", "tkinter / source-dependent"),
             ("Tic-tac-toe 1", base/"magenta-tictactoe-main"/"magenta-tic-tac-toe.py", "console"),
             ("Tic-tac-toe 2", base/"magenta-tictactoe-main"/"tic-tac-toe.py", "console"),
         ]
@@ -636,13 +869,24 @@ class DilaraApp:
         except (OSError, ValueError) as exc: messagebox.showerror("App registry", str(exc))
 
     def sign_out(self):
-        if not messagebox.askyesno("Sign out", f"Sign out {self.user['username']} and return to the login page?"): return
+        if not messagebox.askyesno("Sign out", f"Save and encrypt {self.user['username']}'s vault, then return to the login page?"): return
+        if self.browser_adapter.is_running():
+            messagebox.showwarning("Close browser first", "DILARA Browser is still running and uses this user's vault. Close the browser window, then sign out so its profile can be sealed consistently.")
+            return
+        try:
+            self.vault.seal()
+        except (VaultError, OSError) as exc:
+            messagebox.showerror("Vault", f"The vault could not be sealed. Your session remains open so you can retry.\n\n{exc}")
+            return
         self._record_activity("user_signed_out", "SYSTEM")
         for child in self.root.winfo_children(): child.destroy()
-        def enter(user):
-            for child in self.root.winfo_children(): child.destroy()
-            DilaraApp(self.root, user)
-        AuthGate(self.root, enter)
+        AuthGate(self.root, self._enter_user)
+
+    def _enter_user(self, user, password):
+        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault.unlock(password)
+        for child in self.root.winfo_children(): child.destroy()
+        DilaraApp(self.root, user, vault)
 
     def open_path(self, path):
         try:
@@ -709,9 +953,18 @@ class DilaraApp:
         self.root.after(1000, self._tick_clock)
 
     def shutdown(self):
-        if messagebox.askyesno("DILARA", "Close the DILARA desktop session?"):
-            self._record_activity("session_ended", "SYSTEM")
-            self.root.destroy()
+        if not messagebox.askyesno("DILARA", "Save and encrypt the user vault, then close DILARA?"):
+            return
+        if self.browser_adapter.is_running():
+            messagebox.showwarning("Close browser first", "DILARA Browser is still running and uses this user's vault. Close the browser window before exiting DILARA.")
+            return
+        try:
+            self.vault.seal()
+        except (VaultError, OSError) as exc:
+            messagebox.showerror("Vault", f"The vault could not be sealed. DILARA will remain open so you can retry.\n\n{exc}")
+            return
+        self._record_activity("session_ended", "SYSTEM")
+        self.root.destroy()
 
 class AuthGate:
     def __init__(self, root, on_success):
@@ -750,8 +1003,8 @@ class AuthGate:
         if self.password.get() != self.confirm.get(): self.error.configure(text="Passwords do not match."); return
         try:
             user = self.store.create_user(self.username.get().strip(), self.password.get(), "admin")
-            self.on_success(user)
-        except (AuthError, OSError) as exc: self.error.configure(text=str(exc))
+            self.on_success(user, self.password.get())
+        except (AuthError, VaultError, OSError) as exc: self.error.configure(text=str(exc))
 
     def _build_login(self):
         outer = self._base("SIGN IN  /  SELECT YOUR LOCAL USER ACCOUNT")
@@ -766,13 +1019,20 @@ class AuthGate:
         try: user = self.store.authenticate(self.username.get().strip(), self.password.get())
         except AuthError as exc: self.error.configure(text=str(exc)); return
         if not user: self.error.configure(text="Invalid username or password, or account disabled."); return
-        self.on_success(user)
+        try:
+            self.on_success(user, self.password.get())
+        except (VaultError, OSError) as exc:
+            self.error.configure(text=str(exc))
 
 def launch_application():
     root = tk.Tk()
-    def enter(user):
+    def enter(user, password):
+        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault.unlock(password)
         for child in root.winfo_children(): child.destroy()
-        DilaraApp(root, user)
+        # The password is used to derive a session key, then is not retained by
+        # the desktop object or written to configuration/container files.
+        DilaraApp(root, user, vault)
     AuthGate(root, enter)
     root.mainloop()
 
