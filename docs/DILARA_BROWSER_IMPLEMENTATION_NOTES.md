@@ -1,19 +1,26 @@
-# Implementation notes
+# DILARA Browser integration notes
 
-## Initial design choices
+## Current integration
 
-- PyQt6 + Qt WebEngine (Chromium renderer)
-- Browser UI and behavior are custom; rendering engine is reused
-- Dedicated persistent profile, separate from the user's default browser profile
-- History is minimal, local, capped at 500 entries, and user-clearable
-- No bookmarks, downloads UI/manager, or password-saving feature
-- Downloads are blocked and browser feature permissions are denied by default
-- The existing Tkinter DILARA shell must launch the browser as a separate process until the shell migration is explicitly undertaken
+- The custom browser is implemented in `browser/browser_app.py` using PyQt6 and Qt WebEngine (Chromium).
+- `browser/browser_adapter.py` launches it as a separate process. This is intentional: the desktop shell is Tkinter, and Qt widgets/event loops are not embedded into it.
+- `main.py` exposes a **BROWSER** workspace, passes an optional initial address to the browser, and uses a per-DILARA-user data directory inside that user's unlocked vault.
+- Activity logging records browser lifecycle metadata only; it must not record addresses, search terms, cookies, or page content.
+- Browser process tracking prevents duplicate launches from this shell instance. Sign-out and shutdown require the user to close the browser first so its profile is not still in use when the vault is sealed.
 
-## Next integration steps
+## Verified boundaries and remaining work
 
-1. Install dependencies and launch on the target Windows machine.
-2. Test address normalization, redirects, pop-up/new-window tab behavior, downloads, and permission denial.
-3. Patch the current `main.py` to call `launch_browser()` from the Browser module button.
-4. Track the returned `Popen` handle in the shell and handle process exit without force-killing unrelated browser instances.
-5. Decide whether browser windows remain external OS windows or whether the wider shell is migrated to Qt; do not attempt cross-toolkit widget embedding.
+1. Unit-test the adapter without Qt by mocking the process launcher (`tests/test_browser_adapter.py`).
+2. Install `browser/requirements.txt` on the target Windows machine and test the actual Qt WebEngine runtime there.
+3. Test address normalization, redirects, pop-ups/new-window tabs, download blocking, and denied site permissions.
+4. IPC is not implemented: the shell cannot focus an existing browser, send a URL to an existing instance, or request graceful close. The user can use the browser's own window controls and Windows taskbar.
+5. The profile is persistent, not incognito. Per-user paths provide application-level separation only; they are not a replacement for Windows ACLs.
+6. This prototype has not undergone a browser security audit and is not a hardened replacement for a maintained mainstream browser in high-risk scenarios.
+
+## Dependency policy
+
+Keep core dependencies in the root `requirements.txt`. Install the optional browser dependencies separately with:
+
+```powershell
+py -3 -m pip install -r browser/requirements.txt
+```

@@ -1,8 +1,9 @@
 """Process adapter for the Qt browser used by the Tkinter DILARA shell.
 
-The browser intentionally runs out-of-process: embedding Qt WebEngine widgets into
-Tkinter is not supported. Browser profile/history data can be isolated per DILARA user
-through DILARA_BROWSER_DATA.
+The browser intentionally runs out-of-process because Qt widgets cannot be hosted directly
+inside Tkinter. On Windows, the shell can reparent the browser top-level native window into
+a Tk workspace frame. Browser profile/history data is isolated per DILARA user through
+DILARA_BROWSER_DATA.
 """
 from __future__ import annotations
 
