@@ -1,2 +1,3 @@
-# The shell foundation uses only the Python standard library.
-# Legacy modules have their own dependencies; do not install them globally until their adapters are selected.
+# Core vault encryption uses AES-GCM from the cryptography package.
+cryptography>=42.0.0
+# The browser has separate optional requirements in browser/requirements.txt.

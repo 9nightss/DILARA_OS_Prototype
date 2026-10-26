@@ -6,7 +6,8 @@
       "verifier": "64fb60b3fde907f8e9ef195ccf237e1498cad8641e4947a0e80e8c12887f02db",
       "iterations": 310000,
       "role": "admin",
-      "enabled": true
+      "enabled": true,
+      "vault_id": "87f6327f7829b35768a1b63ae49e678a"
     }
   }
 }

@@ -41,9 +41,9 @@ def _format_file_size(size: int) -> str:
         value /= 1024
 
 MODULES = [
-    ("DSPACE", "Network atlas", "Country-based resource and site directory."),
-    ("CYBERSTORM", "FTP / remote resources", "Country-based FTP and remote-resource directory."),
-    ("EYE", "Camera matrix", "Camera registry and multi-feed workspace."),
+    ("DSPACE LIST", "Network atlas", "Country-based resource and site directory."),
+    ("FTP LIST", "FTP / remote resources", "Country-based FTP and remote-resource directory."),
+    ("THE EYE", "Camera matrix", "Camera registry and multi-feed workspace."),
     ("KOD8", "Cryptographic workspace", "Cipher routing and .kod8 tooling."),
     ("D-ARCADE", "Game library", "Chess, Lightcycle, Tetris, Maze and Tic-tac-toe."),
     ("D-LLM", "Language model", "Local/custom assistant and model services."),
