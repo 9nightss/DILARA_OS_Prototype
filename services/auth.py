@@ -5,7 +5,7 @@ local application authentication, not Windows account authentication or a
 security boundary against another administrator on the same machine.
 """
 from __future__ import annotations
-import hashlib, hmac, json, os, re
+import hashlib, hmac, json, os, re, secrets
 from pathlib import Path
 
 ITERATIONS = 310_000
@@ -52,9 +52,9 @@ class UserStore:
         if username.casefold() in {u.casefold() for u in data["users"]}: raise AuthError("That username already exists.")
         salt = os.urandom(16)
         digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, ITERATIONS)
-        data["users"][username] = {"salt": salt.hex(), "verifier": digest.hex(), "iterations": ITERATIONS, "role": role, "enabled": True}
+        data["users"][username] = {"salt": salt.hex(), "verifier": digest.hex(), "iterations": ITERATIONS, "role": role, "enabled": True, "vault_id": secrets.token_hex(16)}
         self._write(data)
-        return {"username": username, "role": role}
+        return {"username": username, "role": role, "vault_id": data["users"][username]["vault_id"]}
 
     def authenticate(self, username, password):
         data = self._read()
@@ -66,7 +66,14 @@ class UserStore:
             actual = hashlib.pbkdf2_hmac("sha256", (password or "").encode("utf-8"), bytes.fromhex(rec["salt"]), int(rec["iterations"]))
             valid = hmac.compare_digest(actual.hex(), rec["verifier"])
         except (ValueError, KeyError, TypeError): return None
-        return {"username": found, "role": rec.get("role", "user")} if valid else None
+        if not valid:
+            return None
+        # Older account records receive a random stable vault ID on first valid login.
+        if not rec.get("vault_id"):
+            rec["vault_id"] = secrets.token_hex(16)
+            data["users"][found] = rec
+            self._write(data)
+        return {"username": found, "role": rec.get("role", "user"), "vault_id": rec["vault_id"]}
 
     def set_enabled(self, username, enabled):
         data = self._read()

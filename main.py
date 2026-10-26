@@ -1,17 +1,22 @@
 from __future__ import annotations
 import json
 import math
+import queue
+import threading
+import os
 import subprocess
 import sys
 import tkinter as tk
-from tkinter import messagebox, ttk, filedialog
+from tkinter import messagebox, ttk, filedialog, colorchooser, simpledialog
 from pathlib import Path
 
 from services.activity_log import ActivityLogger, ActivityLogError
 from services.kod8_adapter import Kod8Adapter
 from services.auth import UserStore, AuthError
+from services.vault_manager import VaultManager, VaultError
 from services.app_registry import AppRegistry
 from services.offline_assistant import respond as offline_respond
+from browser.browser_adapter import BrowserAdapter
 
 APP_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = APP_DIR / "config"
@@ -28,22 +33,37 @@ ACCENT = "#4ed6c5"
 ACCENT_2 = "#d17dff"
 WARN = "#f0b56a"
 
+
+def _format_file_size(size: int) -> str:
+    units = ("B", "KB", "MB", "GB", "TB")
+    value = float(size)
+    for unit in units:
+        if value < 1024 or unit == units[-1]:
+            return f"{int(value)} {unit}" if unit == "B" else f"{value:.1f} {unit}"
+        value /= 1024
+
 MODULES = [
-    ("DSPACE", "Network atlas", "Country-based resource and site directory."),
-    ("CYBERSTORM", "FTP / remote resources", "Country-based FTP and remote-resource directory."),
-    ("EYE", "Camera matrix", "Camera registry and multi-feed workspace."),
+    ("DSPACE LIST", "Network atlas", "Country-based resource and site directory."),
+    ("FTP LIST", "FTP / remote resources", "Country-based FTP and remote-resource directory."),
+    ("THE EYE", "Camera matrix", "Camera registry and multi-feed workspace."),
     ("KOD8", "Cryptographic workspace", "Cipher routing and .kod8 tooling."),
     ("D-ARCADE", "Game library", "Chess, Lightcycle, Tetris, Maze and Tic-tac-toe."),
     ("D-LLM", "Language model", "Local/custom assistant and model services."),
     ("D-TERMINAL", "PowerShell console", "Standard-user console; privileged actions should be explicit."),
     ("CHAOS", "Network diagnostics", "Bounded, authorized diagnostics with scope and cancellation."),
+    ("BROWSER", "DILARA Browser", "Custom Chromium-based browser with a dedicated local profile."),
+    ("FILES", "Virtual file system", "Per-user directory tree stored in an encrypted single-file vault."),
+    ("NOTEPAD", "Text editor", "A lightweight editor for notes and text files."),
+    ("STACK", "Stacked workspace", "Combine compatible modules in a tabbed class workspace."),
 ]
 
 class DesktopWindow:
-    def __init__(self, app: "DilaraApp", module: tuple[str, str, str], x: int, y: int, w: int = 560, h: int = 360):
+    def __init__(self, app: "DilaraApp", module: tuple[str, str, str], x: int, y: int, w: int = 560, h: int = 360, stack_keys=None, restoring=False):
         self.app, self.module = app, module
         self.key, self.subtitle, self.description = module
         self.x, self.y, self.w, self.h = x, y, w, h
+        self.stack_keys = list(stack_keys or [])
+        self.restoring = restoring
         self.maximized = False
         self.restore_geometry = (x, y, w, h)
         self.minimized = False
@@ -80,7 +100,10 @@ class DesktopWindow:
                          activeforeground=TEXT, relief="flat", bd=0, width=3, font=("Segoe UI", 10), cursor="hand2")
 
     def _build_content(self):
-        if self.key in {"DSPACE", "CYBERSTORM", "EYE", "D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS"}:
+        if self.key == "STACK":
+            self.app.build_stacked_workspace(self)
+            return
+        if self.key in {"DSPACE", "CYBERSTORM", "EYE", "D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS", "BROWSER", "FILES", "NOTEPAD"}:
             self.app.build_workspace(self)
             return
         tk.Label(self.body, text=self.key, bg=PANEL, fg=ACCENT, font=("Segoe UI", 22, "bold")).pack(anchor="w")
@@ -151,6 +174,7 @@ class DesktopWindow:
         self.focus()
 
     def close(self):
+        self.app._dispose_window(self)
         self.app._record_activity("module_closed", self.key)
         self.frame.destroy()
         self.app.windows.pop(self.key, None)
@@ -158,19 +182,36 @@ class DesktopWindow:
         self.app.refresh_taskbar()
 
 class DilaraApp:
-    def __init__(self, root: tk.Tk, user: dict):
+    def __init__(self, root: tk.Tk, user: dict, vault: VaultManager):
         self.root = root
         self.user = user
-        self.user_dir = APP_DIR / "data" / "users" / user["username"]
+        self.vault = vault
+        if not self.vault.is_open or self.vault.root is None:
+            raise VaultError("Cannot start the desktop without an unlocked user vault.")
+        # User-owned state lives inside the unlocked root so it is sealed with the vault.
+        self.user_dir = self.vault.root / "Applications" / "DILARA"
         self.user_dir.mkdir(parents=True, exist_ok=True)
         self.state_file = self.user_dir / "desktop_state.json"
-        self.app_registry = AppRegistry(APP_DIR)
+        self.app_registry = AppRegistry(self.vault.root / "Applications" / "Registry")
+        # Browser data is separated by DILARA application user; URLs are never activity-logged.
+        self.browser_adapter = BrowserAdapter(self.vault.root / "Applications" / "Browser")
         self.root.title("DILARA // Desktop Environment")
         self.root.geometry("1440x900")
         self.root.minsize(980, 620)
         self.root.configure(bg=BG)
         self.windows: dict[str, DesktopWindow] = {}
         self.active: DesktopWindow | None = None
+        self.wallpaper_color = BG
+        self.wallpaper_path = None
+        self._wallpaper_pil = None
+        self._wallpaper_frames = []
+        self._wallpaper_frame_index = 0
+        self._wallpaper_after_id = None
+        self.terminal_sessions = {}
+        self._terminal_owner = {}
+        self.browser_owner = None
+        self._embedded_browser_hwnd = None
+        self._embedded_browser_host = None
         self.activity_logger = ActivityLogger(APP_DIR / "data" / "activity.kod8log", Kod8Adapter())
         self._record_activity("session_started", "SYSTEM")
         self._load_state()
@@ -195,12 +236,18 @@ class DilaraApp:
         self.sidebar.pack_propagate(False)
         tk.Label(self.sidebar, text="WORKSPACES", bg="#0d141d", fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(20, 10))
         for key, subtitle, desc in MODULES:
+            if key == "STACK":
+                continue
             btn = tk.Button(self.sidebar, text=f"◈  {key}", command=lambda k=key: self.open_module(k),
                             bg="#0d141d", fg=TEXT, activebackground=PANEL_2, activeforeground=ACCENT,
                             relief="flat", bd=0, anchor="w", padx=16, pady=8, font=("Segoe UI", 9), cursor="hand2")
             btn.pack(fill="x", padx=6, pady=1)
         tk.Frame(self.sidebar, bg=BORDER, height=1).pack(fill="x", padx=14, pady=15)
         tk.Label(self.sidebar, text="SESSION", bg="#0d141d", fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(0, 8))
+        tk.Button(self.sidebar, text="▧  Wallpaper", command=self.open_wallpaper_menu, bg="#0d141d", fg=ACCENT_2,
+                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
+        tk.Button(self.sidebar, text="▤  Stack workspace", command=self.open_stacked_workspace, bg="#0d141d", fg=ACCENT,
+                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
         tk.Button(self.sidebar, text="▣  Save layout", command=self.save_state, bg="#0d141d", fg=ACCENT,
                   activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
         tk.Button(self.sidebar, text="ⓘ  About / status", command=self.about, bg="#0d141d", fg=TEXT,
@@ -214,7 +261,8 @@ class DilaraApp:
         self.desktop = tk.Frame(self.workspace, bg=BG)
         self.desktop.pack(fill="both", expand=True)
         self.desktop.bind("<Configure>", self._desktop_resize)
-        self._draw_background()
+        self._create_wallpaper_surface()
+        self._apply_saved_wallpaper()
         self.taskbar = tk.Frame(self.workspace, bg="#0c131c", height=43)
         self.taskbar.pack(fill="x", side="bottom")
         self.taskbar.pack_propagate(False)
@@ -223,68 +271,139 @@ class DilaraApp:
         self.task_buttons.pack(side="left", fill="y")
         tk.Label(self.taskbar, text="LOCAL-FIRST  •  NO AUTO-ELEVATION", bg="#0c131c", fg=MUTED, font=("Consolas", 8)).pack(side="right", padx=15)
 
-    def _draw_background(self):
-        """Draw a restrained animated triangular tessellation behind desktop windows.
+    def _create_wallpaper_surface(self):
+        """Create a static blank-color desktop surface; animation is opt-in via a chosen GIF."""
+        self.wallpaper_label = tk.Label(self.desktop, bg=self.wallpaper_color, bd=0, highlightthickness=0)
+        self.wallpaper_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+        self.wallpaper_label.lower()
+        self.desktop.bind("<Configure>", self._resize_wallpaper, add="+")
 
-        The animation redraws only the background canvas at ~8 FPS; no timers or
-        per-window animation loops are created. Geometry remains intentionally subtle.
-        """
-        canvas = tk.Canvas(self.desktop, bg=BG, highlightthickness=0, bd=0)
-        canvas.place(relwidth=1, relheight=1)
-        # Canvas.lower() lowers canvas items; use Tcl window stacking to lower the widget.
-        canvas.tk.call("lower", canvas._w)
-        self.bg_canvas = canvas
-        self._tessellation_phase = 0.0
-        self._tessellation_job = None
+    def open_wallpaper_menu(self):
+        menu = tk.Menu(self.root, tearoff=False, bg=PANEL_2, fg=TEXT, activebackground=BORDER,
+                       activeforeground=ACCENT)
+        menu.add_command(label="Solid color…", command=self.choose_wallpaper_color)
+        menu.add_command(label="Picture or GIF…", command=self.choose_wallpaper_image)
+        menu.add_command(label="Reset to default", command=self.reset_wallpaper)
+        try:
+            menu.tk_popup(self.root.winfo_pointerx(), self.root.winfo_pointery())
+        finally:
+            menu.grab_release()
 
-        def draw(_event=None):
-            if not canvas.winfo_exists():
-                return
-            canvas.delete("tessellation")
-            w, h = max(1, canvas.winfo_width()), max(1, canvas.winfo_height())
-            spacing = 54
-            cols = min(38, max(2, w // spacing + 2))
-            rows = min(24, max(2, h // spacing + 2))
-            phase = self._tessellation_phase
-            points = {}
-            for r in range(rows):
-                for c in range(cols):
-                    x = c * spacing - spacing
-                    y = r * spacing - spacing
-                    # Small travelling displacement gives the lattice motion without
-                    # making the desktop distracting or moving any actual UI elements.
-                    wave = (r * 0.57 + c * 0.31 + phase)
-                    x += 2.0 * math.sin(wave * 0.7)
-                    y += 3.0 * math.sin(wave)
-                    points[(r, c)] = (x, y)
-            for r in range(rows - 1):
-                for c in range(cols - 1):
-                    a = points[(r, c)]; b = points[(r, c + 1)]
-                    d = points[(r + 1, c)]; e = points[(r + 1, c + 1)]
-                    # Alternating diagonals create a tessellated triangular field.
-                    segments = [(a, b), (a, d), (d, e), (b, e)]
-                    segments.append((a, e) if (r + c) % 2 == 0 else (b, d))
-                    for (x1, y1), (x2, y2) in segments:
-                        cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
-                        pulse = ( math.sin(phase * 1.2 + (r + c) * 0.23) + 1) / 2
-                        color = "#14212d" if pulse < 0.84 else "#1a343d"
-                        canvas.create_line(x1, y1, x2, y2, fill=color, width=1, tags="tessellation")
-            canvas.create_text(w - 24, 22, text="D / 5.0", fill="#29404e", anchor="ne",
-                               font=("Consolas", 10), tags="tessellation")
-            # Keep the background below desktop windows after redraws.
-            canvas.tk.call("lower", canvas._w)
+    def choose_wallpaper_color(self):
+        chosen = colorchooser.askcolor(color=self.wallpaper_color, title="DILARA desktop color", parent=self.root)
+        if chosen and chosen[1]:
+            self.wallpaper_color = chosen[1]
+            self.wallpaper_path = None
+            self._stop_wallpaper_animation()
+            self._render_wallpaper()
+            self._persist_wallpaper()
 
-        def animate():
-            self._tessellation_job = None
-            if not self.root.winfo_exists() or not canvas.winfo_exists():
-                return
-            self._tessellation_phase += 0.10
-            draw()
-            self._tessellation_job = self.root.after(125, animate)
+    def choose_wallpaper_image(self):
+        path = filedialog.askopenfilename(parent=self.root, title="Choose desktop wallpaper",
+            filetypes=[("Pictures and GIFs", "*.png *.gif *.jpg *.jpeg *.bmp *.webp"), ("All files", "*.*")])
+        if not path:
+            return
+        try:
+            self.wallpaper_path = str(Path(path).resolve())
+            self._render_wallpaper()
+            self._persist_wallpaper()
+        except Exception as exc:
+            self.wallpaper_path = None
+            self._stop_wallpaper_animation()
+            messagebox.showerror("Wallpaper", f"Could not load this image. For JPEG/WebP, install Pillow.\n\n{exc}", parent=self.root)
+            self._render_wallpaper()
 
-        canvas.bind("<Configure>", draw)
-        # Start only after geometry is established, avoiding a burst of resize redraws.
-        self.root.after(180, animate)
+    def reset_wallpaper(self):
+        self.wallpaper_color = BG
+        self.wallpaper_path = None
+        self._stop_wallpaper_animation()
+        self._render_wallpaper()
+        self._persist_wallpaper()
+
+    def _persist_wallpaper(self):
+        self.saved_state["wallpaper"] = {"color": self.wallpaper_color, "path": self.wallpaper_path}
+        self._write_state_silently()
+
+    def _apply_saved_wallpaper(self):
+        wallpaper = self.saved_state.get("wallpaper", {}) if isinstance(self.saved_state, dict) else {}
+        if isinstance(wallpaper, dict):
+            self.wallpaper_color = wallpaper.get("color") or BG
+            candidate = wallpaper.get("path")
+            self.wallpaper_path = candidate if candidate and Path(candidate).is_file() else None
+        self._render_wallpaper()
+
+    def _stop_wallpaper_animation(self):
+        if self._wallpaper_after_id is not None:
+            try: self.root.after_cancel(self._wallpaper_after_id)
+            except tk.TclError: pass
+            self._wallpaper_after_id = None
+        self._wallpaper_frames = []
+        self._wallpaper_frame_index = 0
+        self._wallpaper_pil = None
+
+    def _resize_wallpaper(self, _event=None):
+        if self.wallpaper_path and self._wallpaper_pil:
+            if self._wallpaper_after_id is not None:
+                try: self.root.after_cancel(self._wallpaper_after_id)
+                except tk.TclError: pass
+                self._wallpaper_after_id = None
+            self._show_wallpaper_frame(self._wallpaper_frame_index)
+
+    def _render_wallpaper(self, keep_animation=False):
+        if not hasattr(self, "wallpaper_label") or not self.wallpaper_label.winfo_exists():
+            return
+        if not keep_animation:
+            self._stop_wallpaper_animation()
+        self.wallpaper_label.configure(bg=self.wallpaper_color, image="")
+        self.wallpaper_label.image = None
+        if not self.wallpaper_path:
+            self.wallpaper_label.lower()
+            return
+        path = Path(self.wallpaper_path)
+        try:
+            from PIL import Image, ImageSequence, ImageTk
+            image = Image.open(path)
+            frames = [frame.copy().convert("RGB") for frame in ImageSequence.Iterator(image)] if path.suffix.lower() == ".gif" else [image.convert("RGB")]
+            self._wallpaper_pil = frames
+            self._wallpaper_frames = frames if len(frames) > 1 else []
+            self._show_wallpaper_frame(0)
+        except ImportError:
+            # Tk can render GIF/PNG without Pillow; JPEG/WebP need Pillow.
+            if path.suffix.lower() not in {".gif", ".png", ".ppm", ".pgm"}:
+                raise RuntimeError("Pillow is required for this image format. Install it with: py -m pip install Pillow")
+            photo = tk.PhotoImage(file=str(path))
+            self.wallpaper_label.configure(image=photo)
+            self.wallpaper_label.image = photo
+            self.wallpaper_label.lower()
+        except Exception:
+            raise
+
+    def _show_wallpaper_frame(self, index):
+        if not self._wallpaper_pil:
+            return
+        try:
+            from PIL import Image, ImageTk
+            frame = self._wallpaper_pil[index % len(self._wallpaper_pil)]
+            w, h = max(1, self.desktop.winfo_width()), max(1, self.desktop.winfo_height())
+            # Fill the desktop while preserving aspect ratio, then crop center.
+            scale = max(w / frame.width, h / frame.height)
+            resized = frame.resize((max(1, int(frame.width * scale)), max(1, int(frame.height * scale))), Image.Resampling.LANCZOS)
+            left, top = (resized.width - w) // 2, (resized.height - h) // 2
+            resized = resized.crop((left, top, left + w, top + h))
+            photo = ImageTk.PhotoImage(resized)
+            self.wallpaper_label.configure(image=photo)
+            self.wallpaper_label.image = photo
+            self.wallpaper_label.lower()
+            self._wallpaper_frame_index = index % len(self._wallpaper_pil)
+            if self._wallpaper_frames and self.root.winfo_exists():
+                duration = 100
+                try:
+                    from PIL import Image
+                    duration = max(40, int(self._wallpaper_pil[index % len(self._wallpaper_pil)].info.get("duration", 100)))
+                except Exception: pass
+                self._wallpaper_after_id = self.root.after(duration, lambda: self._show_wallpaper_frame(index + 1))
+        except tk.TclError:
+            return
 
     def _desktop_resize(self, _event=None):
         for win in self.windows.values():
@@ -293,7 +412,7 @@ class DilaraApp:
                 win.h = max(240, self.desktop.winfo_height()-24)
                 win.frame.place_configure(width=win.w, height=win.h)
 
-    def open_module(self, key: str):
+    def open_module(self, key: str, restoring=False):
         module = next(m for m in MODULES if m[0] == key)
         if key in self.windows:
             self.windows[key].restore()
@@ -301,10 +420,10 @@ class DilaraApp:
         count = len(self.windows)
         x = 50 + (count * 34) % max(100, self.desktop.winfo_width() - 650)
         y = 35 + (count * 28) % max(80, self.desktop.winfo_height() - 430)
-        default_w, default_h = (650, 700) if key == "D-LLM" else (560, 360)
+        default_w, default_h = (650, 700) if key == "D-LLM" else (760, 520) if key in {"D-TERMINAL", "NOTEPAD", "STACK"} else (560, 360)
         default_w = min(default_w, max(420, self.desktop.winfo_width() - 30))
         default_h = min(default_h, max(300, self.desktop.winfo_height() - 30))
-        self.windows[key] = DesktopWindow(self, module, x, y, default_w, default_h)
+        self.windows[key] = DesktopWindow(self, module, x, y, default_w, default_h, restoring=restoring)
         self._record_activity("module_opened", key)
         self.refresh_taskbar()
 
@@ -331,6 +450,411 @@ class DilaraApp:
             self._build_terminal_workspace(win)
         elif key == "CHAOS":
             self._build_chaos_workspace(win)
+        elif key == "BROWSER":
+            self._build_browser_workspace(win)
+        elif key == "FILES":
+            self._build_files_workspace(win)
+        elif key == "NOTEPAD":
+            self._build_notepad_workspace(win)
+        elif key == "KOD8":
+            self._build_kod8_workspace(win)
+
+    def _build_browser_workspace(self, win):
+        body = win.body
+        tk.Label(body, text="DILARA BROWSER // EMBEDDED WEB WORKSPACE", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body, text="The Chromium-based PyQt browser is hosted inside this DILARA workspace on Windows. D-LLM and D-ARCADE remain separate class applications.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(4, 8))
+        status = tk.Label(body, text="STATUS  •  Preparing embedded browser…", bg=PANEL, fg=MUTED,
+                          font=("Consolas", 8), anchor="w")
+        status.pack(fill="x", pady=(0, 6))
+        host = tk.Frame(body, bg="#05080d", highlightbackground=BORDER, highlightthickness=1)
+        host.pack(fill="both", expand=True)
+        host.bind("<Configure>", lambda _e: self._resize_embedded_browser(host), add="+")
+
+        def launch():
+            if self.browser_adapter.is_running():
+                status.configure(text="STATUS  •  Reattaching existing browser window…", fg=WARN)
+                self._embed_browser_window(host, self.browser_adapter.process, status, attempts=0)
+                return
+            try:
+                process = self.browser_adapter.launch(None)
+                self.browser_owner = getattr(win, "_stack_parent", win)
+                status.configure(text="STATUS  •  Starting browser engine…", fg=WARN)
+                self._record_activity("browser_launched", "BROWSER")
+                if sys.platform == "win32":
+                    self.root.after(180, lambda: self._embed_browser_window(host, process, status, attempts=0))
+                else:
+                    status.configure(text="STATUS  •  Browser launched as a separate process (native embedding requires Windows).", fg=WARN)
+            except (OSError, FileNotFoundError, RuntimeError) as exc:
+                status.configure(text=f"STATUS  •  Launch failed: {exc}", fg=WARN)
+                messagebox.showerror("DILARA Browser", f"Could not launch the browser:\n{exc}", parent=win.frame)
+
+        controls = tk.Frame(body, bg=PANEL); controls.pack(fill="x", pady=(0, 6))
+        tk.Button(controls, text="Start / Reattach Browser", command=launch, bg=PANEL_2,
+                  fg=ACCENT, activebackground=BORDER, relief="flat", padx=10, pady=5,
+                  font=("Segoe UI Semibold", 9), cursor="hand2").pack(anchor="w")
+        tk.Label(body, text="Downloads remain blocked and browser profile/history data stays separate per DILARA user. Closing this workspace closes its browser process.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 8), wraplength=650, justify="left").pack(anchor="w", pady=(6, 0))
+        if not getattr(win, "restoring", False):
+            self.root.after(250, launch)
+
+    def _embed_browser_window(self, host, process, status, attempts=0):
+        if not host.winfo_exists() or process is None or process.poll() is not None:
+            if host.winfo_exists(): status.configure(text="STATUS  •  Browser process exited before embedding", fg=WARN)
+            return
+        if sys.platform != "win32":
+            return
+        try:
+            import ctypes
+            from ctypes import wintypes
+            user32 = ctypes.windll.user32
+            user32.SetParent.argtypes = [wintypes.HWND, wintypes.HWND]
+            user32.SetParent.restype = wintypes.HWND
+            user32.SetWindowLongW.argtypes = [wintypes.HWND, ctypes.c_int, ctypes.c_long]
+            user32.SetWindowLongW.restype = ctypes.c_long
+            user32.SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint]
+            user32.SetWindowPos.restype = wintypes.BOOL
+            target = {"hwnd": None}
+            enum_type = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+            def enum_callback(hwnd, _lparam):
+                pid = wintypes.DWORD()
+                user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+                if pid.value == process.pid and user32.IsWindowVisible(hwnd) and user32.GetWindow(hwnd, 4) == 0:
+                    target["hwnd"] = hwnd
+                    return False
+                return True
+            user32.EnumWindows(enum_type(enum_callback), 0)
+            hwnd = target["hwnd"]
+            if not hwnd:
+                if attempts < 60:
+                    self.root.after(150, lambda: self._embed_browser_window(host, process, status, attempts + 1))
+                else:
+                    status.configure(text="STATUS  •  Browser opened but its native window could not be embedded", fg=WARN)
+                return
+            GWL_STYLE = -16
+            WS_CHILD, WS_VISIBLE = 0x40000000, 0x10000000
+            WS_POPUP, WS_CAPTION, WS_THICKFRAME = 0x80000000, 0x00C00000, 0x00040000
+            WS_MINIMIZEBOX, WS_MAXIMIZEBOX, WS_SYSMENU = 0x00020000, 0x00010000, 0x00080000
+            style = user32.GetWindowLongW(hwnd, GWL_STYLE)
+            style = (style & ~(WS_POPUP | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU)) | WS_CHILD | WS_VISIBLE
+            user32.SetParent(hwnd, host.winfo_id())
+            user32.SetWindowLongW(hwnd, GWL_STYLE, style)
+            self._embedded_browser_hwnd = hwnd
+            self._embedded_browser_host = host
+            self._resize_embedded_browser(host)
+            status.configure(text="STATUS  •  Browser embedded and ready", fg=ACCENT)
+        except Exception as exc:
+            status.configure(text=f"STATUS  •  Native embedding failed: {exc}", fg=WARN)
+
+    def _resize_embedded_browser(self, host):
+        hwnd = getattr(self, "_embedded_browser_hwnd", None)
+        if not hwnd or not host.winfo_exists() or sys.platform != "win32":
+            return
+        try:
+            import ctypes
+            user32 = ctypes.windll.user32
+            from ctypes import wintypes
+            user32.SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint]
+            user32.SetWindowPos.restype = wintypes.BOOL
+            user32.SetWindowPos(hwnd, 0, 0, 0, max(1, host.winfo_width()), max(1, host.winfo_height()),
+                                0x0004 | 0x0010 | 0x0020)  # NOZORDER | NOACTIVATE | FRAMECHANGED
+        except Exception:
+            pass
+
+    def _build_kod8_workspace(self, win):
+        body = win.body
+        tk.Label(body, text="KOD8 // CRYPTOGRAPHIC WORKSPACE", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body, text="The original CL1–CL8 source and standalone UI are preserved. This tab is a launcher/status surface; the existing KOD8 UI remains a separate process.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(6, 12))
+        tk.Button(body, text="Launch KOD8 side application", command=self.launch_kod8_side_app,
+                  bg=ACCENT, fg="#071014", relief="flat", padx=12, pady=7).pack(anchor="w")
+        tk.Label(body, text="Security note: the current experimental transforms do not provide authenticated encryption or tamper detection.",
+                 bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=650, justify="left").pack(anchor="w", pady=(10, 0))
+
+    def _build_notepad_workspace(self, win):
+        body = win.body
+        top = tk.Frame(body, bg=PANEL); top.pack(fill="x")
+        current = {"path": None, "dirty": False}
+        path_label = tk.Label(top, text="Untitled.txt", bg=PANEL, fg=ACCENT, font=("Consolas", 9), anchor="w")
+        path_label.pack(side="left", fill="x", expand=True)
+        editor = tk.Text(body, bg="#070c12", fg=TEXT, insertbackground=TEXT, selectbackground="#24434a",
+                         undo=True, wrap="word", relief="flat", font=("Consolas", 10), padx=10, pady=10)
+        editor.pack(fill="both", expand=True, pady=(8, 0))
+
+        def mark_dirty(_event=None):
+            current["dirty"] = True
+            name = Path(current["path"]).name if current["path"] else "Untitled.txt"
+            path_label.configure(text=f"● {name}")
+        editor.bind("<<Modified>>", lambda _e: (editor.edit_modified(False), mark_dirty()) if editor.edit_modified() else None)
+
+        def maybe_save():
+            if not current["dirty"]: return True
+            answer = messagebox.askyesnocancel("Notepad", "Save changes before continuing?", parent=win.frame)
+            if answer is None: return False
+            if answer: return save_as_or_current()
+            return True
+
+        def load_path(path):
+            try: content = Path(path).read_text(encoding="utf-8-sig")
+            except UnicodeDecodeError:
+                messagebox.showwarning("Notepad", "This file is not UTF-8 text.", parent=win.frame); return
+            except OSError as exc:
+                messagebox.showerror("Notepad", f"Could not open file: {exc}", parent=win.frame); return
+            editor.delete("1.0", "end"); editor.insert("1.0", content)
+            current["path"] = str(Path(path).resolve()); current["dirty"] = False
+            path_label.configure(text=Path(path).name); editor.edit_modified(False)
+
+        def new_file():
+            if not maybe_save(): return
+            editor.delete("1.0", "end"); current.update(path=None, dirty=False)
+            path_label.configure(text="Untitled.txt"); editor.edit_modified(False)
+
+        def open_file():
+            if not maybe_save(): return
+            path = filedialog.askopenfilename(parent=win.frame, title="Open text file", filetypes=[("Text files", "*.txt *.md *.log *.json *.py *.ps1 *.ini *.csv"), ("All files", "*.*")])
+            if path: load_path(path)
+
+        def save_as_or_current(force_dialog=False):
+            path = current["path"]
+            if force_dialog or not path:
+                path = filedialog.asksaveasfilename(parent=win.frame, title="Save text file", defaultextension=".txt",
+                    filetypes=[("Text files", "*.txt"), ("All files", "*.*")], initialfile=Path(path).name if path else "Untitled.txt")
+                if not path: return False
+            try:
+                target = Path(path)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                temp = target.with_name(target.name + ".tmp")
+                temp.write_text(editor.get("1.0", "end-1c"), encoding="utf-8", newline="")
+                os.replace(temp, target)
+                current["path"] = str(target.resolve()); current["dirty"] = False
+                path_label.configure(text=target.name); editor.edit_modified(False)
+                return True
+            except OSError as exc:
+                messagebox.showerror("Notepad", f"Save failed: {exc}", parent=win.frame); return False
+
+        for label, callback in (("New", new_file), ("Open…", open_file), ("Save", lambda: save_as_or_current()), ("Save as…", lambda: save_as_or_current(True))):
+            tk.Button(top, text=label, command=callback, bg=PANEL_2, fg=TEXT, activebackground=BORDER,
+                      relief="flat", padx=8, pady=4).pack(side="left", padx=(4, 0))
+        editor.focus_set()
+
+    def open_stacked_workspace(self):
+        # LLM and Arcade remain class workspaces because their legacy applications are separate processes.
+        compatible = [m for m in MODULES if m[0] not in {"STACK", "D-LLM", "D-ARCADE"}]
+        dialog = tk.Toplevel(self.root); dialog.title("Create stacked workspace"); dialog.geometry("390x540")
+        dialog.configure(bg=BG); dialog.transient(self.root)
+        tk.Label(dialog, text="STACKED WORKSPACE", bg=BG, fg=ACCENT, font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=16, pady=(16, 5))
+        tk.Label(dialog, text="Choose compatible modules to combine as tabs in one desktop window. D-LLM and D-ARCADE remain separate class applications; KOD8 opens its preserved side UI from a tab.",
+                 bg=BG, fg=MUTED, font=("Segoe UI", 9), wraplength=350, justify="left").pack(anchor="w", padx=16, pady=(0, 10))
+        checks = {}
+        container = tk.Frame(dialog, bg=BG); container.pack(fill="both", expand=True, padx=14)
+        for key, subtitle, desc in compatible:
+            value = tk.BooleanVar(value=key in {"NOTEPAD", "D-TERMINAL"})
+            checks[key] = value
+            tk.Checkbutton(container, text=f"{key}  —  {subtitle}", variable=value, bg=BG, fg=TEXT,
+                selectcolor=PANEL_2, activebackground=BG, activeforeground=ACCENT, anchor="w").pack(fill="x", pady=2)
+        def create():
+            keys = [key for key, var in checks.items() if var.get()]
+            if not keys:
+                messagebox.showinfo("Stacked workspace", "Select at least one module.", parent=dialog); return
+            dialog.destroy()
+            self._create_stacked_window(keys)
+        tk.Button(dialog, text="Create workspace", command=create, bg=ACCENT, fg="#071014", relief="flat", padx=14, pady=8).pack(anchor="e", padx=16, pady=14)
+
+    def _create_stacked_window(self, keys, restoring=False):
+        title = " + ".join(keys[:3]) + (f" +{len(keys)-3}" if len(keys) > 3 else "")
+        module = ("STACK", title, "Tabbed class workspace")
+        if "STACK" in self.windows:
+            self.windows["STACK"].close()
+        w = min(920, max(620, self.desktop.winfo_width() - 30))
+        h = min(700, max(400, self.desktop.winfo_height() - 30))
+        win = DesktopWindow(self, module, 24, 20, w, h, stack_keys=keys, restoring=restoring)
+        self.windows["STACK"] = win
+        self._record_activity("stacked_workspace_opened", "STACK")
+        self.refresh_taskbar()
+
+    def build_stacked_workspace(self, win):
+        tabs = ttk.Notebook(win.body)
+        tabs.pack(fill="both", expand=True)
+        win._stack_proxies = []
+        for key in win.stack_keys:
+            module = next((item for item in MODULES if item[0] == key), None)
+            if not module or key in {"STACK", "D-LLM", "D-ARCADE"}:
+                continue
+            tab = tk.Frame(tabs, bg=PANEL, padx=12, pady=10)
+            tabs.add(tab, text=key)
+            proxy = type("WorkspaceProxy", (), {})()
+            proxy.app = self; proxy.module = module; proxy.key = key; proxy.subtitle = module[1]
+            proxy.description = module[2]; proxy.body = tab; proxy.frame = win.frame; proxy._stack_parent = win; proxy.restoring = win.restoring
+            win._stack_proxies.append(proxy)
+            self.build_workspace(proxy)
+        if not win._stack_proxies:
+            tk.Label(win.body, text="No compatible modules selected.", bg=PANEL, fg=MUTED).pack()
+
+    def _build_files_workspace(self, win):
+        """Small tree-based UI backed by the currently unlocked per-user vault."""
+        from tkinter import simpledialog
+        body = win.body
+        root_path = self.vault.root
+        if root_path is None:
+            tk.Label(body, text="VAULT IS LOCKED", bg=PANEL, fg=WARN).pack(anchor="w")
+            return
+        tk.Label(body, text="VIRTUAL ROOT  /  ENCRYPTED USER VAULT", bg=PANEL, fg=MUTED,
+                 font=("Consolas", 8)).pack(anchor="w", pady=(0, 8))
+        path_label = tk.Label(body, text="/", bg=PANEL, fg=ACCENT, font=("Consolas", 9), anchor="w")
+        path_label.pack(fill="x", pady=(0, 7))
+        tree_frame = tk.Frame(body, bg=PANEL)
+        tree_frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(tree_frame, columns=("kind", "size"), show="tree headings", selectmode="browse")
+        tree.heading("#0", text="Name", anchor="w")
+        tree.heading("kind", text="Type", anchor="w")
+        tree.heading("size", text="Size", anchor="e")
+        tree.column("#0", width=270, stretch=True)
+        tree.column("kind", width=90, stretch=False)
+        tree.column("size", width=80, stretch=False, anchor="e")
+        scroll = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=scroll.set)
+        tree.pack(side="left", fill="both", expand=True)
+        scroll.pack(side="right", fill="y")
+        paths = {}
+
+        def safe_inside(path):
+            resolved = Path(path).resolve()
+            if not resolved.is_relative_to(root_path.resolve()):
+                raise ValueError("That path is outside the current user's virtual root.")
+            return resolved
+
+        def refresh(select_path=None):
+            for item in tree.get_children():
+                tree.delete(item)
+            paths.clear()
+            path_label.configure(text="/  (user root)")
+            def add_directory(folder, parent_iid=""):
+                try:
+                    children = sorted(folder.iterdir(), key=lambda item: (not item.is_dir(), item.name.casefold()))
+                except OSError:
+                    return
+                for child in children:
+                    if child.is_symlink():
+                        continue
+                    try:
+                        child = safe_inside(child)
+                    except ValueError:
+                        continue
+                    is_dir = child.is_dir()
+                    size = "—" if is_dir else _format_file_size(child.stat().st_size)
+                    iid = f"node{len(paths)}"
+                    paths[iid] = child
+                    tree.insert(parent_iid, "end", iid=iid, text=("▸  " if is_dir else "   ") + child.name,
+                                values=("Folder" if is_dir else child.suffix.lower() or "File", size),
+                                open=(parent_iid == ""))
+                    if is_dir:
+                        add_directory(child, iid)
+            add_directory(root_path)
+            if select_path:
+                for iid, path in paths.items():
+                    if path == select_path:
+                        tree.selection_set(iid); tree.see(iid); break
+
+        def selected_path():
+            selected = tree.selection()
+            if not selected:
+                return root_path
+            return paths.get(selected[0], root_path)
+
+        def target_directory():
+            path = selected_path()
+            return path if path.is_dir() else path.parent
+
+        def new_folder():
+            parent = target_directory()
+            name = simpledialog.askstring("Create folder", "Folder name:", parent=win.frame)
+            if not name:
+                return
+            if name in {".", ".."} or "/" in name or "\\" in name or Path(name).name != name:
+                messagebox.showwarning("Files", "Enter a single folder name, not a path.", parent=win.frame); return
+            try:
+                destination = safe_inside(parent / name)
+                destination.mkdir()
+                refresh(destination)
+            except FileExistsError:
+                messagebox.showwarning("Files", "An item with that name already exists.", parent=win.frame)
+            except (OSError, ValueError) as exc:
+                messagebox.showerror("Files", str(exc), parent=win.frame)
+
+        def edit_file(path, initial_text=None):
+            try:
+                path = safe_inside(path)
+                content = path.read_text(encoding="utf-8") if initial_text is None else initial_text
+            except UnicodeDecodeError:
+                messagebox.showwarning("Files", "This file is not UTF-8 text and cannot be opened in the built-in editor.", parent=win.frame); return
+            except OSError as exc:
+                messagebox.showerror("Files", f"Could not open file: {exc}", parent=win.frame); return
+            editor = tk.Toplevel(self.root)
+            editor.title(f"DILARA Notepad // {path.name}")
+            editor.geometry("760x560")
+            editor.configure(bg=BG)
+            editor.transient(self.root)
+            header = tk.Frame(editor, bg=PANEL_2, padx=12, pady=8); header.pack(fill="x")
+            tk.Label(header, text=str(path.relative_to(root_path)).replace("\\", "/"), bg=PANEL_2, fg=ACCENT,
+                     font=("Consolas", 9)).pack(side="left")
+            text_widget = tk.Text(editor, bg="#080d13", fg=TEXT, insertbackground=TEXT, wrap="none",
+                                  undo=True, relief="flat", font=("Consolas", 10))
+            text_widget.pack(fill="both", expand=True, padx=8, pady=8)
+            text_widget.insert("1.0", content)
+            def save():
+                try:
+                    checked = safe_inside(path)
+                    temp = checked.with_name(checked.name + ".tmp")
+                    temp.write_text(text_widget.get("1.0", "end-1c"), encoding="utf-8")
+                    os.replace(temp, checked)
+                    refresh(checked)
+                    messagebox.showinfo("Notepad", "Saved to the unlocked user vault workspace.", parent=editor)
+                except (OSError, ValueError) as exc:
+                    messagebox.showerror("Notepad", f"Save failed: {exc}", parent=editor)
+            tk.Button(header, text="Save", command=save, bg=ACCENT, fg="#071014", relief="flat", padx=12).pack(side="right")
+            editor.grab_set()
+            editor.focus_set()
+
+        def new_text():
+            parent = target_directory()
+            name = simpledialog.askstring("New text file", "File name (extension optional):", parent=win.frame)
+            if not name:
+                return
+            if name in {".", ".."} or "/" in name or "\\" in name or Path(name).name != name:
+                messagebox.showwarning("Files", "Enter a single file name, not a path.", parent=win.frame); return
+            if not Path(name).suffix:
+                name += ".txt"
+            try:
+                destination = safe_inside(parent / name)
+                with destination.open("x", encoding="utf-8") as handle:
+                    handle.write("")
+                refresh(destination)
+                edit_file(destination, "")
+            except FileExistsError:
+                messagebox.showwarning("Files", "An item with that name already exists.", parent=win.frame)
+            except (OSError, ValueError) as exc:
+                messagebox.showerror("Files", str(exc), parent=win.frame)
+
+        def open_selected(_event=None):
+            path = selected_path()
+            if path.is_dir():
+                try:
+                    path_label.configure(text="/" + path.relative_to(root_path).as_posix().strip("."))
+                except ValueError:
+                    path_label.configure(text="/")
+                return
+            edit_file(path)
+
+        actions = tk.Frame(body, bg=PANEL); actions.pack(fill="x", pady=(8, 0))
+        for label, command in (("New folder", new_folder), ("New text file", new_text), ("Open / edit", open_selected), ("Refresh", lambda: refresh())):
+            tk.Button(actions, text=label, command=command, bg=PANEL_2, fg=TEXT, activebackground=BORDER,
+                      relief="flat", padx=9, pady=6, font=("Segoe UI", 8), cursor="hand2").pack(side="left", padx=(0, 5))
+        tree.bind("<Double-1>", open_selected)
+        refresh()
+        tk.Label(body, text="Files are staged in the active session and encrypted into the user's .dvault container when signing out. Do not force-close DILARA while files are being saved.",
+                 bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=500, justify="left").pack(anchor="w", pady=(8, 0))
 
     def _build_resource_workspace(self, win):
         key = win.key
@@ -356,7 +880,7 @@ class DilaraApp:
         tree.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=tree.yview); scrollbar.pack(side="right", fill="y")
         tree.configure(yscrollcommand=scrollbar.set)
-        store_path = self.user_dir / ("cameras.json" if key == "EYE" else "ftp_resources.json" if key == "CYBERSTORM" else "dspace_resources.json")
+        store_path = self.user_dir / "resources" / ("cameras.json" if key == "EYE" else "ftp_resources.json" if key == "CYBERSTORM" else "dspace_resources.json")
         def read_items():
             try:
                 raw = json.loads(store_path.read_text(encoding="utf-8"))
@@ -412,7 +936,7 @@ class DilaraApp:
             ("Lightcycle", base/"D-ARCADE-Trolightcycle-main"/"D-ARCADE-Tron-Lightcycle.py", "pygame"),
             ("Maze 1", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGPT.py", "tkinter / source-dependent"),
             ("Maze 2", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ.py", "tkinter / source-dependent"),
-            ("Maze 3", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ2.py", "tkinter / source-dependent")
+            ("Maze 3", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ2.py", "tkinter / source-dependent"),
             ("Tic-tac-toe 1", base/"magenta-tictactoe-main"/"magenta-tic-tac-toe.py", "console"),
             ("Tic-tac-toe 2", base/"magenta-tictactoe-main"/"tic-tac-toe.py", "console"),
         ]
@@ -450,6 +974,7 @@ class DilaraApp:
         def refresh_app_list():
             for child in app_list.winfo_children(): child.destroy()
             for app_key, app_name, _desc in MODULES:
+                if app_key == "STACK": continue
                 tk.Button(app_list, text=f"{app_key}  ·  {app_name}", command=lambda k=app_key: self.open_module(k), bg="#0d141d", fg=TEXT, activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", anchor="w", padx=9, pady=4).pack(fill="x", pady=1)
             extra = [a for a in self.app_registry.list_apps() if a.get("enabled", True)]
             for item in extra:
@@ -489,19 +1014,138 @@ class DilaraApp:
         transcript.configure(state="normal"); transcript.insert("end", "D-LLM offline mode ready. Type /help to begin.\n"); transcript.configure(state="disabled")
 
     def _build_terminal_workspace(self, win):
-        body=win.body
-        tk.Label(body,text="POWERSHELL SESSION",bg=PANEL,fg=TEXT,font=("Segoe UI",10,"bold")).pack(anchor="w")
-        tk.Label(body,text="Launches a normal, non-elevated PowerShell process. Opening DILARA does not execute commands or request administrator rights.",bg=PANEL,fg=MUTED,font=("Segoe UI",9),wraplength=490,justify="left").pack(anchor="w",pady=(6,12))
-        tk.Button(body,text="Launch standard PowerShell",command=self.launch_powershell,bg=ACCENT,fg="#071014",relief="flat",padx=12,pady=8).pack(anchor="w")
-        tk.Label(body,text="Administrator elevation is intentionally not automatic. Add explicit per-action elevation only when the command adapter and confirmation flow are implemented.",bg=PANEL,fg=WARN,font=("Segoe UI",9),wraplength=490,justify="left").pack(anchor="w",pady=(12,0))
+        body = win.body
+        tk.Label(body, text="POWERSHELL // EMBEDDED SESSION", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body, text="A dedicated standard-user PowerShell process is attached to this workspace. Commands execute locally; DILARA does not auto-elevate.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(4, 8))
+        toolbar = tk.Frame(body, bg=PANEL); toolbar.pack(fill="x", pady=(0, 6))
+        status = tk.Label(toolbar, text="SESSION NOT STARTED", bg=PANEL, fg=WARN, font=("Consolas", 8))
+        status.pack(side="left")
+        output = tk.Text(body, bg="#060a0f", fg="#c8f7e9", insertbackground=TEXT, relief="flat",
+                         font=("Consolas", 9), wrap="word", undo=False, state="disabled")
+        output.pack(fill="both", expand=True)
+        entry_row = tk.Frame(body, bg=PANEL); entry_row.pack(fill="x", pady=(7, 0))
+        tk.Label(entry_row, text="PS>", bg=PANEL, fg=ACCENT, font=("Consolas", 10, "bold")).pack(side="left", padx=(0, 7))
+        command = tk.Entry(entry_row, bg="#0a1119", fg=TEXT, insertbackground=TEXT, relief="flat", font=("Consolas", 10))
+        command.pack(side="left", fill="x", expand=True, ipady=7)
+        session_key = id(win)
+        self.terminal_sessions[session_key] = {"process": None, "queue": queue.Queue(), "output": output, "status": status, "owner": win}
+        self._terminal_owner[session_key] = getattr(win, "_stack_parent", win)
+
+        def append(text):
+            if not output.winfo_exists(): return
+            output.configure(state="normal"); output.insert("end", text); output.see("end"); output.configure(state="disabled")
+
+        def start_session():
+            session = self.terminal_sessions[session_key]
+            if session["process"] and session["process"].poll() is None:
+                status.configure(text="SESSION ACTIVE", fg=ACCENT); command.focus_set(); return
+            if sys.platform != "win32":
+                status.configure(text="WINDOWS ONLY", fg=WARN)
+                append("D-TERMINAL requires Windows PowerShell or PowerShell 7.\n")
+                return
+            exe = "powershell.exe"
+            try:
+                proc = subprocess.Popen([exe, "-NoLogo", "-NoProfile", "-Command", "-"], cwd=str(APP_DIR),
+                    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, encoding="utf-8", errors="replace", bufsize=1, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+                session["process"] = proc
+                status.configure(text=f"SESSION ACTIVE · PID {proc.pid} · STANDARD USER", fg=ACCENT)
+                append("DILARA PowerShell session started. Full-screen interactive terminal apps are not supported in this embedded console.\n")
+                def reader():
+                    try:
+                        for line in proc.stdout:
+                            session["queue"].put(line)
+                    except (OSError, ValueError) as exc:
+                        session["queue"].put(f"[reader] {exc}\n")
+                    finally:
+                        session["queue"].put(None)
+                threading.Thread(target=reader, daemon=True).start()
+                self._record_activity("terminal_launched", "D-TERMINAL")
+            except OSError as exc:
+                status.configure(text="LAUNCH FAILED", fg=WARN); append(f"Could not start PowerShell: {exc}\n")
+
+        def poll_output():
+            if not output.winfo_exists(): return
+            session = self.terminal_sessions.get(session_key)
+            if not session: return
+            try:
+                while True:
+                    item = session["queue"].get_nowait()
+                    if item is None:
+                        proc = session.get("process")
+                        if proc and proc.poll() is not None:
+                            status.configure(text=f"SESSION EXITED · CODE {proc.returncode}", fg=WARN)
+                        break
+                    append(item)
+            except queue.Empty: pass
+            try: self.root.after(70, poll_output)
+            except tk.TclError: pass
+
+        def send_command(_event=None):
+            text = command.get()
+            if not text.strip(): return "break"
+            session = self.terminal_sessions.get(session_key)
+            proc = session.get("process") if session else None
+            if not proc or proc.poll() is not None:
+                start_session(); proc = session.get("process") if session else None
+            if proc and proc.poll() is None and proc.stdin:
+                try:
+                    append(f"PS> {text}\n")
+                    proc.stdin.write(text + "\n"); proc.stdin.flush()
+                except (OSError, BrokenPipeError) as exc: append(f"Input failed: {exc}\n")
+            command.delete(0, "end")
+            return "break"
+
+        tk.Button(toolbar, text="Start / Restart", command=start_session, bg=PANEL_2, fg=ACCENT, relief="flat", padx=9).pack(side="right", padx=(4, 0))
+        tk.Button(toolbar, text="Stop session", command=lambda: self.close_terminal_session(win, terminate=True), bg=PANEL_2, fg=WARN, relief="flat", padx=9).pack(side="right")
+        tk.Button(entry_row, text="Run", command=send_command, bg=ACCENT, fg="#071014", relief="flat", padx=12).pack(side="left", padx=(7, 0))
+        command.bind("<Return>", send_command)
+        command.focus_set()
+        # Start a fresh standard-user process for an explicit workspace launch, but never on restore.
+        if not getattr(win, "restoring", False):
+            start_session()
+        poll_output()
 
     def launch_powershell(self):
-        try:
-            exe="powershell.exe" if sys.platform == "win32" else None
-            if not exe: messagebox.showinfo("D-TERMINAL", "The PowerShell launcher is Windows-only."); return
-            subprocess.Popen([exe, "-NoLogo"], cwd=str(APP_DIR))
-            self._record_activity("terminal_launched", "D-TERMINAL")
-        except OSError as exc: messagebox.showerror("D-TERMINAL", str(exc))
+        # Kept as a compatibility entry point; the workspace now hosts the process itself.
+        self.open_module("D-TERMINAL")
+
+    def close_terminal_session(self, win, terminate=False):
+        session = self.terminal_sessions.get(id(win))
+        if not session:
+            return
+        proc = session.get("process")
+        if proc and proc.poll() is None:
+            try:
+                if terminate: proc.terminate()
+                elif proc.stdin: proc.stdin.write("exit\n"); proc.stdin.flush()
+            except (OSError, BrokenPipeError):
+                try: proc.terminate()
+                except OSError: pass
+        session["process"] = None if terminate else proc
+
+    def _dispose_window(self, win):
+        # Close a browser process hosted by this workspace before destroying its parent frame.
+        if self.browser_owner is win and self.browser_adapter.is_running():
+            try: self.browser_adapter.process.terminate()
+            except (OSError, AttributeError): pass
+            self.browser_owner = None
+            self._embedded_browser_hwnd = None
+            self._embedded_browser_host = None
+        # Close sessions owned by this window (including terminals hosted in stack tabs).
+        for session_key, owner in list(self._terminal_owner.items()):
+            if owner is win:
+                session = self.terminal_sessions.pop(session_key, None)
+                self._terminal_owner.pop(session_key, None)
+                if session:
+                    proc = session.get("process")
+                    if proc and proc.poll() is None:
+                        try: proc.terminate()
+                        except OSError: pass
+        for proxy in getattr(win, "_stack_proxies", []):
+            self.close_terminal_session(proxy, terminate=True)
 
     def _build_chaos_workspace(self, win):
         body=win.body
@@ -636,13 +1280,24 @@ class DilaraApp:
         except (OSError, ValueError) as exc: messagebox.showerror("App registry", str(exc))
 
     def sign_out(self):
-        if not messagebox.askyesno("Sign out", f"Sign out {self.user['username']} and return to the login page?"): return
+        if not messagebox.askyesno("Sign out", f"Save and encrypt {self.user['username']}'s vault, then return to the login page?"): return
+        if self.browser_adapter.is_running():
+            messagebox.showwarning("Close browser first", "DILARA Browser is still running and uses this user's vault. Close the browser window, then sign out so its profile can be sealed consistently.")
+            return
+        try:
+            self.vault.seal()
+        except (VaultError, OSError) as exc:
+            messagebox.showerror("Vault", f"The vault could not be sealed. Your session remains open so you can retry.\n\n{exc}")
+            return
         self._record_activity("user_signed_out", "SYSTEM")
         for child in self.root.winfo_children(): child.destroy()
-        def enter(user):
-            for child in self.root.winfo_children(): child.destroy()
-            DilaraApp(self.root, user)
-        AuthGate(self.root, enter)
+        AuthGate(self.root, self._enter_user)
+
+    def _enter_user(self, user, password):
+        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault.unlock(password)
+        for child in self.root.winfo_children(): child.destroy()
+        DilaraApp(self.root, user, vault)
 
     def open_path(self, path):
         try:
@@ -677,13 +1332,30 @@ class DilaraApp:
         CONFIG_DIR.mkdir(exist_ok=True)
         try: self.saved_state = json.loads(self.state_file.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError): self.saved_state = {}
+        if not isinstance(self.saved_state, dict): self.saved_state = {}
+
+    def _write_state_silently(self):
+        state = {"version": 2, "windows": {k: [w.x, w.y, w.w, w.h] for k, w in self.windows.items() if not w.minimized},
+                 "wallpaper": {"color": self.wallpaper_color, "path": self.wallpaper_path},
+                 "stack_keys": getattr(self.windows.get("STACK"), "stack_keys", [])}
+        self.saved_state = state
+        try:
+            self.state_file.parent.mkdir(parents=True, exist_ok=True)
+            self.state_file.write_text(json.dumps(state, indent=2), encoding="utf-8")
+        except OSError as exc:
+            print(f"[DILARA state] {exc}", file=sys.stderr)
 
     def _restore_layout(self):
         # Only restore window geometry; never auto-launch operations or privileged sessions.
         for key, geo in self.saved_state.get("windows", {}).items():
             if key not in {m[0] for m in MODULES}: continue
             try:
-                self.open_module(key)
+                if key == "STACK":
+                    keys = [k for k in self.saved_state.get("stack_keys", []) if k in {m[0] for m in MODULES} and k not in {"STACK", "D-LLM", "D-ARCADE"}]
+                    if not keys: continue
+                    self._create_stacked_window(keys, restoring=True)
+                else:
+                    self.open_module(key, restoring=True)
                 win = self.windows[key]
                 win.x, win.y = max(0, int(geo[0])), max(0, int(geo[1]))
                 win.w, win.h = max(340, int(geo[2])), max(220, int(geo[3]))
@@ -692,9 +1364,11 @@ class DilaraApp:
                 pass
 
     def save_state(self):
-        state = {"version": 1, "windows": {k: [w.x, w.y, w.w, w.h] for k, w in self.windows.items() if not w.minimized}}
+        state = {"version": 2, "windows": {k: [w.x, w.y, w.w, w.h] for k, w in self.windows.items() if not w.minimized},
+                 "wallpaper": {"color": self.wallpaper_color, "path": self.wallpaper_path},
+                 "stack_keys": getattr(self.windows.get("STACK"), "stack_keys", [])}
         try:
-            CONFIG_DIR.mkdir(exist_ok=True)
+            self.state_file.parent.mkdir(parents=True, exist_ok=True)
             self.state_file.write_text(json.dumps(state, indent=2), encoding="utf-8")
             messagebox.showinfo("DILARA", "Desktop layout saved. No module operations or privileged sessions are resumed automatically.")
         except OSError as exc:
@@ -709,9 +1383,24 @@ class DilaraApp:
         self.root.after(1000, self._tick_clock)
 
     def shutdown(self):
-        if messagebox.askyesno("DILARA", "Close the DILARA desktop session?"):
-            self._record_activity("session_ended", "SYSTEM")
-            self.root.destroy()
+        if not messagebox.askyesno("DILARA", "Save and encrypt the user vault, then close DILARA?"):
+            return
+        if self.browser_adapter.is_running():
+            try: self.browser_adapter.process.terminate()
+            except (OSError, AttributeError): pass
+        try:
+            self.vault.seal()
+        except (VaultError, OSError) as exc:
+            messagebox.showerror("Vault", f"The vault could not be sealed. DILARA will remain open so you can retry.\n\n{exc}")
+            return
+        self._record_activity("session_ended", "SYSTEM")
+        self._stop_wallpaper_animation()
+        for session in list(self.terminal_sessions.values()):
+            proc = session.get("process")
+            if proc and proc.poll() is None:
+                try: proc.terminate()
+                except OSError: pass
+        self.root.destroy()
 
 class AuthGate:
     def __init__(self, root, on_success):
@@ -750,8 +1439,8 @@ class AuthGate:
         if self.password.get() != self.confirm.get(): self.error.configure(text="Passwords do not match."); return
         try:
             user = self.store.create_user(self.username.get().strip(), self.password.get(), "admin")
-            self.on_success(user)
-        except (AuthError, OSError) as exc: self.error.configure(text=str(exc))
+            self.on_success(user, self.password.get())
+        except (AuthError, VaultError, OSError) as exc: self.error.configure(text=str(exc))
 
     def _build_login(self):
         outer = self._base("SIGN IN  /  SELECT YOUR LOCAL USER ACCOUNT")
@@ -766,13 +1455,20 @@ class AuthGate:
         try: user = self.store.authenticate(self.username.get().strip(), self.password.get())
         except AuthError as exc: self.error.configure(text=str(exc)); return
         if not user: self.error.configure(text="Invalid username or password, or account disabled."); return
-        self.on_success(user)
+        try:
+            self.on_success(user, self.password.get())
+        except (VaultError, OSError) as exc:
+            self.error.configure(text=str(exc))
 
 def launch_application():
     root = tk.Tk()
-    def enter(user):
+    def enter(user, password):
+        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault.unlock(password)
         for child in root.winfo_children(): child.destroy()
-        DilaraApp(root, user)
+        # The password is used to derive a session key, then is not retained by
+        # the desktop object or written to configuration/container files.
+        DilaraApp(root, user, vault)
     AuthGate(root, enter)
     root.mainloop()
 
