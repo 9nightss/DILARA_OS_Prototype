@@ -1,0 +1,138 @@
+@echo off
+color a
+title dspace 
+:a
+cls
+echo                           wellcome to dspace centre
+echo.
+echo.
+echo 1.turkey
+echo 2.india
+echo 3.china
+echo 4.usa 
+echo 5.russia
+echo 6.england
+echo 7.germany
+echo.
+set /p choice=
+if %choice%==1 goto ping
+if %choice%==2 goto scan
+if %choice%==3 goto tree
+if %choice%==4 goto help
+if %choice%==5 goto systeminfo
+if %choice%==6 goto starter
+if %choice%==7 goto tracert
+if %choice%==qui goto exit
+goto a
+:tracert
+cls
+echo technical university of ostrava
+echo university of tartu
+pause
+start http://dspace.vsb.cz
+start http://dspace.ut.ee
+goto A
+goto a
+:starter
+cls
+echo cranfield uni 
+echo university of cambrige
+echo MiT university
+echo Loughborough University
+pause
+start http://dspace.lib.ntua.gr
+start http://dspace.lboro.ac.uk/dspace-jspui
+start http://lib.cam.ac.uk/repository
+start http://dspace.lib.cranfield.ac.uk
+goto A
+goto a
+:help
+cls
+echo saint luis uni
+echo unafri digital library
+echo rochester uni
+echo miami uni
+echo uni of hawai
+echo uni of victoria
+echo uni of colorado
+echo indiana uni of pennsylvania
+pause
+start http://udr.slu.edu.ph:8080/jspui
+start http://dspace.unafri.org:8080/jspui/handle/ 
+start http://dspace.lib.rochester.edu
+start http://dspace.lib.miamioh.edu/xmlui
+start http://dspace.iup.edu
+start http://dspace.library.colostate.edu
+start http://dspace.library.uvic.ca
+start http://dspace.lib.hawaii.edu
+goto A
+goto a
+:scan
+cls
+echo cochin uni
+echo indian instute of tech bombay
+echo gokhale instute of politics and echonomics
+pause 
+start http://dspace.cusat.ac.in/jspui
+start http://dspace.library.iitb.ac.in/jspui
+start http://dspace.gipe.ac.in/xmlui
+goto A
+goto a
+:tree
+cls
+echo kanazawa uni
+echo sp lib
+echo niigata uni
+echo utrecht uni
+echo cuhk
+pause
+start http://dspace.lib.niigata-u.ac.jp/dspace
+start http://dspace.library.uu.nl
+start http://dspace.lib.kanazawa-u.ac.jp
+start http://dspace.lib.sp.edu.sg/xmlui
+start http://dspace.lib.cuhk.edu.hk
+goto A
+goto a
+:ping 
+cls
+echo TBMM
+echo katip celebi uni
+echo FSM vakif uni
+echo kirklareli uni
+echo istanbul zaim uni
+echo firat uni
+echo kadir has uni
+echo kahramanoglu mehmet bey uni
+echo artvin coruh uni
+echo ataturk uni
+echo kocaeli uni
+echo marmara uni
+echo nigde uni
+pause
+start http://acikerisim.tbmm.gov.tr:8080/xmlui/
+start http://acikerisim.ikc.edu.tr:8080/xmlui
+start http://acikerisim.fsm.edu.tr:8080/xmlui
+start http://acikerisim.kirklareli.edu.tr:8080/xmlui
+start http://openaccess.izu.edu.tr
+start http://openaccess.firat.edu.tr/xmlui/?locale-attribute=tr
+start http://acikerisim.khas.edu.tr:8080/xmlui
+start http://earsiv.kmu.edu.tr
+start http://openaccess.artvin.edu.tr/xmlui
+start http://earsiv.atauni.edu.tr/xmlui
+start http://acikerisim.kocaeli.edu.tr:8080/xmlui
+start http://dspace.marmara.edu.tr
+start http://acikerisim.nigde.edu.tr:8080/jspui
+goto A
+goto a
+:systeminfo
+cls
+echo national tech uni
+echo makedonia uni
+pause
+start http://dspace.lib.ntua.gr
+start http://dspace.lib.uom.gr
+goto A
+goto a
+:exit
+exit
+

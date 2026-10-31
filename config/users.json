@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "users": {
+    "9night": {
+      "salt": "92d019c6cefdf2ad92268c9479b3e3bf",
+      "verifier": "5229d47341af2cd0fd6c0ebbe2bfc198ae5ee49fd137a4a852f20e911b76c1b3",
+      "iterations": 310000,
+      "role": "admin",
+      "enabled": true,
+      "vault_id": "667c0a8e00d3dcf99a38cd9419642d13"
+    }
+  }
+}

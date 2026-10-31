@@ -1,0 +1,362 @@
+@echo off
+title dilara
+color a
+cls
+:D
+echo Register ID Please...
+echo.
+set /p s=user:
+cls
+set /p u=if tomorrow is future:
+if %u%==whatistoday if %s%==9night goto B
+pause
+cls
+echo ACCESS DENİED!
+echo.
+pause
+cls
+goto D
+:B
+cls
+echo still having a good day?
+echo.
+set /p feel=
+if %feel%==anotherdayintheparadise goto lsd
+if %feel%==yes goto asd
+if %feel%==im alright goto lisa
+if %feel%==yeah goto tlc
+@echo off
+
+goto a
+:tlc
+echo hey, at least you have a life form!
+pause
+goto A
+goto a
+:lsd
+echo are you sure this isnt an oblivion movie?
+set /p obliv=
+if %obliv%==canyouseeakillerdronearound goto a
+goto A
+goto a
+@echo off
+:asd
+echo okay, fine!
+pause
+goto A
+goto a
+:lisa
+@echo off
+echo well just take another coffee and you will be fine!
+set /p lloyd=
+if %lloyd%==willdo goto f
+if %lloyd%==nope goto n
+goto a
+:n
+echo yeah, thats right homeboy!
+pause
+goto A
+goto 
+:f 
+echo NOPE! JUST GET YOUR ASS AND TAKE A ANOTHER COFFEE!!!
+pause
+goto A
+:A
+cls
+echo Remember we are living in a modern world,
+echo Which is very chaotic and efficent
+echo Yet based on broken system and corrupt people
+echo do not trust anyone especially people who like shapperd
+
+echo.
+echo.                                
+set /p choice=
+if %choice%==db_dspace goto cern
+if %choice%==db_scan goto scan
+if %choice%==qui goto exit
+if %choice%==86247931 goto nmap
+if %choice%==lsd goto pinger
+if %choice%==db_tel goto telnet
+if %choice%==help goto help
+if %choice%==db_ftp goto ftp
+if %choice%==daemon goto lds
+if %choice%==root goto rs
+if %choice%==shutup goto sys
+if %choice%==db_nmap goto asal
+if %choice%==exi goto exit
+if %choice%==db_whois goto who
+if %choice%==db_chaos goto fad
+goto a
+:cern
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+call dspace.bat
+pause
+goto A
+goto a
+:who
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+set /p whois=
+start http://who.is/whois/%whois%
+start www.censys.io/ipv4?q=%whois%
+goto A
+goto a
+:lds
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+start dspace.bat
+start eye.bat
+call cyberstorm.bat
+goto A
+
+goto a
+:rs
+call wmic
+goto A
+
+goto a
+:sys
+shutdown -s
+goto A
+
+goto a
+:asal
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+set /p target=
+nmap %target%
+pause
+goto A
+
+goto a
+:ftp
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+set /p target system=
+ftp %target system%
+goto A
+
+goto a
+:scan
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+netstat
+netstat -a
+netstat -p
+net user
+pause
+goto A
+
+goto a
+:nmap
+echo please give me authorisation to start the action
+call chaos.bat
+
+:a
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+echo i love you>>%random%.bat
+goto :A
+
+
+shutdown -s -t 30 -c "system is destroyed by you"
+goto A
+
+goto a
+:pinger
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+color 0a
+echo target system ip:
+set /p target system ip=
+nslookup %target system ip%
+ping -n 1 -a %target system ip%
+tracert %target system ip%
+nmap %target system ip%
+pause
+
+goto A
+goto a
+:telnet
+@echo off
+cls
+echo.
+set /p pass=command id:
+cls
+set /p c=authorisation code:
+
+if %c%==c29ib2w if %pass%==9night goto B
+cls
+echo ACCESS DENİED!
+echo.
+pause
+goto nmap
+:B
+cls
+echo code accepted!
+echo.
+pause
+cls
+set /p telnet=
+telnet %telnet%
+pause
+goto A
+
+goto a
+:help
+echo db_scan scan this computer
+echo qui exi = exit
+echo lsd scan
+echo db_tel telnet
+echo help 
+echo db_ftp ftp
+echo daemon 
+echo root
+echo shutup shutdown this computer
+echo db_whois
+echo db_nmap scan
+echo db_chaos 
+echo db_dspace
+echo db_censys
+pause
+goto A
+goto a
+:fad
+
+echo i see only darkness before me... uughhhhh...
+pause
+call chaos.bat
+call attack.bat
+goto nmap
+:exit
+exit

@@ -49,13 +49,22 @@ MODULES = [
     ("KOD8", "Cryptographic workspace", "Cipher routing and .kod8 tooling."),
     ("D-ARCADE", "Game library", "Chess, Lightcycle, Tetris, Maze and Tic-tac-toe."),
     ("D-LLM", "Language model", "Local/custom assistant and model services."),
-    ("D-TERMINAL", "PowerShell console", "Standard-user console; privileged actions should be explicit."),
+    ("D-TERMINAL", "PowerShell console", "Standard and administrator PowerShell instances; elevation always requires a UAC prompt."),
     ("CHAOS", "Network diagnostics", "Bounded, authorized diagnostics with scope and cancellation."),
     ("BROWSER", "DILARA Browser", "Custom Chromium-based browser with a dedicated local profile."),
     ("FILES", "Virtual file system", "Per-user directory tree stored in an encrypted single-file vault."),
     ("NOTEPAD", "Text editor", "A lightweight editor for notes and text files."),
     ("STACK", "Stacked workspace", "Combine compatible modules in a tabbed class workspace."),
 ]
+
+# Each of these modules is its own app. TODO(Fatih): replace the temporary paths with the real entry points.
+RESOURCE_APPS = {
+    "DSPACE LIST": APP_DIR / "legacy_modules" / "dilara 1.0" / "dspace.bat",
+    "FTP LIST":    APP_DIR / "legacy_modules" / "dilara 1.0" / "cyberstorm.bat",
+    "THE EYE":     APP_DIR / "legacy_modules" / "dilara 1.0" / "eye.bat",
+    "CHAOS":       APP_DIR / "legacy_modules" / "dilara 1.0" / "chaos.bat",
+}
+RESOURCE_KEYS = set(RESOURCE_APPS)
 
 class DesktopWindow:
     def __init__(self, app: "DilaraApp", module: tuple[str, str, str], x: int, y: int, w: int = 560, h: int = 360, stack_keys=None, restoring=False):
@@ -103,7 +112,7 @@ class DesktopWindow:
         if self.key == "STACK":
             self.app.build_stacked_workspace(self)
             return
-        if self.key in {"DSPACE", "CYBERSTORM", "EYE", "D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS", "BROWSER", "FILES", "NOTEPAD"}:
+        if self.key in RESOURCE_KEYS | {"D-ARCADE", "D-LLM", "D-TERMINAL", "CHAOS", "BROWSER", "FILES", "NOTEPAD"}:
             self.app.build_workspace(self)
             return
         tk.Label(self.body, text=self.key, bg=PANEL, fg=ACCENT, font=("Segoe UI", 22, "bold")).pack(anchor="w")
@@ -111,12 +120,12 @@ class DesktopWindow:
         tk.Label(self.body, text=self.description, bg=PANEL, fg=TEXT, font=("Segoe UI", 11), wraplength=480, justify="left").pack(anchor="w")
         tk.Frame(self.body, bg=BORDER, height=1).pack(fill="x", pady=17)
         tk.Label(self.body, text="INTEGRATION STATUS", bg=PANEL, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w")
-        status = "KOD8 CL1–CL8 source is preserved. DILARA activity logging calls it through a separate adapter; the original UI remains a side app."
+        status = "Status:Online"
         tk.Label(self.body, text=status, bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=480, justify="left").pack(anchor="w")
-        tk.Button(self.body, text="Launch KOD8 side application", command=self.app.launch_kod8_side_app,
+        tk.Button(self.body, text="Launch the App", command=self.app.launch_kod8_side_app,
                   bg=ACCENT, fg="#071014", activebackground="#7ce7dc", relief="flat",
                   padx=14, pady=8, font=("Segoe UI Semibold", 9), cursor="hand2").pack(anchor="w", pady=(16, 0))
-        tk.Label(self.body, text="Security note: existing transforms are experimental and do not provide authenticated encryption or tamper detection.",
+        tk.Label(self.body, text="All activities will be encrypted by kod8 on backend",
                  bg=PANEL, fg=WARN, font=("Segoe UI", 9), wraplength=480, justify="left").pack(anchor="w", pady=(10, 0))
 
     def _drag_start(self, event):
@@ -440,8 +449,8 @@ class DilaraApp:
         body = win.body
         tk.Label(body, text=key, bg=PANEL, fg=ACCENT, font=("Segoe UI", 22, "bold")).pack(anchor="w")
         tk.Label(body, text=win.subtitle.upper(), bg=PANEL, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", pady=(1, 10))
-        if key in {"DSPACE", "CYBERSTORM", "EYE"}:
-            self._build_resource_workspace(win)
+        if key in RESOURCE_KEYS:
+            self._build_resource_launcher(win)
         elif key == "D-ARCADE":
             self._build_arcade_workspace(win)
         elif key == "D-LLM":
@@ -568,7 +577,7 @@ class DilaraApp:
                  font=("Segoe UI", 10, "bold")).pack(anchor="w")
         tk.Label(body, text="The original CL1–CL8 source and standalone UI are preserved. This tab is a launcher/status surface; the existing KOD8 UI remains a separate process.",
                  bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(6, 12))
-        tk.Button(body, text="Launch KOD8 side application", command=self.launch_kod8_side_app,
+        tk.Button(body, text="Launch the App", command=self.launch_kod8_side_app,
                   bg=ACCENT, fg="#071014", relief="flat", padx=12, pady=7).pack(anchor="w")
         tk.Label(body, text="Security note: the current experimental transforms do not provide authenticated encryption or tamper detection.",
                  bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=650, justify="left").pack(anchor="w", pady=(10, 0))
@@ -856,6 +865,40 @@ class DilaraApp:
         tk.Label(body, text="Files are staged in the active session and encrypted into the user's .dvault container when signing out. Do not force-close DILARA while files are being saved.",
                  bg=PANEL, fg=WARN, font=("Segoe UI", 8), wraplength=500, justify="left").pack(anchor="w", pady=(8, 0))
 
+    def _build_resource_launcher(self, win):
+        body = win.body
+        app_path = RESOURCE_APPS[win.key]
+        tk.Label(body, text=f"{win.key} // {win.subtitle.upper()}", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body, text=f"{win.description} This tab is a launcher; the app runs as a separate process.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=490, justify="left").pack(anchor="w", pady=(4, 10))
+        found = app_path.is_file()
+        tk.Label(body, text=f"ENTRY POINT (temporary)\n{app_path}", bg=PANEL, fg=MUTED,
+                 font=("Consolas", 8), justify="left", wraplength=490).pack(anchor="w")
+        tk.Label(body, text="STATUS  \u2022  " + ("Entry point found" if found else "Entry point not found yet"),
+                 bg=PANEL, fg=ACCENT if found else WARN, font=("Consolas", 8)).pack(anchor="w", pady=(6, 10))
+        tk.Button(body, text="Launch the App", command=lambda k=win.key: self.launch_resource_app(k),
+                  bg=ACCENT, fg="#071014", activebackground="#7ce7dc", relief="flat",
+                  padx=14, pady=8, font=("Segoe UI Semibold", 9), cursor="hand2").pack(anchor="w")
+
+    def launch_resource_app(self, module_key):
+        app_path = RESOURCE_APPS[module_key]
+        if not app_path.is_file():
+            messagebox.showerror(module_key, f"App not found:\n{app_path}")
+            return
+        try:
+            if app_path.suffix.lower() in {".bat", ".cmd"}:
+                if sys.platform != "win32":
+                    messagebox.showerror(module_key, "Batch launchers require Windows.")
+                    return
+                subprocess.Popen([str(app_path)], cwd=str(app_path.parent),
+                                creationflags=subprocess.CREATE_NEW_CONSOLE)
+            else:
+                subprocess.Popen([sys.executable, str(app_path)], cwd=str(app_path.parent))
+            self._record_activity("resource_app_launched", module_key)
+        except OSError as exc:
+            messagebox.showerror(module_key, f"Could not launch {module_key}:\n{exc}")
+        
     def _build_resource_workspace(self, win):
         key = win.key
         body = win.body
@@ -1014,10 +1057,32 @@ class DilaraApp:
         transcript.configure(state="normal"); transcript.insert("end", "D-LLM offline mode ready. Type /help to begin.\n"); transcript.configure(state="disabled")
 
     def _build_terminal_workspace(self, win):
-        body = win.body
-        tk.Label(body, text="POWERSHELL // EMBEDDED SESSION", bg=PANEL, fg=TEXT,
+        outer = win.body
+        tabs = ttk.Notebook(outer)
+        tabs.pack(fill="both", expand=True)
+        body = tk.Frame(tabs, bg=PANEL, padx=8, pady=8)       # STANDARD tab (name kept so old code works)
+        admin_tab = tk.Frame(tabs, bg=PANEL, padx=12, pady=12)
+        tabs.add(body, text="STANDARD")
+        tabs.add(admin_tab, text="ADMINISTRATOR")
+
+        # ---------------- ADMINISTRATOR tab ----------------
+        tk.Label(admin_tab, text="POWERSHELL // ADMINISTRATOR", bg=PANEL, fg=TEXT,
                  font=("Segoe UI", 10, "bold")).pack(anchor="w")
-        tk.Label(body, text="A dedicated standard-user PowerShell process is attached to this workspace. Commands execute locally; DILARA does not auto-elevate.",
+        tk.Label(admin_tab, text="Opens an elevated PowerShell in its own window. Windows will show a UAC prompt each time; "
+                                 "DILARA never elevates on its own. Elevated windows cannot be embedded here, so this "
+                                 "instance lives outside the workspace and is closed from its own window.",
+                 bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(4, 10))
+        admin_status = tk.Label(admin_tab, text="NO ADMIN SESSION", bg=PANEL, fg=WARN, font=("Consolas", 8))
+        admin_status.pack(anchor="w", pady=(0, 8))
+        tk.Button(admin_tab, text="Open Administrator PowerShell",
+                  command=lambda: self.launch_admin_powershell(admin_status),
+                  bg=ACCENT_2, fg="#071014", relief="flat", padx=12, pady=7,
+                  font=("Segoe UI Semibold", 9), cursor="hand2").pack(anchor="w")
+
+        # ---------------- STANDARD tab (previous implementation) ----------------
+        tk.Label(body, text="POWERSHELL // STANDARD SESSION", bg=PANEL, fg=TEXT,
+                 font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tk.Label(body, text="A dedicated standard-user PowerShell process is attached to this tab. Commands execute locally without elevation.",
                  bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=650, justify="left").pack(anchor="w", pady=(4, 8))
         toolbar = tk.Frame(body, bg=PANEL); toolbar.pack(fill="x", pady=(0, 6))
         status = tk.Label(toolbar, text="SESSION NOT STARTED", bg=PANEL, fg=WARN, font=("Consolas", 8))
