@@ -19,9 +19,25 @@ from services.offline_assistant import respond as offline_respond
 from browser.browser_adapter import BrowserAdapter
 
 APP_DIR = Path(__file__).resolve().parent
-CONFIG_DIR = APP_DIR / "config"
+
+
+def _resolve_data_root() -> Path:
+    """Where vaults, runtime workspaces, accounts and logs live (outside the repo and OneDrive).
+    Override with the DILARA_DATA_ROOT environment variable."""
+    override = os.environ.get("DILARA_DATA_ROOT")
+    if override:
+        return Path(override).expanduser()
+    if sys.platform == "win32" and Path("D:/").exists():
+        return Path("D:/DILARA")
+    print("[DILARA] D:\\ not found; falling back to the application folder.", file=sys.stderr)
+    return APP_DIR
+
+
+DATA_ROOT = _resolve_data_root()
+CONFIG_DIR = DATA_ROOT / "config"
 STATE_FILE = CONFIG_DIR / "desktop_state.json"
 USER_STORE_FILE = CONFIG_DIR / "users.json"
+
 
 BG = "#090d13"
 PANEL = "#111923"
@@ -182,13 +198,30 @@ class DesktopWindow:
         self.frame.place(x=self.x, y=self.y, width=self.w, height=self.h)
         self.focus()
 
+    def confirm_unsaved(self):
+        """Offer to save unsaved Notepad text in this window and its stacked tabs. False = cancelled."""
+        for target in [self, *getattr(self, "_stack_proxies", [])]:
+            hook = getattr(target, "_maybe_save", None)
+            if hook:
+                if self.minimized:
+                    self.restore()
+                if not hook():
+                    return False
+        return True
+
     def close(self):
-        self.app._dispose_window(self)
+        if not self.confirm_unsaved():
+            return
+        try:
+            self.app._dispose_window(self)
+        except Exception as exc:        # cleanup trouble must never keep the window on screen
+            print(f"[DILARA close] {exc}", file=sys.stderr)
         self.app._record_activity("module_closed", self.key)
         self.frame.destroy()
         self.app.windows.pop(self.key, None)
         if self.app.active is self: self.app.active = None
         self.app.refresh_taskbar()
+
 
 class DilaraApp:
     def __init__(self, root: tk.Tk, user: dict, vault: VaultManager):
@@ -221,7 +254,7 @@ class DilaraApp:
         self.browser_owner = None
         self._embedded_browser_hwnd = None
         self._embedded_browser_host = None
-        self.activity_logger = ActivityLogger(APP_DIR / "data" / "activity.kod8log", Kod8Adapter())
+        self.activity_logger = ActivityLogger(DATA_ROOT / "data" / "activity.kod8log", Kod8Adapter())
         self._record_activity("session_started", "SYSTEM")
         self._load_state()
         self._build_shell()
@@ -605,6 +638,8 @@ class DilaraApp:
             if answer: return save_as_or_current()
             return True
 
+        win._maybe_save = maybe_save   # lets the window's close button / sign-out ask about unsaved text
+
         def load_path(path):
             try: content = Path(path).read_text(encoding="utf-8-sig")
             except UnicodeDecodeError:
@@ -898,6 +933,35 @@ class DilaraApp:
             self._record_activity("resource_app_launched", module_key)
         except OSError as exc:
             messagebox.showerror(module_key, f"Could not launch {module_key}:\n{exc}")
+
+    def launch_admin_powershell(self, status_label=None):
+        """Open an elevated PowerShell in its own console after an explicit confirmation.
+        Windows shows the UAC prompt; DILARA never elevates silently. Elevated windows cannot be
+        embedded (UIPI) and their output cannot be piped back, so this is a separate window."""
+        def say(text, color):
+            if status_label is not None and status_label.winfo_exists():
+                status_label.configure(text=text, fg=color)
+        if sys.platform != "win32":
+            say("WINDOWS ONLY", WARN)
+            return
+        if not messagebox.askyesno("Administrator PowerShell",
+                                   "Open PowerShell as Administrator?\n\nWindows will ask for approval (UAC). "
+                                   "Commands in that window run with full system privileges."):
+            return
+        try:
+            import ctypes
+            shell32 = ctypes.windll.shell32
+            shell32.ShellExecuteW.restype = ctypes.c_void_p
+            rc = int(shell32.ShellExecuteW(None, "runas", "powershell.exe", "-NoLogo -NoExit",
+                                           str(APP_DIR), 1) or 0)
+        except Exception as exc:
+            say(f"LAUNCH FAILED \u00b7 {exc}", WARN)
+            return
+        if rc > 32:
+            say("ADMIN SESSION OPENED \u00b7 separate window", ACCENT)
+            self._record_activity("admin_terminal_launched", "D-TERMINAL")
+        else:
+            say("NOT STARTED \u00b7 UAC declined or failed", WARN)
         
     def _build_resource_workspace(self, win):
         key = win.key
@@ -1192,13 +1256,9 @@ class DilaraApp:
         session["process"] = None if terminate else proc
 
     def _dispose_window(self, win):
-        # Close a browser process hosted by this workspace before destroying its parent frame.
-        if self.browser_owner is win and self.browser_adapter.is_running():
-            try: self.browser_adapter.process.terminate()
-            except (OSError, AttributeError): pass
-            self.browser_owner = None
-            self._embedded_browser_hwnd = None
-            self._embedded_browser_host = None
+        if self.browser_owner is win:
+            self._close_browser()
+
         # Close sessions owned by this window (including terminals hosted in stack tabs).
         for session_key, owner in list(self._terminal_owner.items()):
             if owner is win:
@@ -1344,22 +1404,64 @@ class DilaraApp:
             self._record_activity("registered_app_launched", "APP_REGISTRY")
         except (OSError, ValueError) as exc: messagebox.showerror("App registry", str(exc))
 
-    def sign_out(self):
-        if not messagebox.askyesno("Sign out", f"Save and encrypt {self.user['username']}'s vault, then return to the login page?"): return
-        if self.browser_adapter.is_running():
-            messagebox.showwarning("Close browser first", "DILARA Browser is still running and uses this user's vault. Close the browser window, then sign out so its profile can be sealed consistently.")
-            return
+    def _log_close_error(self, exc):
+        """Append the full error to DATA_ROOT/data/close_errors.log so failures can be diagnosed."""
+        import datetime, traceback
         try:
-            self.vault.seal()
-        except (VaultError, OSError) as exc:
-            messagebox.showerror("Vault", f"The vault could not be sealed. Your session remains open so you can retry.\n\n{exc}")
+            log = DATA_ROOT / "data" / "close_errors.log"
+            log.parent.mkdir(parents=True, exist_ok=True)
+            with log.open("a", encoding="utf-8") as handle:
+                handle.write(f"[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] {exc!r}\n")
+                handle.write("".join(traceback.format_exception(type(exc), exc, exc.__traceback__)) + "\n")
+        except OSError:
+            pass
+
+    def _seal_vault(self):
+        """Encrypt and close the vault. True = closed (saved, or deliberately abandoned).
+        False = the user chose to keep DILARA open. A failed save can never trap the user."""
+        while True:
+            try:
+                clean = self.vault.seal()
+                break
+            except (VaultError, OSError) as exc:
+                self._log_close_error(exc)
+                workspace = getattr(self.vault, "_session_dir", None)
+                choice = messagebox.askyesnocancel(
+                    "Vault could not be saved",
+                    f"{exc}\n\n"
+                    "YES  \u2013 try again\n"
+                    "NO   \u2013 close anyway. This session's changes are NOT encrypted into the vault; "
+                    f"they stay as plain files in:\n{workspace}\n"
+                    "CANCEL \u2013 keep DILARA open")
+                if choice is True:
+                    continue
+                if choice is None:
+                    return False
+                abandon = getattr(self.vault, "abandon", None)
+                if abandon:
+                    abandon()
+                return True
+        if clean is False:
+            messagebox.showwarning("Vault", "Your vault was saved and encrypted.\n\nA few temporary files are still "
+                                            "locked by another program (often a cloud-sync client or antivirus). "
+                                            "They will be removed automatically the next time DILARA starts.")
+        return True
+
+    def sign_out(self):
+        if not messagebox.askyesno("Sign out", f"Save and encrypt {self.user['username']}'s vault, then return to the login page?"):
+            return
+        if not self._prepare_close() or not self._seal_vault():
             return
         self._record_activity("user_signed_out", "SYSTEM")
+        self._stop_wallpaper_animation()
+        self.windows.clear()
+        self.active = None
+        self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)   # the old desktop no longer owns the window
         for child in self.root.winfo_children(): child.destroy()
         AuthGate(self.root, self._enter_user)
 
     def _enter_user(self, user, password):
-        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault = VaultManager(DATA_ROOT, user["username"], user.get("vault_id"))
         vault.unlock(password)
         for child in self.root.winfo_children(): child.destroy()
         DilaraApp(self.root, user, vault)
@@ -1394,12 +1496,14 @@ class DilaraApp:
             btn.pack(side="left", fill="y", padx=1)
 
     def _load_state(self):
-        CONFIG_DIR.mkdir(exist_ok=True)
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         try: self.saved_state = json.loads(self.state_file.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError): self.saved_state = {}
         if not isinstance(self.saved_state, dict): self.saved_state = {}
-
+   
     def _write_state_silently(self):
+        if not self.vault.is_open:
+            return   
         state = {"version": 2, "windows": {k: [w.x, w.y, w.w, w.h] for k, w in self.windows.items() if not w.minimized},
                  "wallpaper": {"color": self.wallpaper_color, "path": self.wallpaper_path},
                  "stack_keys": getattr(self.windows.get("STACK"), "stack_keys", [])}
@@ -1446,27 +1550,78 @@ class DilaraApp:
         import datetime
         self.clock.configure(text=datetime.datetime.now().strftime("%Y-%m-%d  %H:%M:%S"))
         self.root.after(1000, self._tick_clock)
+    @staticmethod
+    def _stop_process_tree(proc, timeout=6.0):
+        """Stop a child process and everything it spawned, then wait until it is really gone."""
+        if proc is None or proc.poll() is not None:
+            return
+        try:
+            if sys.platform == "win32":
+                subprocess.run(["taskkill", "/PID", str(proc.pid), "/T", "/F"], capture_output=True,
+                               timeout=timeout, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            else:
+                proc.terminate()
+        except (OSError, subprocess.SubprocessError):
+            try: proc.kill()
+            except OSError: pass
+        try: proc.wait(timeout=timeout)
+        except subprocess.TimeoutExpired: pass
+
+    def _prepare_close(self):
+        """Everything that has to happen before the vault is sealed. False = the user cancelled."""
+        for win in list(self.windows.values()):
+            if not win.confirm_unsaved():
+                return False
+        self._write_state_silently()   # layout and wallpaper are saved into the vault first
+        self._stop_all_children()      # nothing may still hold files inside the vault
+        return True
+
+    def _stop_all_children(self):
+        try:
+            self._close_browser()
+        except Exception as exc:
+            self._log_close_error(exc)
+        for session in list(self.terminal_sessions.values()):
+            try:
+                proc = session.get("process")
+                if proc is not None:
+                    self._stop_process_tree(proc)
+            except Exception as exc:
+                self._log_close_error(exc)
+            session["process"] = None
+
+    def _close_browser(self, grace=5.0):
+        """Close DILARA Browser gently so it can flush its profile, then force-stop any leftovers."""
+        import time
+        proc = self.browser_adapter.process
+        hwnd = self._embedded_browser_hwnd
+        if proc is not None and proc.poll() is None:
+            if hwnd and sys.platform == "win32":
+                try:
+                    import ctypes
+                    from ctypes import wintypes
+                    post = ctypes.windll.user32.PostMessageW
+                    post.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+                    post.restype = wintypes.BOOL
+                    post(hwnd, 0x0010, 0, 0)          # WM_CLOSE
+                    proc.wait(timeout=grace)
+                except Exception:
+                    pass
+            self._stop_process_tree(proc)             # browser engine child processes included
+            if sys.platform == "win32":
+                time.sleep(0.3)                       # let Windows release the profile files
+        self.browser_owner = None
+        self._embedded_browser_hwnd = None
+        self._embedded_browser_host = None
 
     def shutdown(self):
-        if not messagebox.askyesno("DILARA", "Save and encrypt the user vault, then close DILARA?"):
+        if not messagebox.askyesno("DILARA", "Save your work, encrypt the user vault, then close DILARA?"):
             return
-        if self.browser_adapter.is_running():
-            try: self.browser_adapter.process.terminate()
-            except (OSError, AttributeError): pass
-        try:
-            self.vault.seal()
-        except (VaultError, OSError) as exc:
-            messagebox.showerror("Vault", f"The vault could not be sealed. DILARA will remain open so you can retry.\n\n{exc}")
+        if not self._prepare_close() or not self._seal_vault():
             return
         self._record_activity("session_ended", "SYSTEM")
         self._stop_wallpaper_animation()
-        for session in list(self.terminal_sessions.values()):
-            proc = session.get("process")
-            if proc and proc.poll() is None:
-                try: proc.terminate()
-                except OSError: pass
         self.root.destroy()
-
 class AuthGate:
     def __init__(self, root, on_success):
         self.root, self.on_success = root, on_success
@@ -1528,7 +1683,7 @@ class AuthGate:
 def launch_application():
     root = tk.Tk()
     def enter(user, password):
-        vault = VaultManager(APP_DIR, user["username"], user.get("vault_id"))
+        vault = VaultManager(DATA_ROOT, user["username"], user.get("vault_id"))
         vault.unlock(password)
         for child in root.winfo_children(): child.destroy()
         # The password is used to derive a session key, then is not retained by
