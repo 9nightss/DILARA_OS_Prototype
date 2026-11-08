@@ -1,15 +1,3 @@
-"""
-Maze Lab — Phase 1: bidirectional Randomized Prim
-Python 3.x, standard library only (Tkinter).
-
-Canvas: 500x500 pixels. Logical cell size: 4 pixels by default (125x125 cells).
-Two frontiers grow from opposite corners. The two regions are joined by opening
-a valid wall between them, guaranteeing a connected maze.
-
-This is a bidirectional randomized Prim-style growth variant. A* uses Manhattan
-distance, four-directional movement, and uniform edge costs.
-"""
-
 import heapq
 import itertools
 import random

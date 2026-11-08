@@ -1,0 +1,3 @@
+Welcome to DILARA.
+
+This is your private virtual root directory. Files saved here are included in your per-user vault.

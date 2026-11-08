@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "seeded": [
+    "D-ARCADE",
+    "D-LLM"
+  ],
+  "containers": {
+    "D-ARCADE": [
+      {
+        "id": "eb426f6574",
+        "name": "Chess 1",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-CHESS-main/chess_gui.py",
+        "note": "pillow"
+      },
+      {
+        "id": "2f86bf509d",
+        "name": "Chess 2",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-CHESS-main/chess_gui_v2.py",
+        "note": "pillow"
+      },
+      {
+        "id": "9011219649",
+        "name": "Tetris",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-TETRIS-main/D-ARCADE-TETRIS.py",
+        "note": "pygame"
+      },
+      {
+        "id": "0222ad18db",
+        "name": "Lightcycle",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-Trolightcycle-main/D-ARCADE-Tron-Lightcycle.py",
+        "note": "pygame"
+      },
+      {
+        "id": "ac082a3969",
+        "name": "Maze 1",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGPT.py",
+        "note": "tkinter / source-dependent"
+      },
+      {
+        "id": "706498ba99",
+        "name": "Maze 2",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGEMİNİ.py",
+        "note": "tkinter / source-dependent"
+      },
+      {
+        "id": "6d072af7aa",
+        "name": "Maze 3",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGEMİNİ2.py",
+        "note": "tkinter / source-dependent"
+      },
+      {
+        "id": "0132d38f42",
+        "name": "Tic-tac-toe 1",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/magenta-tictactoe-main/magenta-tic-tac-toe.py",
+        "note": "console"
+      },
+      {
+        "id": "1b96efa6b9",
+        "name": "Tic-tac-toe 2",
+        "kind": "python",
+        "target": "legacy_modules/D-ARCADE CLASS/magenta-tictactoe-main/tic_tac_toe_v2.py",
+        "note": "console"
+      }
+    ],
+    "D-LLM": [],
+    "grp-77dc1fff": [
+      {
+        "id": "a2ffba88f2",
+        "name": "DSPACE LIST",
+        "kind": "module",
+        "target": "DSPACE LIST",
+        "note": "Network atlas"
+      },
+      {
+        "id": "4e5dd74af1",
+        "name": "FTP LIST",
+        "kind": "module",
+        "target": "FTP LIST",
+        "note": "FTP / remote resources"
+      },
+      {
+        "id": "09a8e99f73",
+        "name": "THE EYE",
+        "kind": "module",
+        "target": "THE EYE",
+        "note": "Camera matrix"
+      }
+    ]
+  },
+  "migrations": [
+    "dllm-default-modules-v1",
+    "sidebar-libraries-v1"
+  ],
+  "layout": {
+    "order": [
+      "grp-77dc1fff",
+      "KOD8",
+      "D-ARCADE",
+      "D-LLM",
+      "D-TERMINAL",
+      "CHAOS",
+      "BROWSER",
+      "FILES",
+      "NOTEPAD"
+    ],
+    "expanded": {
+      "D-ARCADE": false,
+      "D-LLM": false,
+      "grp-77dc1fff": true
+    },
+    "folders": [
+      {
+        "key": "grp-77dc1fff",
+        "title": "Libraries"
+      }
+    ]
+  }
+}

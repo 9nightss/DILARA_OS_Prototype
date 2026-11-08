@@ -15,6 +15,7 @@ from services.kod8_adapter import Kod8Adapter
 from services.auth import UserStore, AuthError
 from services.vault_manager import VaultManager, VaultError
 from services.app_registry import AppRegistry
+from services.app_folders import AppFolderStore, AppFolderError, classify_path
 from services.offline_assistant import respond as offline_respond
 from browser.browser_adapter import BrowserAdapter
 
@@ -81,6 +82,33 @@ RESOURCE_APPS = {
     "CHAOS":       APP_DIR / "legacy_modules" / "dilara 1.0" / "chaos.bat",
 }
 RESOURCE_KEYS = set(RESOURCE_APPS)
+
+# Container classes: modules that hold an editable list of side-app buttons ("app folders").
+# The lists are stored per user inside the vault. These defaults are added once, on first use,
+# and are removable and reorderable afterwards like any other entry.
+CONTAINER_KEYS = ("D-ARCADE", "D-LLM")
+_ARC = "legacy_modules/D-ARCADE CLASS"
+FOLDER_SEEDS = {
+    "D-ARCADE": [
+        ("Chess 1", "python", f"{_ARC}/D-ARCADE-CHESS-main/chess_gui.py", "pillow"),
+        ("Chess 2", "python", f"{_ARC}/D-ARCADE-CHESS-main/chess_gui_v2.py", "pillow"),
+        ("Tetris", "python", f"{_ARC}/D-ARCADE-TETRIS-main/D-ARCADE-TETRIS.py", "pygame"),
+        ("Lightcycle", "python", f"{_ARC}/D-ARCADE-Trolightcycle-main/D-ARCADE-Tron-Lightcycle.py", "pygame"),
+        ("Maze 1", "python", f"{_ARC}/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGPT.py", "tkinter / source-dependent"),
+        ("Maze 2", "python", f"{_ARC}/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGEM\u0130N\u0130.py", "tkinter / source-dependent"),
+        ("Maze 3", "python", f"{_ARC}/D-ARCADE-MAZE-DEMO/D-ARCADE_MAZEGEM\u0130N\u01302.py", "tkinter / source-dependent"),
+        ("Tic-tac-toe 1", "python", f"{_ARC}/magenta-tictactoe-main/magenta-tic-tac-toe.py", "console"),
+        ("Tic-tac-toe 2", "python", f"{_ARC}/magenta-tictactoe-main/tic_tac_toe_v2.py", "console"),
+    ],
+    "D-LLM": [],
+}
+# Ready-made sidebar folders, created once per user (name, title, module keys). They are ordinary
+# folders afterwards: rename, reorder or delete them, and the modules return to the main list.
+DEFAULT_SIDEBAR_FOLDERS = [
+    ("sidebar-libraries-v1", "Libraries", ("DSPACE LIST", "FTP LIST", "THE EYE")),
+]
+FOLDER_KIND_LABEL = {"python": "Python app", "batch": "Batch launcher", "exe": "Program", "url": "Web link",
+                     "folder": "Folder", "module": "DILARA module", "registry": "Added app"}
 
 class DesktopWindow:
     def __init__(self, app: "DilaraApp", module: tuple[str, str, str], x: int, y: int, w: int = 560, h: int = 360, stack_keys=None, restoring=False):
@@ -277,27 +305,31 @@ class DilaraApp:
         self.sidebar.pack(side="left", fill="y")
         self.sidebar.pack_propagate(False)
         tk.Label(self.sidebar, text="WORKSPACES", bg="#0d141d", fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(20, 10))
-        for key, subtitle, desc in MODULES:
-            if key == "STACK":
-                continue
-            btn = tk.Button(self.sidebar, text=f"◈  {key}", command=lambda k=key: self.open_module(k),
-                            bg="#0d141d", fg=TEXT, activebackground=PANEL_2, activeforeground=ACCENT,
-                            relief="flat", bd=0, anchor="w", padx=16, pady=8, font=("Segoe UI", 9), cursor="hand2")
-            btn.pack(fill="x", padx=6, pady=1)
-        tk.Frame(self.sidebar, bg=BORDER, height=1).pack(fill="x", padx=14, pady=15)
-        tk.Label(self.sidebar, text="SESSION", bg="#0d141d", fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(0, 8))
-        tk.Button(self.sidebar, text="▧  Wallpaper", command=self.open_wallpaper_menu, bg="#0d141d", fg=ACCENT_2,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
-        tk.Button(self.sidebar, text="▤  Stack workspace", command=self.open_stacked_workspace, bg="#0d141d", fg=ACCENT,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
-        tk.Button(self.sidebar, text="▣  Save layout", command=self.save_state, bg="#0d141d", fg=ACCENT,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
-        tk.Button(self.sidebar, text="ⓘ  About / status", command=self.about, bg="#0d141d", fg=TEXT,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
-        tk.Button(self.sidebar, text="▦  Apps & Users", command=self.open_apps_users, bg="#0d141d", fg=ACCENT,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
-        tk.Button(self.sidebar, text="⇥  Sign out", command=self.sign_out, bg="#0d141d", fg=TEXT,
-                  activebackground=PANEL_2, relief="flat", anchor="w", padx=16, pady=8, font=("Segoe UI", 9)).pack(fill="x", padx=6)
+        session = tk.Frame(self.sidebar, bg="#0d141d")
+        session.pack(side="bottom", fill="x")
+        tk.Frame(session, bg=BORDER, height=1).pack(fill="x", padx=14, pady=(10, 12))
+        tk.Label(session, text="SESSION", bg="#0d141d", fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(0, 6))
+        for label, command, color in (("\u25a7  Wallpaper", self.open_wallpaper_menu, ACCENT_2),
+                                      ("\u25a4  Stack workspace", self.open_stacked_workspace, ACCENT),
+                                      ("\u25a3  Save layout", self.save_state, ACCENT),
+                                      ("\u24d8  About / status", self.about, TEXT),
+                                      ("\u25a6  Apps & Users", self.open_apps_users, ACCENT),
+                                      ("\u21e5  Sign out", self.sign_out, TEXT)):
+            tk.Button(session, text=label, command=command, bg="#0d141d", fg=color, activebackground=PANEL_2,
+                      relief="flat", anchor="w", padx=16, pady=6, font=("Segoe UI", 9)).pack(fill="x", padx=6)
+        tree_holder = tk.Frame(self.sidebar, bg="#0d141d")
+        tree_holder.pack(fill="both", expand=True)
+        tree_canvas = tk.Canvas(tree_holder, bg="#0d141d", highlightthickness=0, width=170)
+        tree_bar = ttk.Scrollbar(tree_holder, orient="vertical", command=tree_canvas.yview)
+        self.sidebar_inner = tk.Frame(tree_canvas, bg="#0d141d")
+        self.sidebar_inner.bind("<Configure>", lambda _e: tree_canvas.configure(scrollregion=tree_canvas.bbox("all")))
+        tree_window = tree_canvas.create_window((0, 0), window=self.sidebar_inner, anchor="nw")
+        tree_canvas.bind("<Configure>", lambda e: tree_canvas.itemconfigure(tree_window, width=e.width))
+        tree_canvas.configure(yscrollcommand=tree_bar.set)
+        tree_canvas.pack(side="left", fill="both", expand=True)
+        tree_bar.pack(side="right", fill="y")
+        self._sidebar_canvas = tree_canvas
+        self._render_sidebar_tree()
         self.workspace = tk.Frame(main, bg=BG)
         self.workspace.pack(side="left", fill="both", expand=True)
         self.desktop = tk.Frame(self.workspace, bg=BG)
@@ -462,7 +494,7 @@ class DilaraApp:
         count = len(self.windows)
         x = 50 + (count * 34) % max(100, self.desktop.winfo_width() - 650)
         y = 35 + (count * 28) % max(80, self.desktop.winfo_height() - 430)
-        default_w, default_h = (650, 700) if key == "D-LLM" else (760, 520) if key in {"D-TERMINAL", "NOTEPAD", "STACK"} else (560, 360)
+        default_w, default_h = (650, 700) if key == "D-LLM" else (760, 520) if key in {"D-TERMINAL", "NOTEPAD", "STACK"} else (560, 480) if key == "D-ARCADE" else (560, 360)
         default_w = min(default_w, max(420, self.desktop.winfo_width() - 30))
         default_h = min(default_h, max(300, self.desktop.winfo_height() - 30))
         self.windows[key] = DesktopWindow(self, module, x, y, default_w, default_h, restoring=restoring)
@@ -1035,33 +1067,422 @@ class DilaraApp:
         body=win.body
         tk.Label(body, text="GAME LIBRARY", bg=PANEL, fg=TEXT, font=("Segoe UI", 10, "bold")).pack(anchor="w")
         tk.Label(body, text="Be wary.. Couple games might have different variations", bg=PANEL, fg=MUTED, font=("Segoe UI", 9), wraplength=490, justify="left").pack(anchor="w", pady=(4, 12))
-        base=APP_DIR / "legacy_modules" / "D-ARCADE CLASS"
-        games=[
-            ("Chess 1", base/"D-ARCADE-CHESS-main"/"chess_gui.py", "pillow"),
-            ("Chess 2", base/"D-ARCADE-CHESS-main"/"chess_gui_v2.py", "pillow"),            
-            ("Tetris", base/"D-ARCADE-TETRIS-main"/"D-ARCADE-TETRIS.py", "pygame"),
-            ("Lightcycle", base/"D-ARCADE-Trolightcycle-main"/"D-ARCADE-Tron-Lightcycle.py", "pygame"),
-            ("Maze 1", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGPT.py", "tkinter / source-dependent"),
-            ("Maze 2", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ.py", "tkinter / source-dependent"),
-            ("Maze 3", base/"D-ARCADE-MAZE-DEMO"/"D-ARCADE_MAZEGEMİNİ2.py", "tkinter / source-dependent"),
-            ("Tic-tac-toe 1", base/"magenta-tictactoe-main"/"magenta-tic-tac-toe.py", "console"),
-            ("Tic-tac-toe 2", base/"magenta-tictactoe-main"/"tic-tac-toe.py", "console"),
-        ]
-        for name, path, note in games:
-            row=tk.Frame(body,bg=PANEL_2,padx=10,pady=7); row.pack(fill="x",pady=3)
-            tk.Label(row,text=name,bg=PANEL_2,fg=TEXT,font=("Segoe UI",10,"bold")).pack(side="left")
-            tk.Label(row,text=note,bg=PANEL_2,fg=MUTED,font=("Segoe UI",8)).pack(side="left",padx=10)
-            tk.Button(row,text="Launch",command=lambda n=name,p=path:self.launch_legacy_game(n,p),bg=ACCENT,fg="#071014",relief="flat",padx=12).pack(side="right")
-        tk.Label(body,text="Legacy dependencies (Pillow / Pygame) must be installed in the Python environment you use to launch DILARA. The maze and console game require additional compatibility testing.",bg=PANEL,fg=WARN,font=("Segoe UI",8),wraplength=490,justify="left").pack(anchor="w",pady=(10,0))
+        tk.Label(body,text="Legacy dependencies (Pillow / Pygame) must be installed in the Python environment you use to launch DILARA. The maze and console game require additional compatibility testing.",bg=PANEL,fg=WARN,font=("Segoe UI",8),wraplength=490,justify="left").pack(side="bottom", anchor="w", pady=(10,0))
+        self._build_app_folder(win, "D-ARCADE")
 
-    def launch_legacy_game(self, name, path):
-        if not path.is_file():
-            messagebox.showerror("D-ARCADE", f"Game source not found:\n{path}"); return
+    # ------------------------------------------------------------------ app folders
+    def _folder_store(self):
+        store = getattr(self, "_app_folder_store", None)
+        if store is None:
+            store = AppFolderStore(self.user_dir / "app_folders.json", APP_DIR, vault_root=self.vault.root)
+            for container, defaults in FOLDER_SEEDS.items():
+                try:
+                    store.seed_once(container, defaults)
+                except AppFolderError as exc:
+                    print(f"[DILARA app folders] could not seed {container}: {exc}", file=sys.stderr)
+            # Earlier versions seeded D-LLM with a shortcut to every module. Those exact defaults
+            # (name == module key, note == its subtitle) are removed once; anything you added or
+            # edited yourself is left alone.
+            subtitles = {key: subtitle for key, subtitle, _desc in MODULES}
+            try:
+                store.prune_once("dllm-default-modules-v1", "D-LLM",
+                                 lambda e: e.get("kind") == "module" and e.get("name") == e.get("target")
+                                 and e.get("note") == subtitles.get(e.get("target")))
+            except AppFolderError as exc:
+                print(f"[DILARA app folders] cleanup skipped: {exc}", file=sys.stderr)
+            subtitle_of = {key: subtitle for key, subtitle, _desc in MODULES}
+            for name, title, module_keys in DEFAULT_SIDEBAR_FOLDERS:
+                visible = [k for k in subtitle_of if k != "STACK" and k not in module_keys]
+                try:
+                    store.seed_folder_once(name, title, [(k, subtitle_of[k]) for k in module_keys],
+                                           reserved=set(subtitle_of), top_of=visible)
+                except AppFolderError as exc:
+                    print(f"[DILARA app folders] could not create {title}: {exc}", file=sys.stderr)
+            self._app_folder_store = store
+        return store
+
+    def _build_app_folder(self, win, container):
+        """Scrollable list of side-app buttons for a container module, with add / reorder / remove."""
+        body = win.body
+        store = self._folder_store()
+        head = tk.Frame(body, bg=PANEL); head.pack(fill="x", pady=(12, 5))
+        title = tk.Label(head, text="APPS IN THIS FOLDER", bg=PANEL, fg=MUTED, font=("Segoe UI", 8, "bold"))
+        title.pack(side="left")
+        holder = tk.Frame(body, bg=PANEL); holder.pack(fill="both", expand=True)
+        canvas = tk.Canvas(holder, bg=PANEL, highlightthickness=0, height=140)
+        bar = ttk.Scrollbar(holder, orient="vertical", command=canvas.yview)
+        inner = tk.Frame(canvas, bg=PANEL)
+        inner.bind("<Configure>", lambda _e: canvas.configure(scrollregion=canvas.bbox("all")))
+        window_id = canvas.create_window((0, 0), window=inner, anchor="nw")
+        canvas.bind("<Configure>", lambda e: canvas.itemconfigure(window_id, width=e.width))
+        canvas.configure(yscrollcommand=bar.set)
+        canvas.pack(side="left", fill="both", expand=True); bar.pack(side="right", fill="y")
+
+        def on_wheel(event):
+            canvas.yview_scroll(-1 if event.delta > 0 else 1, "units")
+        def bind_wheel(widget):
+            widget.bind("<MouseWheel>", on_wheel, add="+")
+            for child in widget.winfo_children():
+                bind_wheel(child)
+
+        def refresh():
+            for child in inner.winfo_children():
+                child.destroy()
+            entries = store.entries(container)
+            title.configure(text=f"APPS IN THIS FOLDER  \u00b7  {len(entries)}")
+            if not entries:
+                tk.Label(inner, text="This folder is empty. Use \u201c+ Add app\u201d to put a program, link, folder or "
+                                     "DILARA module here.", bg=PANEL, fg=MUTED, font=("Segoe UI", 9),
+                         wraplength=440, justify="left").pack(anchor="w", pady=8)
+            for entry in entries:
+                row = tk.Frame(inner, bg=PANEL_2, padx=10, pady=7); row.pack(fill="x", pady=3, padx=(0, 4))
+                tk.Button(row, text="Launch", command=lambda e=entry: self.launch_folder_entry(container, e),
+                          bg=ACCENT, fg="#071014", relief="flat", padx=12).pack(side="right")
+                for glyph, delta in (("\u2715", None), ("\u25bc", 1), ("\u25b2", -1)):
+                    def act(e=entry, d=delta):
+                        if d is None:
+                            if messagebox.askyesno("Remove app", f"Remove \u201c{e['name']}\u201d from {container}?\n\n"
+                                                   "Only the button is removed; the app itself is not touched."):
+                                store.remove(container, e["id"])
+                                self._record_activity("app_folder_entry_removed", container)
+                            else:
+                                return
+                        else:
+                            store.move(container, e["id"], d)
+                        self._notify_folders_changed()
+                    tk.Button(row, text=glyph, command=act, bg=PANEL_2, fg=MUTED, activebackground=BORDER,
+                              relief="flat", bd=0, width=2, cursor="hand2").pack(side="right", padx=(0, 2))
+                info = tk.Frame(row, bg=PANEL_2); info.pack(side="left", fill="x", expand=True)
+                tk.Label(info, text=entry["name"], bg=PANEL_2, fg=TEXT, font=("Segoe UI", 10, "bold"), anchor="w").pack(anchor="w")
+                detail = FOLDER_KIND_LABEL.get(entry["kind"], entry["kind"]) + (f"  \u00b7  {entry['note']}" if entry.get("note") else "")
+                missing = store.status(entry) == "missing"
+                if missing:
+                    detail += "  \u00b7  \u26a0 not found"
+                tk.Label(info, text=detail, bg=PANEL_2, fg=WARN if missing else MUTED, font=("Segoe UI", 8), anchor="w").pack(anchor="w")
+            bind_wheel(inner)
+
+        tk.Button(head, text="Refresh", command=refresh, bg=PANEL_2, fg=TEXT, relief="flat", padx=8, pady=2).pack(side="right")
+        tk.Button(head, text="+ Add app", command=lambda: self._open_add_app_dialog(container, self._notify_folders_changed),
+                  bg=ACCENT, fg="#071014", relief="flat", padx=10, pady=2).pack(side="right", padx=(0, 6))
+        canvas.bind("<MouseWheel>", on_wheel)
+        self.__dict__.setdefault("_folder_views", []).append((container, refresh))
+        refresh()
+
+    def _open_add_app_dialog(self, container, on_added, title=None):
+        store = self._folder_store()
+        top = tk.Toplevel(self.root); top.title(f"Add app to {title or container}"); top.geometry("540x420")
+        top.configure(bg=BG); top.transient(self.root)
+        tk.Label(top, text=f"ADD TO {(title or container).upper()}", bg=BG, fg=ACCENT, font=("Segoe UI", 13, "bold")).pack(anchor="w", padx=16, pady=(14, 8))
+        types = {"Program or script (.py, .bat, .exe)": "file", "Web link": "url", "Folder": "folder",
+                 "DILARA module": "module", "Added app (from Apps / Users)": "registry"}
+        type_var = tk.StringVar(value=next(iter(types)))
+        ttk.Combobox(top, textvariable=type_var, values=list(types), state="readonly", width=44).pack(anchor="w", padx=16)
+        target_var, name_var, note_var = tk.StringVar(), tk.StringVar(), tk.StringVar()
+        area = tk.Frame(top, bg=BG); area.pack(fill="x", padx=16, pady=10)
+        registry_ids = {}
+
+        def entry_row(label, var, width=46):
+            tk.Label(top, text=label, bg=BG, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=16, pady=(6, 0))
+            tk.Entry(top, textvariable=var, bg=PANEL_2, fg=TEXT, insertbackground=TEXT, relief="flat", width=width).pack(anchor="w", padx=16, ipady=5)
+
+        def autoname(text):
+            if not name_var.get().strip():
+                name_var.set(text)
+
+        def rebuild(*_):
+            for child in area.winfo_children(): child.destroy()
+            target_var.set("")
+            kind = types[type_var.get()]
+            if kind in ("file", "folder"):
+                tk.Entry(area, textvariable=target_var, bg=PANEL_2, fg=TEXT, insertbackground=TEXT, relief="flat", width=48).pack(side="left", ipady=5)
+                def browse():
+                    if kind == "file":
+                        chosen = filedialog.askopenfilename(parent=top, title="Select program or script", initialdir=str(APP_DIR),
+                                                            filetypes=[("Programs and scripts", "*.py *.pyw *.bat *.cmd *.exe"), ("All files", "*.*")])
+                    else:
+                        chosen = filedialog.askdirectory(parent=top, title="Select folder", initialdir=str(APP_DIR))
+                    if chosen:
+                        target_var.set(chosen); autoname(Path(chosen).stem.replace("_", " ").replace("-", " "))
+                tk.Button(area, text="Browse\u2026", command=browse, bg=PANEL_2, fg=TEXT, relief="flat", padx=8).pack(side="left", padx=6)
+            elif kind == "url":
+                tk.Entry(area, textvariable=target_var, bg=PANEL_2, fg=TEXT, insertbackground=TEXT, relief="flat", width=56).pack(side="left", ipady=5)
+                tk.Label(area, text="https://\u2026", bg=BG, fg=MUTED, font=("Segoe UI", 8)).pack(side="left", padx=6)
+            elif kind == "module":
+                keys = [k for k, _s, _d in MODULES if k not in {"STACK", container}]
+                box = ttk.Combobox(area, textvariable=target_var, values=keys, state="readonly", width=30); box.pack(side="left")
+                box.bind("<<ComboboxSelected>>", lambda _e: autoname(target_var.get()))
+            else:
+                registry_ids.clear()
+                for app in self.app_registry.list_apps():
+                    registry_ids[f"{app.get('name')}  ({app.get('id')})"] = app.get("id")
+                box = ttk.Combobox(area, textvariable=target_var, values=list(registry_ids), state="readonly", width=48); box.pack(side="left")
+                box.bind("<<ComboboxSelected>>", lambda _e: autoname(target_var.get().rsplit("  (", 1)[0]))
+                if not registry_ids:
+                    tk.Label(area, text="No added apps yet (see Apps / Users).", bg=BG, fg=WARN, font=("Segoe UI", 8)).pack(side="left", padx=6)
+        type_var.trace_add("write", rebuild)
+        rebuild()
+        entry_row("NAME", name_var)
+        entry_row("NOTE (OPTIONAL)", note_var)
+
+        def add():
+            kind = types[type_var.get()]
+            target = target_var.get().strip()
+            try:
+                if kind == "file":
+                    kind = classify_path(target)
+                    if not messagebox.askyesno("Add program", f"Add this program to {container}?\n\n{target}\n\nDILARA will run it with "
+                                               "your user permissions. Only add programs you trust.", parent=top):
+                        return
+                if kind in ("python", "batch", "exe", "folder") and target:
+                    target = store.to_portable(target)
+                elif kind == "registry":
+                    target = registry_ids.get(target, "")
+                store.add(container, name_var.get(), kind, target, note_var.get())
+            except AppFolderError as exc:
+                messagebox.showerror("Add app", str(exc), parent=top); return
+            self._record_activity("app_folder_entry_added", container)
+            top.destroy(); on_added()
+        buttons = tk.Frame(top, bg=BG); buttons.pack(side="bottom", fill="x", padx=16, pady=14)
+        tk.Button(buttons, text="Add", command=add, bg=ACCENT, fg="#071014", relief="flat", padx=16, pady=6).pack(side="right")
+        tk.Button(buttons, text="Cancel", command=top.destroy, bg=PANEL_2, fg=TEXT, relief="flat", padx=12, pady=6).pack(side="right", padx=8)
+
+    def launch_folder_entry(self, container, entry):
+        store = self._folder_store()
+        kind = entry.get("kind")
         try:
-            proc=subprocess.Popen([sys.executable, str(path)], cwd=str(path.parent))
-            self._record_activity("game_launched", "D-ARCADE")
-            self._record_activity("side_process_started", "D-ARCADE")
-        except OSError as exc: messagebox.showerror("D-ARCADE", f"Could not launch {name}:\n{exc}")
+            if kind == "module":
+                if not any(m[0] == entry["target"] for m in MODULES):
+                    raise AppFolderError(f"Unknown module: {entry['target']}")
+                self.open_module(entry["target"])
+            elif kind == "url":
+                import webbrowser
+                webbrowser.open(entry["target"])
+            elif kind == "folder":
+                path = store.resolve_path(entry)
+                if not path.is_dir():
+                    raise AppFolderError(f"Folder not found:\n{path}")
+                self.open_path(path)
+            elif kind == "registry":
+                app = next((a for a in self.app_registry.list_apps() if a.get("id") == entry["target"]), None)
+                if app is None:
+                    raise AppFolderError("That added app was removed from the registry.")
+                self.launch_registered_app(app)
+            else:
+                spec = store.build_launch(entry, sys.executable, sys.platform)
+                flags = subprocess.CREATE_NEW_CONSOLE if spec["new_console"] else 0
+                proc = subprocess.Popen(spec["argv"], cwd=spec["cwd"], creationflags=flags)
+                self._track_side_process(proc, spec["cwd"])
+                self._record_activity("side_process_started", container)
+                if container == "D-ARCADE":
+                    self._record_activity("game_launched", container)
+        except (AppFolderError, OSError, ValueError) as exc:
+            messagebox.showerror(container, f"Could not start \u201c{entry.get('name')}\u201d:\n{exc}")
+            return
+        self._record_activity("app_folder_launch", container)
+
+    # ------------------------------------------------------------------ sidebar folders
+    def _notify_folders_changed(self):
+        """Refresh every open container window and the sidebar after a folder change."""
+        views = self.__dict__.setdefault("_folder_views", [])
+        for item in list(views):
+            try:
+                item[1]()
+            except tk.TclError:          # that window was closed
+                views.remove(item)
+        self._render_sidebar_tree()
+
+    def _sidebar_layout(self):
+        """(user folders by key, default top-level key order). Modules inside a user folder leave the top level."""
+        store = self._folder_store()
+        folders = {f["key"]: f for f in store.folders()}
+        hidden = store.hidden_modules(exclude=set(CONTAINER_KEYS))
+        default = [k for k, _s, _d in MODULES if k != "STACK" and k not in hidden] + list(folders)
+        return folders, default
+
+    def _popup_menu(self, items, event):
+        menu = tk.Menu(self.root, tearoff=0, bg=PANEL_2, fg=TEXT, activebackground=BORDER, activeforeground=ACCENT)
+        for label, command in items:
+            if label is None:
+                menu.add_separator()
+            else:
+                menu.add_command(label=label, command=command)
+        try:
+            menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            menu.grab_release()
+
+    def _render_sidebar_tree(self):
+        inner = self.__dict__.get("sidebar_inner")
+        if inner is None:
+            return
+        bg = "#0d141d"
+        store = self._folder_store()
+        folders, default = self._sidebar_layout()
+        for child in inner.winfo_children():
+            child.destroy()
+
+        def clip(text, limit=20):
+            return text if len(text) <= limit else text[:limit - 1] + "…"
+
+        def toggle(key, expanded):
+            store.set_expanded(key, not expanded)
+            self._render_sidebar_tree()
+
+        for key in store.order(default):
+            if key in folders or key in CONTAINER_KEYS:
+                is_user = key in folders
+                title = folders[key]["title"] if is_user else key
+                expanded = store.is_expanded(key, default=is_user)
+                head = tk.Frame(inner, bg=bg); head.pack(fill="x", padx=6, pady=1)
+                header = tk.Button(head, text=f"{'▾' if expanded else '▸'}  ◈  {clip(title, 16)}",
+                                   command=lambda k=key, x=expanded: toggle(k, x), bg=bg, fg=ACCENT if expanded else TEXT,
+                                   activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", bd=0, anchor="w",
+                                   padx=10, pady=8, font=("Segoe UI", 9), cursor="hand2")
+                header.pack(side="left", fill="x", expand=True)
+                header.bind("<Button-3>", lambda ev, k=key: self._sidebar_folder_menu(k, ev))
+                if not is_user:
+                    tk.Button(head, text="↗", command=lambda k=key: self.open_module(k), bg=bg, fg=MUTED,
+                              activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", bd=0, width=2,
+                              cursor="hand2").pack(side="right")
+                if expanded:
+                    for entry in store.entries(key):
+                        missing = store.status(entry) == "missing"
+                        row = tk.Frame(inner, bg=bg); row.pack(fill="x", padx=(24, 6))
+                        item = tk.Button(row, text=("⚠ " if missing else "· ") + clip(entry["name"]),
+                                         command=lambda k=key, e=entry: self.launch_folder_entry(k, e), bg=bg,
+                                         fg=WARN if missing else MUTED, activebackground=PANEL_2, activeforeground=ACCENT,
+                                         relief="flat", bd=0, anchor="w", padx=8, pady=5, font=("Segoe UI", 9), cursor="hand2")
+                        item.pack(fill="x")
+                        item.bind("<Button-3>", lambda ev, k=key, e=entry: self._sidebar_entry_menu(k, e, ev))
+                    row = tk.Frame(inner, bg=bg); row.pack(fill="x", padx=(24, 6))
+                    tk.Button(row, text="+  Add app", command=lambda k=key, t=title: self._open_add_app_dialog(k, self._notify_folders_changed, t),
+                              bg=bg, fg=MUTED, activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", bd=0,
+                              anchor="w", padx=8, pady=4, font=("Segoe UI", 8), cursor="hand2").pack(fill="x")
+            else:
+                button = tk.Button(inner, text=f"◈  {key}", command=lambda k=key: self.open_module(k), bg=bg, fg=TEXT,
+                                   activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", bd=0, anchor="w",
+                                   padx=16, pady=8, font=("Segoe UI", 9), cursor="hand2")
+                button.pack(fill="x", padx=6, pady=1)
+                button.bind("<Button-3>", lambda ev, k=key: self._sidebar_module_menu(k, ev))
+        tk.Button(inner, text="+  New folder", command=self._new_sidebar_folder, bg=bg, fg=MUTED,
+                  activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", bd=0, anchor="w", padx=16, pady=8,
+                  font=("Segoe UI", 8), cursor="hand2").pack(fill="x", padx=6, pady=(8, 0))
+        canvas = self.__dict__.get("_sidebar_canvas")
+        if canvas is not None:
+            def on_wheel(event):
+                canvas.yview_scroll(-1 if event.delta > 0 else 1, "units")
+            def bind_wheel(widget):
+                widget.bind("<MouseWheel>", on_wheel, add="+")
+                for child in widget.winfo_children():
+                    bind_wheel(child)
+            bind_wheel(inner)
+            canvas.bind("<MouseWheel>", on_wheel)
+
+    def _sidebar_move(self, key, delta):
+        _folders, default = self._sidebar_layout()
+        self._folder_store().move_in_order(key, delta, default)
+        self._render_sidebar_tree()
+
+    def _sidebar_module_menu(self, key, event):
+        folders, _default = self._sidebar_layout()
+        items = [("Move up", lambda: self._sidebar_move(key, -1)), ("Move down", lambda: self._sidebar_move(key, 1))]
+        if folders:
+            items.append((None, None))
+            items += [(f"Move into “{f['title']}”", lambda fk=fk: self._move_module_into_folder(key, fk))
+                      for fk, f in folders.items()]
+        self._popup_menu(items, event)
+
+    def _move_module_into_folder(self, module_key, folder_key):
+        subtitle = next((s for k, s, _d in MODULES if k == module_key), "")
+        try:
+            self._folder_store().add(folder_key, module_key, "module", module_key, subtitle)
+        except AppFolderError as exc:
+            messagebox.showerror("Folders", str(exc)); return
+        self._record_activity("sidebar_module_moved", "SYSTEM")
+        self._notify_folders_changed()
+
+    def _sidebar_folder_menu(self, key, event):
+        folders, _default = self._sidebar_layout()
+        title = folders[key]["title"] if key in folders else key
+        items = []
+        if key not in folders:
+            items.append(("Open window", lambda: self.open_module(key)))
+        items.append(("Add app…", lambda: self._open_add_app_dialog(key, self._notify_folders_changed, title)))
+        if key in folders:
+            items.append(("Rename…", lambda: self._rename_sidebar_folder(key)))
+        items += [(None, None), ("Move up", lambda: self._sidebar_move(key, -1)), ("Move down", lambda: self._sidebar_move(key, 1))]
+        if key in folders:
+            items += [(None, None), ("Delete folder…", lambda: self._delete_sidebar_folder(key))]
+        self._popup_menu(items, event)
+
+    def _sidebar_entry_menu(self, container, entry, event):
+        store = self._folder_store()
+        def remove():
+            store.remove(container, entry["id"])
+            self._record_activity("app_folder_entry_removed", container)
+            self._notify_folders_changed()
+        def move(delta):
+            store.move(container, entry["id"], delta)
+            self._notify_folders_changed()
+        self._popup_menu([("Launch", lambda: self.launch_folder_entry(container, entry)), (None, None),
+                          ("Move up", lambda: move(-1)), ("Move down", lambda: move(1)), (None, None),
+                          ("Remove from folder", remove)], event)
+
+    def _reserved_folder_names(self):
+        return {k for k, _s, _d in MODULES}
+
+    def _new_sidebar_folder(self):
+        title = simpledialog.askstring("New folder", "Folder name:", parent=self.root)
+        if title is None:
+            return
+        try:
+            self._folder_store().create_folder(title, self._reserved_folder_names())
+        except AppFolderError as exc:
+            messagebox.showerror("New folder", str(exc), parent=self.root); return
+        self._record_activity("sidebar_folder_created", "SYSTEM")
+        self._render_sidebar_tree()
+
+    def _rename_sidebar_folder(self, key):
+        folders, _default = self._sidebar_layout()
+        title = simpledialog.askstring("Rename folder", "New name:", initialvalue=folders[key]["title"], parent=self.root)
+        if title is None:
+            return
+        try:
+            self._folder_store().rename_folder(key, title, self._reserved_folder_names())
+        except AppFolderError as exc:
+            messagebox.showerror("Rename folder", str(exc), parent=self.root); return
+        self._render_sidebar_tree()
+
+    def _delete_sidebar_folder(self, key):
+        folders, _default = self._sidebar_layout()
+        count = len(self._folder_store().entries(key))
+        if not messagebox.askyesno("Delete folder", f"Delete the folder “{folders[key]['title']}”?\n\n"
+                                   f"Its {count} shortcut(s) are removed; the apps themselves are not touched and "
+                                   "modules return to the main list."):
+            return
+        try:
+            self._folder_store().delete_folder(key)
+        except AppFolderError as exc:
+            messagebox.showerror("Delete folder", str(exc)); return
+        self._record_activity("sidebar_folder_deleted", "SYSTEM")
+        self._notify_folders_changed()
+
+    def _track_side_process(self, proc, cwd):
+        procs = self.__dict__.setdefault("_side_procs", [])
+        procs[:] = [(p, c) for p, c in procs if p.poll() is None]
+        procs.append((proc, Path(cwd)))
+
+    def _stop_vault_side_processes(self):
+        """Side apps started from inside the vault would keep its files open and block sealing."""
+        root = self.vault.root
+        if root is None:
+            return
+        for proc, cwd in list(self.__dict__.get("_side_procs", [])):
+            try:
+                if proc.poll() is None and cwd.resolve().is_relative_to(Path(root).resolve()):
+                    self._stop_process_tree(proc)
+            except OSError:
+                pass
 
     def _build_llm_workspace(self, win):
         body = win.body
@@ -1075,19 +1496,7 @@ class DilaraApp:
         tk.Label(fallback, text="02  BUILT-IN UTILITY FALLBACK", bg=PANEL_2, fg=ACCENT_2, font=("Segoe UI", 10, "bold")).pack(anchor="w")
         tk.Label(fallback, text="A minimal no-network helper for DILARA help and basic calculations. It is not a generative language model; use it when you need a lightweight fallback.", bg=PANEL_2, fg=TEXT, font=("Segoe UI", 9), wraplength=440, justify="left").pack(anchor="w", pady=4)
         tk.Button(fallback, text="Open utility fallback", command=self.open_offline_chat, bg="#2b3544", fg=TEXT, relief="flat", padx=10, pady=6).pack(anchor="w", pady=(4, 0))
-        app_heading = tk.Frame(body, bg=PANEL); app_heading.pack(fill="x", pady=(12, 5))
-        tk.Label(app_heading, text="AVAILABLE APPS", bg=PANEL, fg=MUTED, font=("Segoe UI", 8, "bold")).pack(side="left")
-        app_list = tk.Frame(body, bg=PANEL); app_list.pack(fill="x")
-        def refresh_app_list():
-            for child in app_list.winfo_children(): child.destroy()
-            for app_key, app_name, _desc in MODULES:
-                if app_key == "STACK": continue
-                tk.Button(app_list, text=f"{app_key}  ·  {app_name}", command=lambda k=app_key: self.open_module(k), bg="#0d141d", fg=TEXT, activebackground=PANEL_2, activeforeground=ACCENT, relief="flat", anchor="w", padx=9, pady=4).pack(fill="x", pady=1)
-            extra = [a for a in self.app_registry.list_apps() if a.get("enabled", True)]
-            for item in extra:
-                tk.Button(app_list, text=f"{item.get('name')}  ·  added app", command=lambda a=item: self.launch_registered_app(a), bg="#0d141d", fg=ACCENT_2, activebackground=PANEL_2, relief="flat", anchor="w", padx=9, pady=4).pack(fill="x", pady=1)
-        tk.Button(app_heading, text="Refresh", command=refresh_app_list, bg=PANEL_2, fg=TEXT, relief="flat", padx=8, pady=2).pack(side="right")
-        refresh_app_list()
+        self._build_app_folder(win, "D-LLM")
 
     def launch_custom_dllm(self):
         core = APP_DIR / "legacy_modules" / "DilaraLLM_demo-main" / "dilara_core.py"
@@ -1579,6 +1988,10 @@ class DilaraApp:
     def _stop_all_children(self):
         try:
             self._close_browser()
+        except Exception as exc:
+            self._log_close_error(exc)
+        try:
+            self._stop_vault_side_processes()
         except Exception as exc:
             self._log_close_error(exc)
         for session in list(self.terminal_sessions.values()):

@@ -1,0 +1,157 @@
+```latex:kod8_cryptanalysis.tex
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Termes}
+\setmonofont{TeX Gyre Cursor}[Scale=0.88]
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  pdftitle={Security Audit and Remediation Report: KOD8 Sandbox (v3.0)},
+  pdfauthor={Fatih ULUSOY}
+}
+
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codekw}{RGB}{0,90,150}
+\definecolor{codestr}{RGB}{140,20,20}
+\definecolor{codecomm}{RGB}{110,110,110}
+
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecomm}\itshape,
+  stringstyle=\color{codestr},
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  framesep=4pt,
+  language=Python,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=6pt,
+  xleftmargin=1.2em,
+  tabsize=4
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Security Audit \& Remediation: KOD8 Sandbox}
+\fancyhead[R]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\title{\textbf{Security Audit and Remediation Report\\
+KOD8 Sandbox Edition (v3.0)}}
+\author{A. Fatih ULUSOY}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent
+The KOD8 cipher engine has undergone a complete architectural pivot. Originally evaluated in August 2026 (v2.0) as a classical product cipher optimized for heuristic obfuscation against automated decoding agents, the system has been entirely upgraded to a strict, NCIA-compliant cryptographic standard (v3.0). This document serves as the formal re-audit and remediation report. All previously identified vulnerabilities---specifically the S-box seed collapse, the static CBC initialization vector, and the Vigen\`ere frequency analysis vulnerability---have been systematically eliminated. The engine now operates as a Programmable Cryptographic State Machine, leveraging native, FIPS-validated algorithms (AES-256-GCM, HKDF-SHA-384, SHA-512) while preserving the original topological execution trace dictated by the facility's hardcoded hardware key. Furthermore, this report details the new CL9 Split-Key disk provisioning architecture, establishing a zero-trust model for external hardware encryption.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section{Introduction and Previous Findings (v2.0)}
+% =====================================================================
+
+The prior cryptanalysis of KOD8 v2.0 established that while the cipher successfully fulfilled its mandate as an obfuscation layer, it suffered from critical mathematical vulnerabilities when exposed to a targeted cryptanalytic adversary under Kerckhoffs's principle. 
+
+The primary findings requiring remediation were:
+\begin{enumerate}[leftmargin=1.6em]
+    \item \textbf{S-Box Entropy Collapse:} The Fisher-Yates shuffle derived its seed from a positional digit sum, reducing a nominal $10^8$ key space to a trivial 325 candidate states.
+    \item \textbf{Static IV Reuse:} The \texttt{op\_block\_xor\_cbc} primitive utilized the literal key string as the initialization vector, destroying semantic security and rendering identical plaintexts into identical ciphertexts.
+    \item \textbf{Classical Frequency Vulnerability:} The \texttt{op\_vigenere\_tr} step was constrained to single-digit decimal shifts, enabling instantaneous key recovery via Pearson's chi-square test without brute-force computation.
+\end{enumerate}
+
+% =====================================================================
+\section{Architectural Pivot: KOD8 Sandbox (v3.0)}
+% =====================================================================
+
+To meet government facility compliance and NCIA baselines, KOD8 v3.0 abandons proprietary byte-scrambling in favor of a strictly compliant, layered protocol. The original hardcoded string (\texttt{86247931}) no longer acts as direct key material; instead, it dictates the \emph{pipeline topology} and serves as the Initial Keying Material (IKM) for a secure derivation function.
+
+\subsection{Resolution of Vulnerabilities}
+\begin{itemize}[leftmargin=1.6em]
+    \item \textbf{S-Box Collapse Mitigated:} Key expansion is now handled exclusively by \textbf{HKDF-SHA-384} (RFC 5869), guaranteeing cryptographically secure 256-bit AES and 384-bit HMAC keys derived from unique 16-byte random salts.
+    \item \textbf{Static IV Replaced:} Bulk encryption is managed by \textbf{AES-256-GCM}. Every encryption cycle generates a dynamic, cryptographically secure 96-bit random nonce (\texttt{os.urandom(12)}), restoring complete semantic security (IND-CCA2).
+    \item \textbf{Frequency Attacks Eliminated:} Classical byte-level character shifts have been stripped. Data confidentiality is mathematically guaranteed by Galois/Counter Mode.
+    \item \textbf{Authentication Implemented:} The system no longer fails silently on tampering. AES-GCM provides an integrated 128-bit authentication tag, and the pipeline is wrapped in a secondary \textbf{SHA-512} outer integrity hash.
+\end{itemize}
+
+% =====================================================================
+\section{The Topological Pipeline}
+% =====================================================================
+
+The Sandbox implementation maps the hardcoded numeric trace ($8 \to 6 \to 2 \to 4 \to 7 \to 9 \to 3 \to 1$) to FIPS-approved structural roles, avoiding the overhead of redundant double-encryption while maintaining a rigorous defense-in-depth posture.
+
+\begin{description}[leftmargin=1.4em, style=nextline]
+    \item[\textbf{Node 8: Key Expansion (HKDF-SHA-384)}] 
+    Generates a unique 16-byte salt per file. Combines the salt and the base key via HMAC-based Extract-and-Expand to produce independent session keys for AES and HMAC operations.
+    \item[\textbf{Node 6: Data Preparation (Zlib)}] 
+    Compresses plaintext to eliminate predictable data structures (e.g., file headers) and reduce payload size prior to cryptographic processing.
+    \item[\textbf{Node 2: Post-Quantum Wrap}] 
+    Allocates a 32-byte header reservation for incoming ML-KEM-768 (FIPS 203) hybrid key encapsulation, future-proofing against harvest-now-decrypt-later attacks.
+    \item[\textbf{Node 4: Plaintext Auth (HMAC-SHA-384)}] 
+    Cryptographically signs the compressed data to prove origin authenticity before the bulk scramble.
+    \item[\textbf{Node 7: Bulk Encryption (AES-256-GCM)}] 
+    Provides the core authenticated confidentiality envelope.
+    \item[\textbf{Node 9: Ciphertext Framing}] 
+    Slices and pads the resulting encrypted binary into standardized 1024-byte block sizes to obscure the original file's size and data type.
+    \item[\textbf{Node 3: Outer Integrity (SHA-512)}] 
+    Computes a final cryptographic hash of the entire framed payload so corrupted data is dropped immediately during decryption, mitigating resource-exhaustion attacks on the AES engine.
+    \item[\textbf{Node 1: Terminal Encoding (Strict Base64)}] 
+    ASCII armoring for safe transit, combined with a non-cryptographic string reversal. This reversal is applied \emph{safely outside} the AES-GCM envelope to preserve KOD8's signature finish without compromising mathematical entropy.
+\end{description}
+
+% =====================================================================
+\section{CL9: Split-Key Disk Provisioning}
+% =====================================================================
+
+A primary operational requirement for the facility was the secure management of external USB and SSD drives, circumventing the vulnerabilities of single-passphrases and commercial telemetry lockouts. KOD8 v3.0 introduces \textbf{CL9}, a zero-trust Split-Key Provisioner.
+
+\subsection{Hardware Partition Strategy}
+Drives are formatted into two distinct partitions:
+\begin{enumerate}
+    \item \textbf{Volume A (The Ignition Volume):} A 50MB unencrypted FAT32 partition housing a randomly generated 64-byte \texttt{Drive\_Token.key}.
+    \item \textbf{Volume B (The Secure Volume):} The remaining block device, encrypted using native OEM ciphers (BitLocker AES-XTS or LUKS2).
+\end{enumerate}
+
+\subsection{Cryptographic Handshake}
+The authorized Host PC retains a corresponding 64-byte \texttt{Host\_Token.key} in a secure local enclave. Upon insertion, KOD8 operates as a Key Management Server (KMS). It executes Node 8 (HKDF-SHA-384) to cryptographically fuse the Drive Token and the Host Token into a single 256-bit Master Unlock Key. 
+
+Crucially, KOD8 does not attempt to encrypt the disk blocks directly. Instead, Node 9 formats the resulting Master Unlock Key into a bootloader-compliant structure (\texttt{.bek} for Windows, raw binary for Linux), which is then injected directly into the native OS encryption engine. 
+
+\textbf{Security Benefit:} The external drive is mathematically dead if stolen. It requires the simultaneous physical presence of the authorized host machine and the drive itself to compute the AES-XTS master key.
+
+% =====================================================================
+\section{Conclusion}
+% =====================================================================
+
+The KOD8 Sandbox Edition (v3.0) successfully addresses and resolves all critical vulnerabilities identified in the legacy obfuscation engine. By abandoning proprietary heuristics in favor of strict, FIPS-validated cryptographic primitives, and by implementing the innovative CL9 Split-Key architecture for hardware provisioning, KOD8 has transitioned into a robust, deployment-ready security tool suitable for facility operations.
+
+\end{document}
+```eof

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KOD8 Sandbox Edition - v3.0 Architecture</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #000; }
+    .slide-container {
+      width: 1280px;
+      height: 720px;
+      margin: 0 auto;
+      overflow: hidden;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .light-ground { background: #f8fafc; }
+    .dark-ground { background: #0f172a; }
+    .accent { color: #D92B3A; }
+    .header-bar { width: 64px; height: 4px; background: #D92B3A; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Title -->
+  <div class="slide-container dark-ground" style="padding:80px; display:flex; flex-direction:column; justify-content:center;">
+    <div class="header-bar" style="width: 120px;"></div>
+    <h1 contenteditable="true" style="font-size:72px; font-weight:800; color:#f8fafc; margin:0; line-height:1.1; letter-spacing:-1px;">
+      KOD8 Sandbox Edition <span class="accent">v3.0</span>
+    </h1>
+    <h2 contenteditable="true" style="font-size:32px; font-weight:400; color:#94a3b8; margin:24px 0 0 0;">
+      NCIA-Compliant Multi-Layer Cryptographic Engine & Split-Key Provisioner
+    </h2>
+    <p style="margin-top: auto; color: #475569; font-size: 18px;">A. Fatih ULUSOY | Cryptographic Architecture Review</p>
+  </div>
+
+  <!-- Slide 2: The Evolution (v2.0 vs v3.0) -->
+  <div class="slide-container light-ground" style="padding:64px; display:flex; flex-direction:column;">
+    <h2 contenteditable="true" style="font-size:40px; font-weight:800; color:#0f172a; margin:0 0 48px 0;">
+      Architectural Pivot: Obfuscation to Compliance
+    </h2>
+    <div style="display:flex; gap:32px; flex-grow:1;">
+      <div style="flex:1; background:#ffffff; border-radius:16px; padding:40px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1); border-top: 6px solid #64748b;">
+        <h3 style="font-size:24px; font-weight:800; color:#0f172a; margin:0 0 16px 0;">Legacy (v2.0)</h3>
+        <ul style="list-style:none; font-size:18px; color:#475569; line-height:1.8;">
+          <li><i class="fa-solid fa-xmark" style="color:#ef4444; width:24px;"></i> Heuristic Product Cipher</li>
+          <li><i class="fa-solid fa-xmark" style="color:#ef4444; width:24px;"></i> Vulnerable to Frequency Analysis</li>
+          <li><i class="fa-solid fa-xmark" style="color:#ef4444; width:24px;"></i> 325-State S-Box Collapse</li>
+          <li><i class="fa-solid fa-xmark" style="color:#ef4444; width:24px;"></i> Static Initialization Vectors</li>
+        </ul>
+      </div>
+      <div style="flex:1; background:#ffffff; border-radius:16px; padding:40px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1); border-top: 6px solid #1E9E75;">
+        <h3 style="font-size:24px; font-weight:800; color:#0f172a; margin:0 0 16px 0;">Sandbox Edition (v3.0)</h3>
+        <ul style="list-style:none; font-size:18px; color:#475569; line-height:1.8;">
+          <li><i class="fa-solid fa-check" style="color:#1E9E75; width:24px;"></i> FIPS-Validated Primitives</li>
+          <li><i class="fa-solid fa-check" style="color:#1E9E75; width:24px;"></i> AES-256-GCM Authenticated Cipher</li>
+          <li><i class="fa-solid fa-check" style="color:#1E9E75; width:24px;"></i> HKDF-SHA-384 Key Derivation</li>
+          <li><i class="fa-solid fa-check" style="color:#1E9E75; width:24px;"></i> Zero-Trust Split-Key Provisioning</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: The Topological Pipeline 1 -->
+  <div class="slide-container dark-ground" style="padding:64px; display:flex; flex-direction:column;">
+    <h2 contenteditable="true" style="font-size:40px; font-weight:800; color:#f8fafc; margin:0 0 16px 0;">
+      The Trace: Preparation & Authentication
+    </h2>
+    <p style="font-size: 20px; color: #94a3b8; margin-bottom: 48px;">Executing the hardcoded path (8 → 6 → 2 → 4)</p>
+    
+    <div style="display:flex; justify-content:space-between; gap:24px;">
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">8</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">HKDF-SHA-384</h3>
+        <p style="color:#94a3b8; font-size:16px;">Expands the base key and generated file salt into unique 256-bit AES and 384-bit HMAC session keys.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">6</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">Zlib Deflate</h3>
+        <p style="color:#94a3b8; font-size:16px;">Compresses plaintext to eliminate known-plaintext headers and reduce payload size before encryption.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">2</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">PQ Wrap</h3>
+        <p style="color:#94a3b8; font-size:16px;">Allocates a 32-byte reservation block for future ML-KEM-768 hybrid post-quantum encapsulation.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">4</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">HMAC-SHA-384</h3>
+        <p style="color:#94a3b8; font-size:16px;">Cryptographically signs the compressed data to guarantee inner origin authenticity.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: The Topological Pipeline 2 -->
+  <div class="slide-container dark-ground" style="padding:64px; display:flex; flex-direction:column;">
+    <h2 contenteditable="true" style="font-size:40px; font-weight:800; color:#f8fafc; margin:0 0 16px 0;">
+      The Trace: Encryption & Framing
+    </h2>
+    <p style="font-size: 20px; color: #94a3b8; margin-bottom: 48px;">Executing the hardcoded path (7 → 9 → 3 → 1)</p>
+    
+    <div style="display:flex; justify-content:space-between; gap:24px;">
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px; border: 2px solid #D92B3A;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">7</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">AES-256-GCM</h3>
+        <p style="color:#94a3b8; font-size:16px;">The core engine. Authenticated bulk encryption utilizing a unique 96-bit random nonce per cycle.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">9</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">Block Framing</h3>
+        <p style="color:#94a3b8; font-size:16px;">Pads the AES payload out to uniform 1024-byte chunks, obscuring original file types and sizes.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">3</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">SHA-512 Hash</h3>
+        <p style="color:#94a3b8; font-size:16px;">Outer integrity validation. Tampered ciphertexts are dropped before decryption begins.</p>
+      </div>
+      <div style="flex:1; background:#1e293b; padding:32px; border-radius:12px;">
+        <div style="font-size:48px; color:#D92B3A; font-weight:800; margin-bottom:16px;">1</div>
+        <h3 style="color:#f8fafc; font-size:20px; margin-bottom:8px;">Terminal Encode</h3>
+        <p style="color:#94a3b8; font-size:16px;">Base64 ASCII armoring combined with the KOD8 signature string reversal for safe transit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: CL9 Introduction -->
+  <div class="slide-container light-ground" style="padding:64px; display:flex; align-items:center;">
+    <div style="flex:1;">
+      <h2 contenteditable="true" style="font-size:48px; font-weight:800; color:#0f172a; margin:0 0 24px 0; line-height:1.1;">
+        The Hardware Problem
+      </h2>
+      <p style="font-size:20px; color:#475569; margin:0 0 24px 0; line-height:1.6;">
+        Standard USB encryption relies on single passphrases (vulnerable to coercion or brute-force) or commercial telemetry (vulnerable to remote locks). 
+      </p>
+      <p style="font-size:20px; color:#475569; margin:0; line-height:1.6; border-left: 4px solid #D92B3A; padding-left: 16px;">
+        How do we secure external drives for government facilities without relying on passwords or the cloud?
+      </p>
+    </div>
+    <div style="flex:1; display:flex; justify-content:center;">
+      <i class="fa-solid fa-usb" style="font-size: 200px; color: #94a3b8;"></i>
+    </div>
+  </div>
+
+  <!-- Slide 6: CL9 Split-Key Architecture -->
+  <div class="slide-container light-ground" style="padding:64px; display:flex; flex-direction:column;">
+    <h2 contenteditable="true" style="font-size:40px; font-weight:800; color:#0f172a; margin:0 0 48px 0; text-align:center;">
+      Solution: CL9 Split-Key Provisioning
+    </h2>
+    <div style="flex-grow:1; display:flex; justify-content:center; align-items:center; gap: 40px;">
+      
+      <!-- Component 1 -->
+      <div style="background:#ffffff; border: 1px solid #e2e8f0; border-radius:12px; padding:32px; width: 320px; text-align:center; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+        <i class="fa-solid fa-hard-drive" style="font-size:48px; color:#0f172a; margin-bottom:24px;"></i>
+        <h3 style="font-size:20px; font-weight:800; color:#0f172a; margin-bottom:12px;">Volume A: Ignition</h3>
+        <p style="font-size:16px; color:#64748b;">50MB unencrypted FAT32 partition. Contains the 64-byte random <b>Drive Token</b>.</p>
+      </div>
+
+      <i class="fa-solid fa-plus" style="font-size:32px; color:#cbd5e1;"></i>
+
+      <!-- Component 2 -->
+      <div style="background:#ffffff; border: 1px solid #e2e8f0; border-radius:12px; padding:32px; width: 320px; text-align:center; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+        <i class="fa-solid fa-laptop-code" style="font-size:48px; color:#0f172a; margin-bottom:24px;"></i>
+        <h3 style="font-size:20px; font-weight:800; color:#0f172a; margin-bottom:12px;">Host Enclave</h3>
+        <p style="font-size:16px; color:#64748b;">Secure local directory on the authorized PC. Contains the 64-byte random <b>Host Token</b>.</p>
+      </div>
+
+      <i class="fa-solid fa-arrow-right-long" style="font-size:32px; color:#cbd5e1;"></i>
+
+      <!-- Result -->
+      <div style="background:#D92B3A; border-radius:12px; padding:32px; width: 320px; text-align:center; color:#ffffff; box-shadow:0 10px 15px rgba(217, 43, 58, 0.3);">
+        <i class="fa-solid fa-lock" style="font-size:48px; color:#ffffff; margin-bottom:24px;"></i>
+        <h3 style="font-size:20px; font-weight:800; margin-bottom:12px;">AES-XTS Master Key</h3>
+        <p style="font-size:16px; color:#f8fafc; opacity:0.9;">HKDF combines both tokens to format a native .bek or LUKS bootloader key.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: PGP Integration -->
+  <div class="slide-container dark-ground" style="padding:64px; display:flex; align-items:center;">
+    <div style="flex:1; padding-right: 48px;">
+      <h2 contenteditable="true" style="font-size:40px; font-weight:800; color:#f8fafc; margin:0 0 24px 0;">
+        PGP Detached Signatures
+      </h2>
+      <p style="font-size:20px; color:#94a3b8; margin:0 0 24px 0; line-height:1.6;">
+        To meet government facility compliance, KOD8 now generates detached OpenPGP signatures (<code style="background:#1e293b; padding:2px 6px; border-radius:4px; color:#e2e8f0;">.asc</code>) for every encrypted file.
+      </p>
+      <ul style="list-style:none; padding:0; margin:0; font-size:18px; color:#cbd5e1; line-height:2;">
+        <li><i class="fa-solid fa-check-circle" style="color:#1E9E75; margin-right:8px;"></i> Ensures non-repudiation of origin.</li>
+        <li><i class="fa-solid fa-check-circle" style="color:#1E9E75; margin-right:8px;"></i> Validates exact payload hashes.</li>
+        <li><i class="fa-solid fa-check-circle" style="color:#1E9E75; margin-right:8px;"></i> Native `PGPy13` integration.</li>
+      </ul>
+    </div>
+    <div style="flex:1; background:#1e293b; border-radius:12px; padding:32px; font-family:monospace; color:#94a3b8; font-size:14px; line-height:1.5;">
+      -----BEGIN PGP SIGNATURE-----<br><br>
+      iQIzBAABCAAdFiEE...<br>
+      JmB8V2T/qYgO1kXb...<br>
+      +wN3/sT8Zp2lH1qA...<br>
+      -----END PGP SIGNATURE-----
+    </div>
+  </div>
+
+  <!-- Slide 8: Closing -->
+  <div class="slide-container light-ground" style="padding:64px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+    <i class="fa-solid fa-shield-check" style="font-size: 80px; color: #1E9E75; margin-bottom: 32px;"></i>
+    <h2 contenteditable="true" style="font-size:56px; font-weight:800; color:#0f172a; margin:0 0 16px 0; line-height:1.1;">
+      Deployment Ready
+    </h2>
+    <p contenteditable="true" style="font-size:24px; color:#475569; margin:0; max-width:600px;">
+      Zero-trust architecture established. Ready for facility provisioning.
+    </p>
+  </div>
+
+</body>
+</html>

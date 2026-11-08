@@ -163,7 +163,7 @@ class Player:
         if len(self.trail_order) > 1:
             core_width = max(3, CELL_SIZE // 4)
             points = [
-                (cx * CELL_SIZE + CELL_SIZE // 3, cy * CELL_SIZE + CELL_SIZE // 2)
+                (cx * CELL_SIZE + CELL_SIZE // 2, cy * CELL_SIZE + CELL_SIZE // 2)
                 for (cx, cy) in self.trail_order
             ]
             pygame.draw.lines(surface, self.color, False, points, core_width)

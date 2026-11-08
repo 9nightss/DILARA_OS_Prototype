@@ -180,3 +180,6 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 *.kod8log
+filepath-codebreaker.txt
+filepath-databank-1.txt
+KOD8_ENC/DOCS/KOD8 Sandbox Edition.pptx

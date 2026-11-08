@@ -1,0 +1,3276 @@
+PS C:\Users\ab_fa\OneDrive\Documents\GitHub\DILARA_OS_Prototype> tree
+Folder PATH listing
+Volume serial number is A676-4386
+C:.
+├───apps
+├───browser
+│   └───__pycache__
+├───config
+├───data
+│   ├───CodeBreaker
+│   │   ├───Cicada 3301
+│   │   │   ├───2012
+│   │   │   │   ├───additional docs
+│   │   │   │   │   ├───4chan threads
+│   │   │   │   │   ├───accusation of cyberterrorism
+│   │   │   │   │   ├───more related info
+│   │   │   │   │   ├───outguss
+│   │   │   │   │   ├───scream314 git pages
+│   │   │   │   │   ├───signed messages
+│   │   │   │   │   ├───The Leaked Email
+│   │   │   │   │   ├───the mail
+│   │   │   │   │   ├───the subreddit
+│   │   │   │   │   └───the unsolved book code
+│   │   │   │   ├───additional media
+│   │   │   │   │   ├───images
+│   │   │   │   │   │   ├───MIDI and seconde chance
+│   │   │   │   │   │   └───The posters
+│   │   │   │   │   ├───Puzzle chart
+│   │   │   │   │   ├───The phone call
+│   │   │   │   │   ├───Unverified and Leaked information
+│   │   │   │   │   └───xaxanon videos
+│   │   │   │   │       ├───00003 MTS
+│   │   │   │   │       ├───00004 MTS
+│   │   │   │   │       ├───00005 MTS
+│   │   │   │   │       ├───00006 MTS
+│   │   │   │   │       ├───00007 MTS
+│   │   │   │   │       ├───00008 MTS
+│   │   │   │   │       ├───00009 MTS
+│   │   │   │   │       ├───00010 MTS
+│   │   │   │   │       └───00011 MTS
+│   │   │   │   ├───kod8u's attempt
+│   │   │   │   │   └───2012
+│   │   │   │   ├───marcus wanner's CAKES
+│   │   │   │   │   └───futorcap-master
+│   │   │   │   ├───MIDI puzzle
+│   │   │   │   └───websites
+│   │   │   │       ├───CIcada's MIT keyserver
+│   │   │   │       ├───the GPS coordinates website
+│   │   │   │       │   └───845145127_files
+│   │   │   │       └───the subreddit
+│   │   │   │           ├───old reddit
+│   │   │   │           │   └───a2e7j6ic78h0j7eiejd0120_files
+│   │   │   │           └───PDFs
+│   │   │   ├───2013
+│   │   │   │   ├───additional docs
+│   │   │   │   │   ├───4chan threads
+│   │   │   │   │   ├───logs
+│   │   │   │   │   ├───Related wikipedia pages
+│   │   │   │   │   ├───scream314 github
+│   │   │   │   │   ├───signed messages
+│   │   │   │   │   ├───telnet
+│   │   │   │   │   ├───The Book of the Law
+│   │   │   │   │   ├───The infamous warnning
+│   │   │   │   │   ├───The Leaked Email
+│   │   │   │   │   └───TOR 2.2 PAGE
+│   │   │   │   ├───additional files
+│   │   │   │   │   ├───Cicada OS
+│   │   │   │   │   │   └───cicados
+│   │   │   │   │   │       ├───AUDIO
+│   │   │   │   │   │       ├───DATA
+│   │   │   │   │   │       ├───tmp
+│   │   │   │   │   │       └───usr_local_bin
+│   │   │   │   │   ├───Scripts
+│   │   │   │   │   ├───The twitter
+│   │   │   │   │   └───Winners leak
+│   │   │   │   └───additional images
+│   │   │   │       ├───Posters
+│   │   │   │       └───the end questions
+│   │   │   ├───2014
+│   │   │   │   ├───additional docs
+│   │   │   │   │   ├───4chan threads
+│   │   │   │   │   ├───outguss
+│   │   │   │   │   ├───related wikipedia pages
+│   │   │   │   │   ├───scream314 github
+│   │   │   │   │   ├───scripts
+│   │   │   │   │   │   └───programs' site
+│   │   │   │   │   ├───Self-Reliance and Other Essays
+│   │   │   │   │   ├───the growing string
+│   │   │   │   │   └───Titanpads from time of solving
+│   │   │   │   ├───additional images
+│   │   │   │   │   ├───godel escher bach
+│   │   │   │   │   ├───Liber primus pages
+│   │   │   │   │   ├───POST 2014 (wikia wise)
+│   │   │   │   │   └───the growing string
+│   │   │   │   ├───Liber Primus
+│   │   │   │   │   ├───A drop box of all unmodified files
+│   │   │   │   │   │   └───2014onion7
+│   │   │   │   │   ├───Enhanced Rune Images
+│   │   │   │   │   ├───gifs
+│   │   │   │   │   ├───liber primus images full
+│   │   │   │   │   ├───LP Sacred Book Edition
+│   │   │   │   │   │   ├───complete remake in english
+│   │   │   │   │   │   └───english text on top of pages
+│   │   │   │   │   └───Stacked Pages
+│   │   │   │   └───Websites
+│   │   │   │       ├───Interconnectedness fron onion 5
+│   │   │   │       ├───ONION 3
+│   │   │   │       ├───onion 5v2
+│   │   │   │       └───onion 6
+│   │   │   ├───2015
+│   │   │   │   ├───extra docs
+│   │   │   │   └───images
+│   │   │   ├───2016
+│   │   │   │   └───2016
+│   │   │   │       ├───additional docs
+│   │   │   │       ├───additional images
+│   │   │   │       └───extra stuff
+│   │   │   ├───2017
+│   │   │   │   ├───additional docs
+│   │   │   │   │   └───4chan threads
+│   │   │   │   └───additional images
+│   │   │   ├───3301
+│   │   │   │   ├───AUDIO
+│   │   │   │   ├───BOOT
+│   │   │   │   │   └───ISOLINUX
+│   │   │   │   └───DATA
+│   │   │   ├───Archive
+│   │   │   │   ├───Media coverage
+│   │   │   │   │   ├───As usual, 4chan always joins the party (gamejacking mostly)
+│   │   │   │   │   ├───cicada3301.boards.net
+│   │   │   │   │   │   ├───Branches 8-14
+│   │   │   │   │   │   ├───Cross 0-2
+│   │   │   │   │   │   ├───General Discussion
+│   │   │   │   │   │   ├───Mobius 15-22
+│   │   │   │   │   │   ├───Parable 57
+│   │   │   │   │   │   ├───Spiral Branches 40-55
+│   │   │   │   │   │   ├───Theories
+│   │   │   │   │   │   ├───Tools
+│   │   │   │   │   │   └───Welcome
+│   │   │   │   │   ├───Mainstream media
+│   │   │   │   │   │   └───The rolling stones
+│   │   │   │   │   ├───media articles
+│   │   │   │   │   ├───non text coverage
+│   │   │   │   │   └───reddit front page posts
+│   │   │   │   └───Old Sites
+│   │   │   │       ├───3301Archive
+│   │   │   │       │   ├───THE ASSET PACKAGE
+│   │   │   │       │   └───walkthrough
+│   │   │   │       │       ├───2012 WALKTHROUGH
+│   │   │   │       │       │   └───extra stuff
+│   │   │   │       │       ├───2016
+│   │   │   │       │       ├───CURRENT STATUS
+│   │   │   │       │       └───LP 15.JPG
+│   │   │   │       ├───bernsteinbear.com blog cicada
+│   │   │   │       │   └───3301 - Max Bernstein_files
+│   │   │   │       ├───calypne
+│   │   │   │       ├───cicada3301.boards.net
+│   │   │   │       │   ├───Branches 8-14
+│   │   │   │       │   ├───Cross 0-2
+│   │   │   │       │   ├───General Discussion
+│   │   │   │       │   ├───Mobius 15-22
+│   │   │   │       │   ├───Parable 57
+│   │   │   │       │   ├───Spiral Branches 40-55
+│   │   │   │       │   ├───Theories
+│   │   │   │       │   ├───Tools
+│   │   │   │       │   └───Welcome
+│   │   │   │       └───clevercode
+│   │   │   ├───assets
+│   │   │   │   ├───2012
+│   │   │   │   ├───2013
+│   │   │   │   │   └───cicados
+│   │   │   │   │       ├───AUDIO
+│   │   │   │   │       ├───DATA
+│   │   │   │   │       ├───tmp
+│   │   │   │   │       └───usr_local_bin
+│   │   │   │   ├───2014
+│   │   │   │   │   ├───liber-primus-complete
+│   │   │   │   │   │   └───out
+│   │   │   │   │   │       └───nopass
+│   │   │   │   │   ├───stage01
+│   │   │   │   │   ├───stage02
+│   │   │   │   │   │   └───auqgnxjtvdbll3pv.onion
+│   │   │   │   │   ├───stage03
+│   │   │   │   │   │   └───cu343l33nqaekrnw.onion
+│   │   │   │   │   ├───stage04
+│   │   │   │   │   │   └───fv7lyucmeozzd5j4.onion
+│   │   │   │   │   ├───stage05
+│   │   │   │   │   │   └───avowyfgl5lkzfj3n.onion
+│   │   │   │   │   ├───stage06
+│   │   │   │   │   │   └───avowyfgl5lkzfj3n.onion
+│   │   │   │   │   ├───stage07
+│   │   │   │   │   │   └───q4utgdi2n4m4uim5.onion
+│   │   │   │   │   ├───stage08
+│   │   │   │   │   ├───stage09
+│   │   │   │   │   │   └───ut3qtzbrvs7dtvzp.onion
+│   │   │   │   │   ├───stage10
+│   │   │   │   │   │   └───ut3qtzbrvs7dtvzp.onion
+│   │   │   │   │   └───stage11
+│   │   │   │   │       └───ky2khlqdf7qdznac.onion
+│   │   │   │   └───2016
+│   │   │   ├───EXAM PAGE
+│   │   │   └───EXTRA WIKI PAGES
+│   │   │       ├───Adopting the wiki
+│   │   │       ├───DEBATE ABOUT MEANING OF THE PICTURE ON ONION
+│   │   │       │   ├───collage images origin
+│   │   │       │   │   ├───Bottom Ancient Days
+│   │   │       │   │   ├───cicada
+│   │   │       │   │   ├───TOP NEWTON TRIANGLE
+│   │   │       │   │   └───William Blake - Nebuchadnezzar
+│   │   │       │   ├───extra docs
+│   │   │       │   └───extra media
+│   │   │       ├───FAQ
+│   │   │       ├───Instar emergence (mp3 and hidden poem)
+│   │   │       ├───Liber Primus Ideas and Suggestions
+│   │   │       ├───Liber Primus Solved Pages
+│   │   │       ├───LOGS ABOUT HOW WE FOUND LINODE SERVER OF ONION 3
+│   │   │       ├───Origin of Cicada 3301 logo
+│   │   │       │   └───Images
+│   │   │       ├───Outguess detection visual analysis
+│   │   │       │   ├───extra docs
+│   │   │       │   └───images
+│   │   │       ├───Ports of Cicada onions
+│   │   │       ├───useful tools
+│   │   │       ├───We found traces of some Cicada Crypto group from 90S
+│   │   │       │   ├───cypherpunk connection
+│   │   │       │   ├───Michael D. stiber
+│   │   │       │   └───webster uni connection
+│   │   │       └───Why this bug (symbolism of cicadas and Instar)
+│   │   ├───CYBERPUNK 2077 ARG
+│   │   │   ├───01- QUADRA
+│   │   │   ├───02- Trauma Team
+│   │   │   │   ├───secure site_files
+│   │   │   │   └───Trauma Team_files
+│   │   │   ├───03 - 01 AURAMİS
+│   │   │   │   └───Home of the Cyberpunk 2077 universe — games, anime & more_files
+│   │   │   ├───03 - 02 NİGHTCORP
+│   │   │   │   ├───Case 00032 05 54 0B CP_files
+│   │   │   │   ├───nightcorp_files
+│   │   │   │   ├───Wayback Machine_files
+│   │   │   │   └───Welcome to Corsairs_files
+│   │   │   ├───03- E3
+│   │   │   │   ├───03 - 01 AURAMİS
+│   │   │   │   │   └───Home of the Cyberpunk 2077 universe — games, anime & more_files
+│   │   │   │   ├───03 - 02 NİGHTCORP
+│   │   │   │   │   ├───Case 00032 05 54 0B CP_files
+│   │   │   │   │   ├───nightcorp_files
+│   │   │   │   │   ├───Wayback Machine_files
+│   │   │   │   │   └───Welcome to Corsairs_files
+│   │   │   │   ├───auramis_212_91_11_21_mai82eq8jnzckcjs
+│   │   │   │   │   └───archive2
+│   │   │   │   ├───DarkFuture.com_files
+│   │   │   │   └───NETWATCH
+│   │   │   │       ├───Connection_files
+│   │   │   │       ├───netwatch SEBURO ARASAKA PAGE 1_files
+│   │   │   │       ├───netwatch SEBURO ARASAKA PAGE 2_files
+│   │   │   │       ├───netwatch SEBURO ARASAKA PAGE 3_files
+│   │   │   │       ├───netwatch SEBURO ARASAKA PAGE 4_files
+│   │   │   │       └───netwatch_files
+│   │   │   ├───case_modding_materials
+│   │   │   │   ├───Corporate logotypes
+│   │   │   │   ├───Gang logotypes
+│   │   │   │   ├───PC case templates
+│   │   │   │   └───Styles
+│   │   │   ├───DARK THEME - Categorized AIO Command List-521-v9-7-1718629018
+│   │   │   ├───FF06B5
+│   │   │   │   ├───Archibald Crane
+│   │   │   │   ├───Big joe
+│   │   │   │   ├───CARPE
+│   │   │   │   ├───Case 00032 05 54 0B CP_files
+│   │   │   │   ├───Christine Markow
+│   │   │   │   ├───Coach Fred
+│   │   │   │   ├───harold han
+│   │   │   │   ├───Joanne Koch
+│   │   │   │   ├───Ruth Dzeng
+│   │   │   │   └───Zen Master
+│   │   │   ├───NETWATCH
+│   │   │   │   ├───Connection_files
+│   │   │   │   ├───netwatch SEBURO ARASAKA PAGE 1_files
+│   │   │   │   ├───netwatch SEBURO ARASAKA PAGE 2_files
+│   │   │   │   ├───netwatch SEBURO ARASAKA PAGE 3_files
+│   │   │   │   ├───netwatch SEBURO ARASAKA PAGE 4_files
+│   │   │   │   └───netwatch_files
+│   │   │   ├───NUSA
+│   │   │   │   ├───nusa invite findings
+│   │   │   │   ├───NUSA_NETRUNNER SENDİNGS
+│   │   │   │   │   ├───Hawk
+│   │   │   │   │   ├───shadowmoss
+│   │   │   │   │   │   └───shadowmoss
+│   │   │   │   │   ├───Thial
+│   │   │   │   │   ├───Twoface
+│   │   │   │   │   └───Wolvenkit-2201-8-17-1756751399
+│   │   │   │   │       ├───lib
+│   │   │   │   │       ├───opus-tools
+│   │   │   │   │       └───Resources
+│   │   │   │   │           ├───Media
+│   │   │   │   │           │   └───Images
+│   │   │   │   │           │       └───Icons
+│   │   │   │   │           │           ├───Application
+│   │   │   │   │           │           └───Files
+│   │   │   │   │           ├───Old
+│   │   │   │   │           │   ├───Images
+│   │   │   │   │           │   └───Svg
+│   │   │   │   │           ├───SkyboxTextures
+│   │   │   │   │           └───TemplateFiles
+│   │   │   │   │               ├───inkatlas
+│   │   │   │   │               └───yaml
+│   │   │   │   ├───other
+│   │   │   │   ├───SECRET MESSAGE FOUNDİNGS
+│   │   │   │   └───youwannaseethis
+│   │   │   └───scripts
+│   │   ├───darknet-ng
+│   │   │   ├───2023 challenges
+│   │   │   ├───Badge
+│   │   │   │   └───Darknet-NG-12-Badge-main
+│   │   │   ├───Boss Fight
+│   │   │   ├───casefile
+│   │   │   │   ├───async
+│   │   │   │   ├───gateherder
+│   │   │   │   └───nolen
+│   │   │   ├───Daemon tech
+│   │   │   ├───darknet-ng.github.io-main
+│   │   │   │   └───darknet-ng.github.io-main
+│   │   │   │       └───darknet-website-files-2022
+│   │   │   ├───data-man
+│   │   │   ├───defcon33
+│   │   │   ├───DEFCON34
+│   │   │   ├───emergence-protocol
+│   │   │   ├───firewall
+│   │   │   │   └───firewalld_backup
+│   │   │   │       └───firewalld_backup
+│   │   │   │           ├───firewalld
+│   │   │   │           │   ├───ipsets
+│   │   │   │           │   └───zones
+│   │   │   │           └───firewalld_backup
+│   │   │   │               └───firewalld
+│   │   │   │                   ├───ipsets
+│   │   │   │                   └───zones
+│   │   │   ├───Rorschach
+│   │   │   ├───secrets
+│   │   │   ├───SOBOL'S CHALLENGE
+│   │   │   └───strange signals
+│   │   ├───DEFCON 33
+│   │   └───defcon 34
+│   └───databank
+│       ├───EVRAK BABAM
+│       │   └───resim babam
+│       ├───kgb - PETER SERVİS
+│       │   ├───---mdt---
+│       │   ├───---nex
+│       │   ├───--cvs--
+│       │   ├───--pss--
+│       │   ├───--srd--
+│       │   ├───--tenkrad--
+│       │   └───SSP
+│       ├───mit
+│       ├───nato
+│       │   ├───Challenger tank turret
+│       │   │   └───Challenger 1 DEFE 70-1615-20250818T090100Z-1-001
+│       │   │       └───Challenger 1 DEFE 70-1615
+│       │   ├───flight manuals
+│       │   │   ├───B-52
+│       │   │   ├───B64D
+│       │   │   ├───EF2000 - EUROFİGHTER
+│       │   │   ├───F-16
+│       │   │   ├───F-22
+│       │   │   ├───F-4E
+│       │   │   ├───F18
+│       │   │   ├───MİG-29
+│       │   │   ├───SR-71
+│       │   │   └───TF-X KAAN
+│       │   ├───Kosovo Case
+│       │   ├───MEETİNG NOTES
+│       │   ├───Project manta
+│       │   ├───project scorpius
+│       │   └───UKRAİNE CASE
+│       ├───North Korea
+│       │   └───drone shots
+│       ├───NSA
+│       │   ├───Crypto museum
+│       │   └───soft tools
+│       │       ├───DanderSpritz_docs-master
+│       │       │   └───DanderSpritz_docs-master
+│       │       │       ├───DaPu
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Data
+│       │       │       │   └───PyScripts
+│       │       │       ├───Darkskyline
+│       │       │       │   └───Filters
+│       │       │       ├───DeMi
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Data
+│       │       │       │   │   └───i386-winnt-wow64
+│       │       │       │   │       └───disable
+│       │       │       │   │           └───all
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───demi
+│       │       │       │   │   │       ├───mcf
+│       │       │       │   │   │       │   ├───cmd
+│       │       │       │   │   │       │   │   ├───diba
+│       │       │       │   │   │       │   │   │   └───data
+│       │       │       │   │   │       │   │   │       └───dsz
+│       │       │       │   │   │       │   │   └───kisucomms
+│       │       │       │   │   │       │   │       └───data
+│       │       │       │   │   │       │   │           └───dsz
+│       │       │       │   │   │       │   └───kisu
+│       │       │       │   │   │       └───windows
+│       │       │       │   │   │           ├───driver
+│       │       │       │   │   │           └───module
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Scripts
+│       │       │       │   │   └───Connected
+│       │       │       │   └───Version
+│       │       │       ├───Df
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───PyScripts
+│       │       │       │   ├───Tools
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   └───x64-winnt
+│       │       │       │   └───Uploads
+│       │       │       │       ├───i386-winnt
+│       │       │       │       └───x64-winnt
+│       │       │       ├───DmGz
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───Install
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───dmgz
+│       │       │       │   │   │       └───dmgz
+│       │       │       │   │   │           └───cmd
+│       │       │       │   │   │               └───dmgz
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Scripts
+│       │       │       │   │   └───Include
+│       │       │       │   ├───Uploads
+│       │       │       │   │   ├───i386
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   └───x64
+│       │       │       │   │       └───winnt
+│       │       │       │   └───Version
+│       │       │       ├───DSky
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Filters
+│       │       │       │   │   └───src
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───lib
+│       │       │       │   │   │   └───dsky
+│       │       │       │   │   │       ├───mca
+│       │       │       │   │   │       │   └───dsky
+│       │       │       │   │   │       │       └───cmd
+│       │       │       │   │   │       │           └───trafficcapture
+│       │       │       │   │   │       └───menu
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Tools
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   └───Legacy
+│       │       │       │   │       └───1.0
+│       │       │       │   ├───Uploads
+│       │       │       │   │   ├───i386
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   └───x64
+│       │       │       │   │       └───winnt
+│       │       │       │   └───Version
+│       │       │       ├───Dsz
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   │   └───include
+│       │       │       │   │   └───Storage
+│       │       │       │   │       └───include
+│       │       │       │   ├───CoreSchemas
+│       │       │       │   ├───Data
+│       │       │       │   │   ├───disable
+│       │       │       │   │   │   └───local
+│       │       │       │   │   └───windows
+│       │       │       │   │       ├───disable
+│       │       │       │   │       │   └───local
+│       │       │       │   │       └───prompt
+│       │       │       │   │           └───remote
+│       │       │       │   ├───Databases
+│       │       │       │   ├───Gui
+│       │       │       │   │   ├───Config
+│       │       │       │   │   │   ├───Macros
+│       │       │       │   │   │   │   ├───DeveloperTools
+│       │       │       │   │   │   │   ├───FiveTerminals
+│       │       │       │   │   │   │   └───SystemStartup
+│       │       │       │   │   │   └───Modules
+│       │       │       │   │   └───lib
+│       │       │       │   │       └───java-j2se_1.6-sun
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   ├───Files
+│       │       │       │   │   │   ├───i386-winnt-vc9
+│       │       │       │   │   │   │   └───release
+│       │       │       │   │   │   ├───i386-winnt-vc9s
+│       │       │       │   │   │   │   └───release
+│       │       │       │   │   │   └───x64-winnt-vc9s
+│       │       │       │   │   │       └───release
+│       │       │       │   │   ├───Files-dsz
+│       │       │       │   │   │   ├───i386-winnt-vc9
+│       │       │       │   │   │   │   └───release
+│       │       │       │   │   │   ├───i386-winnt-vc9s
+│       │       │       │   │   │   │   └───release
+│       │       │       │   │   │   └───x64-winnt-vc9s
+│       │       │       │   │   │       └───release
+│       │       │       │   │   └───Techniques
+│       │       │       │   │       └───windows
+│       │       │       │   ├───Payloads
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   ├───i386-winnt
+│       │       │       │   │   │   └───x64-winnt
+│       │       │       │   │   └───Files
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───HelperScripts
+│       │       │       │   │   ├───History
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   ├───dsz
+│       │       │       │   │   │   │   ├───data
+│       │       │       │   │   │   │   ├───file
+│       │       │       │   │   │   │   ├───lp
+│       │       │       │   │   │   │   │   ├───alias
+│       │       │       │   │   │   │   │   ├───cmdline
+│       │       │       │   │   │   │   │   └───gui
+│       │       │       │   │   │   │   │       └───terminal
+│       │       │       │   │   │   │   ├───mca
+│       │       │       │   │   │   │   │   ├───core
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───addresses
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───aliases
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───available
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───commands
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───cprpc
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───help
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───library
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───lpdirectory
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───lpgetenv
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───plugins
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───throttle
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───version
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───whoami
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───wrappers
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   ├───file
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───cd
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───copy
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───delete
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───dir
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───diskspace
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───drives
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───fileattributes
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───grep
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───logedit
+│       │       │       │   │   │   │   │   │       ├───matchfiletimes
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───mkdir
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───move
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───put
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───rmdir
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───strings
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───systempaths
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   ├───install
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───dllload
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───registrykeys
+│       │       │       │   │   │   │   │   │       └───shutdown
+│       │       │       │   │   │   │   │   ├───network
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───arp
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───banner
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───dns
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───firewall
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───ifconfig
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───nameserverlookup
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───netbios
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───netconnections
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───netmap
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───packetredirect
+│       │       │       │   │   │   │   │   │       ├───ping
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───portmap
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───route
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───traceroute
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   ├───process
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───environment
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───getadmin
+│       │       │       │   │   │   │   │   │       ├───kill
+│       │       │       │   │   │   │   │   │       ├───processes
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       ├───processinfo
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───processmodify
+│       │       │       │   │   │   │   │   │       ├───processoptions
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───processsuspend
+│       │       │       │   │   │   │   │   │       └───runaschild
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   ├───security
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───audit
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───eventlogclear
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───eventlogedit
+│       │       │       │   │   │   │   │   │       ├───eventlogfilter
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───eventlogquery
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───hide
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───permissions
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   ├───status
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───activity
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───currentusers
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───devicequery
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───handles
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───memory
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───objects
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───performance
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───scheduler
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───time
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       ├───uptime
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───windows
+│       │       │       │   │   │   │   │   │           └───data
+│       │       │       │   │   │   │   │   │               └───dsz
+│       │       │       │   │   │   │   │   └───survey
+│       │       │       │   │   │   │   │       └───cmd
+│       │       │       │   │   │   │   │           ├───activedirectory
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───domaincontroller
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───drivers
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───groups
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───language
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───ldap
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───packages
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───passworddump
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───registryhive
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───registryquery
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───services
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───sidlookup
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           ├───systemversion
+│       │       │       │   │   │   │   │           │   └───data
+│       │       │       │   │   │   │   │           │       └───dsz
+│       │       │       │   │   │   │   │           └───users
+│       │       │       │   │   │   │   │               └───data
+│       │       │       │   │   │   │   │                   └───dsz
+│       │       │       │   │   │   │   ├───mca_dsz
+│       │       │       │   │   │   │   │   ├───file
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───get
+│       │       │       │   │   │   │   │   │       │   └───data
+│       │       │       │   │   │   │   │   │       │       └───dsz
+│       │       │       │   │   │   │   │   │       └───papercut
+│       │       │       │   │   │   │   │   ├───network
+│       │       │       │   │   │   │   │   │   └───cmd
+│       │       │       │   │   │   │   │   │       ├───redirect
+│       │       │       │   │   │   │   │   │       └───serialredirect
+│       │       │       │   │   │   │   │   └───process
+│       │       │       │   │   │   │   │       └───cmd
+│       │       │       │   │   │   │   │           └───run
+│       │       │       │   │   │   │   ├───mcf
+│       │       │       │   │   │   │   │   ├───cmd
+│       │       │       │   │   │   │   │   │   └───processsuspend
+│       │       │       │   │   │   │   │   └───tasking
+│       │       │       │   │   │   │   │       └───dsz
+│       │       │       │   │   │   │   │           └───processsuspend
+│       │       │       │   │   │   │   ├───menu
+│       │       │       │   │   │   │   │   ├───input
+│       │       │       │   │   │   │   │   │   └───values
+│       │       │       │   │   │   │   │   └───output
+│       │       │       │   │   │   │   ├───operational
+│       │       │       │   │   │   │   ├───path
+│       │       │       │   │   │   │   │   └───windows
+│       │       │       │   │   │   │   ├───payload
+│       │       │       │   │   │   │   ├───process
+│       │       │       │   │   │   │   │   └───windows
+│       │       │       │   │   │   │   ├───ui
+│       │       │       │   │   │   │   ├───user
+│       │       │       │   │   │   │   │   ├───unix
+│       │       │       │   │   │   │   │   └───windows
+│       │       │       │   │   │   │   ├───version
+│       │       │       │   │   │   │   │   └───checks
+│       │       │       │   │   │   │   │       ├───unix
+│       │       │       │   │   │   │   │       └───windows
+│       │       │       │   │   │   │   └───windows
+│       │       │       │   │   │   │       ├───driver
+│       │       │       │   │   │   │       ├───registry
+│       │       │       │   │   │   │       └───sid
+│       │       │       │   │   │   ├───gui
+│       │       │       │   │   │   │   └───networkserver
+│       │       │       │   │   │   ├───mcl
+│       │       │       │   │   │   │   ├───data
+│       │       │       │   │   │   │   │   ├───env
+│       │       │       │   │   │   │   │   └───namespace
+│       │       │       │   │   │   │   │       ├───common
+│       │       │       │   │   │   │   │       └───payload
+│       │       │       │   │   │   │   ├───elevation
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   ├───framework
+│       │       │       │   │   │   │   │   ├───dsz
+│       │       │       │   │   │   │   │   └───ur
+│       │       │       │   │   │   │   ├───hiding
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   ├───imports
+│       │       │       │   │   │   │   ├───injection
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   ├───lp
+│       │       │       │   │   │   │   │   └───cmdparser
+│       │       │       │   │   │   │   ├───memory
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   ├───object
+│       │       │       │   │   │   │   ├───os
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   │       └───winnt
+│       │       │       │   │   │   │   ├───privilege
+│       │       │       │   │   │   │   │   └───errors
+│       │       │       │   │   │   │   ├───status
+│       │       │       │   │   │   │   │   └───framework
+│       │       │       │   │   │   │   ├───target
+│       │       │       │   │   │   │   ├───tasking
+│       │       │       │   │   │   │   │   ├───env
+│       │       │       │   │   │   │   │   ├───resource
+│       │       │       │   │   │   │   │   ├───technique
+│       │       │       │   │   │   │   │   └───virtualdir
+│       │       │       │   │   │   │   └───tools
+│       │       │       │   │   │   ├───mcl_platform
+│       │       │       │   │   │   │   ├───data
+│       │       │       │   │   │   │   │   ├───env
+│       │       │       │   │   │   │   │   └───namespace
+│       │       │       │   │   │   │   │       ├───common
+│       │       │       │   │   │   │   │       └───payload
+│       │       │       │   │   │   │   ├───tasking
+│       │       │       │   │   │   │   │   ├───env
+│       │       │       │   │   │   │   │   ├───resource
+│       │       │       │   │   │   │   │   ├───technique
+│       │       │       │   │   │   │   │   └───virtualdir
+│       │       │       │   │   │   │   └───tools
+│       │       │       │   │   │   └───policy
+│       │       │       │   │   ├───ModuleToggle
+│       │       │       │   │   ├───Peel
+│       │       │       │   │   ├───Policy
+│       │       │       │   │   ├───Screenshot
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───Connected
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   ├───Flav
+│       │       │       │   │   ├───HelperScripts
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   ├───Include
+│       │       │       │   │   │   ├───linux
+│       │       │       │   │   │   ├───solaris
+│       │       │       │   │   │   ├───unix
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   ├───PSP
+│       │       │       │   │   └───RequestHandler
+│       │       │       │   ├───Tools
+│       │       │       │   │   └───java-j2se_1.5
+│       │       │       │   └───Version
+│       │       │       ├───Ep
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Bootstrap
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   ├───Schema
+│       │       │       │   │   ├───Schemas
+│       │       │       │   │   │   └───OldSchemas
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───ExternalLibraries
+│       │       │       │   │   └───i386-winnt-vc71
+│       │       │       │   ├───Payloads
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───i386-winnt
+│       │       │       │   │   └───Files
+│       │       │       │   │       └───i386-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───Plugins
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   └───Files
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───BehavePeking
+│       │       │       │   │   ├───Capn
+│       │       │       │   │   │   └───Include
+│       │       │       │   │   ├───DarkSkyline
+│       │       │       │   │   │   └───Include
+│       │       │       │   │   ├───DoormanGauze
+│       │       │       │   │   ├───DoorwayNapkin
+│       │       │       │   │   ├───DraftyPlan
+│       │       │       │   │   ├───DrillerSkyline
+│       │       │       │   │   │   └───Include
+│       │       │       │   │   ├───EmptyKeg
+│       │       │       │   │   ├───ifthen
+│       │       │       │   │   ├───Include
+│       │       │       │   │   │   └───Old
+│       │       │       │   │   ├───JealousFruit
+│       │       │       │   │   ├───KeeperLatch
+│       │       │       │   │   │   └───Include
+│       │       │       │   │   ├───malfind
+│       │       │       │   │   ├───PeddleCheap
+│       │       │       │   │   ├───PSP
+│       │       │       │   │   ├───RoundupMast
+│       │       │       │   │   ├───RP
+│       │       │       │   │   ├───Services
+│       │       │       │   │   ├───ST
+│       │       │       │   │   ├───Tools
+│       │       │       │   │   ├───TouchScripts
+│       │       │       │   │   ├───XpFirewall
+│       │       │       │   │   └───ZippyBang
+│       │       │       │   └───Uploads
+│       │       │       ├───ExternalLibraries
+│       │       │       │   ├───i386-winnt-vc71
+│       │       │       │   ├───i386-winnt-vc9
+│       │       │       │   └───java-j2se_1.6-sun
+│       │       │       │       └───endorsed
+│       │       │       ├───FlAv
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Data
+│       │       │       │   │   └───windows
+│       │       │       │   │       └───disable
+│       │       │       │   │           └───local
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───Install
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───flav
+│       │       │       │   │   │       └───flav
+│       │       │       │   │   │           └───cmd
+│       │       │       │   │   │               └───flavcontrol
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Scripts
+│       │       │       │   ├───Uploads
+│       │       │       │   │   ├───i386
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   └───x64
+│       │       │       │   │       └───winnt
+│       │       │       │   └───Version
+│       │       │       ├───GaTh
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   └───Modules
+│       │       │       │       ├───Descriptions
+│       │       │       │       │   ├───linux
+│       │       │       │       │   └───windows
+│       │       │       │       └───Files
+│       │       │       │           ├───i386-winnt-vc9
+│       │       │       │           │   └───release
+│       │       │       │           ├───i386-winnt-vc9s
+│       │       │       │           │   └───release
+│       │       │       │           └───x64-winnt-vc9s
+│       │       │       │               └───release
+│       │       │       ├───GeZu
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   └───PyScripts
+│       │       │       │       ├───DataHandlers
+│       │       │       │       ├───Lib
+│       │       │       │       │   └───gezu
+│       │       │       │       │       └───mca
+│       │       │       │       │           └───gezu
+│       │       │       │       │               └───cmd
+│       │       │       │       │                   └───GeZu_KernelMemory
+│       │       │       │       │                       └───data
+│       │       │       │       │                           └───dsz
+│       │       │       │       └───Tasking
+│       │       │       ├───GRcl
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   └───Modules
+│       │       │       │       ├───Descriptions
+│       │       │       │       │   ├───linux
+│       │       │       │       │   └───windows
+│       │       │       │       └───Files
+│       │       │       │           ├───i386-winnt-vc9
+│       │       │       │           │   └───release
+│       │       │       │           ├───i386-winnt-vc9s
+│       │       │       │           │   └───release
+│       │       │       │           └───x64-winnt-vc9s
+│       │       │       │               └───release
+│       │       │       ├───GRDO
+│       │       │       │   ├───Tools
+│       │       │       │   │   └───i386
+│       │       │       │   └───Uploads
+│       │       │       │       ├───i386
+│       │       │       │       │   └───winnt
+│       │       │       │       └───x64
+│       │       │       │           └───winnt
+│       │       │       ├───GROK
+│       │       │       │   ├───1.2.0.1
+│       │       │       │   │   ├───Offline
+│       │       │       │   │   └───Uploads
+│       │       │       │   ├───2.1.3.1
+│       │       │       │   │   ├───Offline
+│       │       │       │   │   └───Uploads
+│       │       │       │   └───PyScripts
+│       │       │       ├───Gui
+│       │       │       │   ├───Config
+│       │       │       │   │   ├───Console
+│       │       │       │   │   │   └───themes
+│       │       │       │   │   ├───FileBrowser
+│       │       │       │   │   ├───Modules
+│       │       │       │   │   ├───NetmapViewer
+│       │       │       │   │   ├───RequestHandler
+│       │       │       │   │   ├───ScreenShot
+│       │       │       │   │   ├───ScriptEditor
+│       │       │       │   │   │   └───modes
+│       │       │       │   │   ├───Shell
+│       │       │       │   │   ├───TargetDetails
+│       │       │       │   │   ├───TaskManager
+│       │       │       │   │   └───Terminal
+│       │       │       │   ├───lib
+│       │       │       │   │   └───java-j2se_1.6-sun
+│       │       │       │   └───Scripts
+│       │       │       │       └───RequestHandler
+│       │       │       ├───LegacyWindowsExploits
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Exploits
+│       │       │       │   │   ├───EAFU 2.2.0
+│       │       │       │   │   │   └───EAFU_SSL_exe
+│       │       │       │   │   ├───ECWI
+│       │       │       │   │   ├───ELV 2.1.3
+│       │       │       │   │   ├───ESKE 1.6.2
+│       │       │       │   │   ├───ETBL 1.1.1
+│       │       │       │   │   ├───ETRE 1.0.4
+│       │       │       │   │   ├───EVFR 3.2.0.2
+│       │       │       │   │   ├───EXPA 1.0.0.2
+│       │       │       │   │   └───ST 1.14
+│       │       │       │   ├───Resources
+│       │       │       │   │   ├───Pc
+│       │       │       │   │   │   └───i386-winnt
+│       │       │       │   │   ├───Perl
+│       │       │       │   │   └───Tools
+│       │       │       │   └───Scripts
+│       │       │       ├───Ops
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Data
+│       │       │       │   │   ├───database_plans
+│       │       │       │   │   │   ├───Oracle
+│       │       │       │   │   │   │   ├───Detailed Audit Check
+│       │       │       │   │   │   │   └───Survey
+│       │       │       │   │   │   ├───SQL Server
+│       │       │       │   │   │   │   ├───Kaspersky 6
+│       │       │       │   │   │   │   ├───Kaspersky 8
+│       │       │       │   │   │   │   ├───SolarWinds
+│       │       │       │   │   │   │   ├───Survey (Ver 9+)
+│       │       │       │   │   │   │   └───WSUS Server
+│       │       │       │   │   │   └───SQLite
+│       │       │       │   │   │       └───Survey
+│       │       │       │   │   └───pspFPs
+│       │       │       │   ├───Databases
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───Connected
+│       │       │       │   │   ├───database
+│       │       │       │   │   ├───lib
+│       │       │       │   │   │   ├───ops
+│       │       │       │   │   │   │   ├───cmd
+│       │       │       │   │   │   │   ├───data
+│       │       │       │   │   │   │   ├───files
+│       │       │       │   │   │   │   ├───networking
+│       │       │       │   │   │   │   ├───override
+│       │       │       │   │   │   │   ├───processes
+│       │       │       │   │   │   │   ├───project
+│       │       │       │   │   │   │   ├───psp
+│       │       │       │   │   │   │   ├───security
+│       │       │       │   │   │   │   ├───survey
+│       │       │       │   │   │   │   │   └───engine
+│       │       │       │   │   │   │   │       └───tags
+│       │       │       │   │   │   │   │           └───section
+│       │       │       │   │   │   │   └───system
+│       │       │       │   │   │   ├───opsdata
+│       │       │       │   │   │   ├───util
+│       │       │       │   │   │   └───xops
+│       │       │       │   │   ├───overseer
+│       │       │       │   │   │   └───plugins
+│       │       │       │   │   ├───ripper
+│       │       │       │   │   │   └───plugins
+│       │       │       │   │   ├───scansweep
+│       │       │       │   │   │   ├───monitorengine
+│       │       │       │   │   │   └───scanengine2
+│       │       │       │   │   ├───survey
+│       │       │       │   │   ├───windows
+│       │       │       │   │   │   ├───psp
+│       │       │       │   │   │   └───sentinel
+│       │       │       │   │   └───wrappers
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───Connected
+│       │       │       │   │   ├───Include
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───windows
+│       │       │       │   ├───Tools
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───yak2
+│       │       │       │   │   └───ZiPo
+│       │       │       │   ├───Uploads
+│       │       │       │   │   └───i386
+│       │       │       │   │       └───winnt
+│       │       │       │   │           └───Yak2
+│       │       │       │   └───Utils
+│       │       │       ├───PaCu
+│       │       │       │   └───Uploads
+│       │       │       │       └───i386
+│       │       │       │           └───winnt
+│       │       │       ├───Pc
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Data
+│       │       │       │   │   ├───i386-winnt-wow64
+│       │       │       │   │   │   └───disable
+│       │       │       │   │   │       └───all
+│       │       │       │   │   └───windows
+│       │       │       │   │       └───disable
+│       │       │       │   │           └───local
+│       │       │       │   ├───Eggs
+│       │       │       │   │   └───i386-winnt
+│       │       │       │   │       ├───LoadFromFileW
+│       │       │       │   │       └───LoadFromMemory
+│       │       │       │   ├───Gui
+│       │       │       │   │   ├───Config
+│       │       │       │   │   │   └───Modules
+│       │       │       │   │   └───lib
+│       │       │       │   │       └───java-j2se_1.6-sun
+│       │       │       │   ├───Keys
+│       │       │       │   │   └───Default
+│       │       │       │   ├───Legacy
+│       │       │       │   │   ├───Bin
+│       │       │       │   │   ├───Exploits
+│       │       │       │   │   │   └───PC_Trigger
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───release
+│       │       │       │   │   └───Resources
+│       │       │       │   │       └───PC
+│       │       │       │   │           ├───Eggs
+│       │       │       │   │           │   ├───LoadFromFile
+│       │       │       │   │           │   ├───LoadFromFile_1_2
+│       │       │       │   │           │   ├───LoadFromFile_1_3
+│       │       │       │   │           │   ├───LoadFromMemory
+│       │       │       │   │           │   ├───LoadFromResource
+│       │       │       │   │           │   └───LoadFromResourceFile
+│       │       │       │   │           ├───Keys
+│       │       │       │   │           │   └───Default
+│       │       │       │   │           ├───Payloads
+│       │       │       │   │           │   └───PC2
+│       │       │       │   │           └───Tools
+│       │       │       │   ├───Level3
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───release
+│       │       │       │   │   ├───legacy
+│       │       │       │   │   └───x64-winnt
+│       │       │       │   │       └───release
+│       │       │       │   ├───Level4
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───release
+│       │       │       │   │   └───x64-winnt
+│       │       │       │   │       └───release
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───Payloads
+│       │       │       │   │   └───winnt
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───Install
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   │       └───KiSu
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───pc
+│       │       │       │   │   │       ├───payload
+│       │       │       │   │   │       └───pc
+│       │       │       │   │   │           └───cmd
+│       │       │       │   │   │               ├───appcompat
+│       │       │       │   │   │               ├───injectdll
+│       │       │       │   │   │               └───pcstatus
+│       │       │       │   │   ├───Payload
+│       │       │       │   │   ├───PortKnock
+│       │       │       │   │   └───Tasking
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───Include
+│       │       │       │   │   └───Install
+│       │       │       │   │       └───winnt
+│       │       │       │   │           ├───AppCompat
+│       │       │       │   │           ├───AppInit
+│       │       │       │   │           └───WinsockHelp
+│       │       │       │   ├───Tools
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   ├───java-j2se_1.5
+│       │       │       │   │   │   ├───data
+│       │       │       │   │   │   └───lib
+│       │       │       │   │   └───legacy
+│       │       │       │   └───Version
+│       │       │       ├───Pc2.2
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Level3
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───release
+│       │       │       │   │   └───x64-winnt
+│       │       │       │   │       └───release
+│       │       │       │   ├───Level4
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   │   └───release
+│       │       │       │   │   └───x64-winnt
+│       │       │       │   │       └───release
+│       │       │       │   ├───Payloads
+│       │       │       │   │   └───winnt
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───Install
+│       │       │       │   │   │   └───winnt
+│       │       │       │   │   │       └───KiSu
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───pc2_2
+│       │       │       │   │   │       └───payload
+│       │       │       │   │   └───Payload
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───Include
+│       │       │       │   │   └───Install
+│       │       │       │   │       └───winnt
+│       │       │       │   │           ├───AppInit
+│       │       │       │   │           └───WinsockHelp
+│       │       │       │   ├───Tools
+│       │       │       │   │   ├───i386-linux
+│       │       │       │   │   ├───i386-winnt
+│       │       │       │   │   └───java-j2se_1.5
+│       │       │       │   │       ├───data
+│       │       │       │   │       └───lib
+│       │       │       │   └───Version
+│       │       │       ├───PFre
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Data
+│       │       │       │   │   ├───unix
+│       │       │       │   │   │   └───disable
+│       │       │       │   │   │       └───all
+│       │       │       │   │   └───windows
+│       │       │       │   │       └───disable
+│       │       │       │   │           └───local
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───Scripts
+│       │       │       │   │   └───include
+│       │       │       │   └───Uploads
+│       │       │       ├───Python
+│       │       │       │   ├───Core
+│       │       │       │   │   ├───DLLs
+│       │       │       │   │   └───Lib
+│       │       │       │   │       ├───bsddb
+│       │       │       │   │       ├───compiler
+│       │       │       │   │       ├───ctypes
+│       │       │       │   │       │   └───macholib
+│       │       │       │   │       ├───curses
+│       │       │       │   │       ├───distutils
+│       │       │       │   │       │   └───command
+│       │       │       │   │       ├───email
+│       │       │       │   │       │   └───mime
+│       │       │       │   │       ├───encodings
+│       │       │       │   │       ├───hotshot
+│       │       │       │   │       ├───idlelib
+│       │       │       │   │       │   └───Icons
+│       │       │       │   │       ├───importlib
+│       │       │       │   │       ├───json
+│       │       │       │   │       ├───lib-tk
+│       │       │       │   │       ├───lib2to3
+│       │       │       │   │       │   ├───fixes
+│       │       │       │   │       │   └───pgen2
+│       │       │       │   │       ├───logging
+│       │       │       │   │       ├───msilib
+│       │       │       │   │       ├───multiprocessing
+│       │       │       │   │       │   └───dummy
+│       │       │       │   │       ├───pydoc_data
+│       │       │       │   │       ├───site-packages
+│       │       │       │   │       ├───sqlite3
+│       │       │       │   │       ├───unittest
+│       │       │       │   │       ├───wsgiref
+│       │       │       │   │       └───xml
+│       │       │       │   │           ├───dom
+│       │       │       │   │           ├───etree
+│       │       │       │   │           ├───parsers
+│       │       │       │   │           └───sax
+│       │       │       │   └───Override
+│       │       │       │       └───Lib
+│       │       │       │           └───multiprocessing
+│       │       │       ├───ScRe
+│       │       │       │   ├───Commands
+│       │       │       │   │   ├───CommandLine
+│       │       │       │   │   ├───Display
+│       │       │       │   │   └───Storage
+│       │       │       │   ├───Modules
+│       │       │       │   │   ├───Descriptions
+│       │       │       │   │   │   └───windows
+│       │       │       │   │   └───Files-dsz
+│       │       │       │   │       ├───i386-winnt-vc9
+│       │       │       │   │       │   └───release
+│       │       │       │   │       ├───i386-winnt-vc9s
+│       │       │       │   │       │   └───release
+│       │       │       │   │       └───x64-winnt-vc9s
+│       │       │       │   │           └───release
+│       │       │       │   ├───PyLp
+│       │       │       │   │   └───DataHandlers
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   ├───DataHandlers
+│       │       │       │   │   ├───Lib
+│       │       │       │   │   │   └───scre
+│       │       │       │   │   │       └───mca
+│       │       │       │   │   │           └───scre
+│       │       │       │   │   │               └───cmd
+│       │       │       │   │   │                   └───sql
+│       │       │       │   │   │                       └───data
+│       │       │       │   │   │                           └───dsz
+│       │       │       │   │   └───Tasking
+│       │       │       │   └───Version
+│       │       │       ├───ST1.14
+│       │       │       │   ├───installer32eggs
+│       │       │       │   ├───installer64eggs
+│       │       │       │   └───Tools
+│       │       │       ├───StLa
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───PyScripts
+│       │       │       │   ├───Tools
+│       │       │       │   │   └───i386-winnt
+│       │       │       │   └───Uploads
+│       │       │       │       ├───i386
+│       │       │       │       └───x64
+│       │       │       ├───Tasking
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───PyScripts
+│       │       │       │   │   └───Lib
+│       │       │       │   │       └───tasking
+│       │       │       │   └───Scripts
+│       │       │       │       └───Include
+│       │       │       ├───TeDi
+│       │       │       │   └───PyScripts
+│       │       │       ├───UtBu
+│       │       │       │   ├───Aliases
+│       │       │       │   ├───Scripts
+│       │       │       │   │   ├───Include
+│       │       │       │   │   └───Install
+│       │       │       │   ├───Uploads
+│       │       │       │   │   └───i386
+│       │       │       │   │       └───winnt
+│       │       │       │   └───Version
+│       │       │       └───ZBng
+│       │       │           ├───Aliases
+│       │       │           ├───Commands
+│       │       │           │   ├───CommandLine
+│       │       │           │   ├───Display
+│       │       │           │   └───Storage
+│       │       │           ├───Data
+│       │       │           │   ├───i386-winnt-wow64
+│       │       │           │   │   └───disable
+│       │       │           │   │       └───all
+│       │       │           │   ├───windows
+│       │       │           │   │   └───disable
+│       │       │           │   │       └───local
+│       │       │           │   └───x64-winnt
+│       │       │           │       └───disable
+│       │       │           │           └───all
+│       │       │           ├───Modules
+│       │       │           │   ├───Descriptions
+│       │       │           │   │   └───windows
+│       │       │           │   └───Files-dsz
+│       │       │           │       ├───i386-winnt-vc9
+│       │       │           │       │   └───release
+│       │       │           │       ├───i386-winnt-vc9s
+│       │       │           │       │   └───release
+│       │       │           │       └───x64-winnt-vc9s
+│       │       │           │           └───release
+│       │       │           ├───PyLp
+│       │       │           │   └───DataHandlers
+│       │       │           ├───PyScripts
+│       │       │           │   ├───DataHandlers
+│       │       │           │   ├───Lib
+│       │       │           │   │   └───zbng
+│       │       │           │   │       ├───lib_exba
+│       │       │           │   │       └───mca
+│       │       │           │   │           ├───network
+│       │       │           │   │           │   └───cmd
+│       │       │           │   │           │       └───shares
+│       │       │           │   │           │           └───data
+│       │       │           │   │           │               └───dsz
+│       │       │           │   │           ├───process
+│       │       │           │   │           │   └───cmd
+│       │       │           │   │           │       └───remoteexecute
+│       │       │           │   │           │           └───data
+│       │       │           │   │           │               └───dsz
+│       │       │           │   │           ├───security
+│       │       │           │   │           │   └───cmd
+│       │       │           │   │           │       ├───duplicatetoken
+│       │       │           │   │           │       │   └───data
+│       │       │           │   │           │       │       └───dsz
+│       │       │           │   │           │       └───logonasuser
+│       │       │           │   │           │           └───data
+│       │       │           │   │           │               └───dsz
+│       │       │           │   │           └───zbng
+│       │       │           │   │               └───cmd
+│       │       │           │   │                   └───authentication
+│       │       │           │   └───Tasking
+│       │       │           ├───Scripts
+│       │       │           │   ├───Connected
+│       │       │           │   └───Include
+│       │       │           └───Version
+│       │       ├───EQGRP_Lost_in_Translation-master
+│       │       │   └───EQGRP_Lost_in_Translation-master
+│       │       │       ├───oddjob
+│       │       │       │   ├───Binaries
+│       │       │       │   │   ├───oddjob_builder
+│       │       │       │   │   │   ├───bin
+│       │       │       │   │   │   └───builder
+│       │       │       │   │   └───Payloads
+│       │       │       │   ├───Not-For-Release
+│       │       │       │   ├───Testing-Docs
+│       │       │       │   └───User-Docs
+│       │       │       ├───swift
+│       │       │       └───windows
+│       │       │           ├───Bin
+│       │       │           │   ├───i386-winnt-vc9
+│       │       │           │   │   └───release
+│       │       │           │   └───java-j2se_1.5-sun
+│       │       │           │       └───release
+│       │       │           ├───exploits
+│       │       │           │   └───ZIBE
+│       │       │           │       ├───plugins
+│       │       │           │       └───pyreadline
+│       │       │           │           ├───clipboard
+│       │       │           │           ├───configuration
+│       │       │           │           ├───console
+│       │       │           │           ├───keysyms
+│       │       │           │           ├───lineeditor
+│       │       │           │           ├───modes
+│       │       │           │           └───test
+│       │       │           ├───fuzzbunch
+│       │       │           │   └───pyreadline
+│       │       │           │       ├───clipboard
+│       │       │           │       ├───configuration
+│       │       │           │       ├───console
+│       │       │           │       ├───keysyms
+│       │       │           │       ├───lineeditor
+│       │       │           │       ├───modes
+│       │       │           │       └───test
+│       │       │           ├───implants
+│       │       │           ├───lib
+│       │       │           │   ├───resources
+│       │       │           │   ├───x64-Windows
+│       │       │           │   └───x86-Windows
+│       │       │           ├───payloads
+│       │       │           ├───Resources
+│       │       │           │   ├───DaPu
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Data
+│       │       │           │   │   └───PyScripts
+│       │       │           │   ├───Darkskyline
+│       │       │           │   │   └───Filters
+│       │       │           │   ├───DeMi
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   └───i386-winnt-wow64
+│       │       │           │   │   │       └───disable
+│       │       │           │   │   │           └───all
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───demi
+│       │       │           │   │   │   │       ├───mcf
+│       │       │           │   │   │   │       │   ├───cmd
+│       │       │           │   │   │   │       │   │   ├───diba
+│       │       │           │   │   │   │       │   │   │   └───data
+│       │       │           │   │   │   │       │   │   │       └───dsz
+│       │       │           │   │   │   │       │   │   └───kisucomms
+│       │       │           │   │   │   │       │   │       └───data
+│       │       │           │   │   │   │       │   │           └───dsz
+│       │       │           │   │   │   │       │   └───kisu
+│       │       │           │   │   │   │       └───windows
+│       │       │           │   │   │   │           ├───driver
+│       │       │           │   │   │   │           └───module
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   └───Connected
+│       │       │           │   │   └───Version
+│       │       │           │   ├───Df
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   └───x64-winnt
+│       │       │           │   │   └───Uploads
+│       │       │           │   │       ├───i386-winnt
+│       │       │           │   │       └───x64-winnt
+│       │       │           │   ├───DmGz
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───Install
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───dmgz
+│       │       │           │   │   │   │       └───dmgz
+│       │       │           │   │   │   │           └───cmd
+│       │       │           │   │   │   │               └───dmgz
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   └───Include
+│       │       │           │   │   ├───Uploads
+│       │       │           │   │   │   ├───i386
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   └───x64
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   └───Version
+│       │       │           │   ├───DSky
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Filters
+│       │       │           │   │   │   └───src
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───lib
+│       │       │           │   │   │   │   └───dsky
+│       │       │           │   │   │   │       ├───mca
+│       │       │           │   │   │   │       │   └───dsky
+│       │       │           │   │   │   │       │       └───cmd
+│       │       │           │   │   │   │       │           └───trafficcapture
+│       │       │           │   │   │   │       └───menu
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   └───Legacy
+│       │       │           │   │   │       └───1.0
+│       │       │           │   │   ├───Uploads
+│       │       │           │   │   │   ├───i386
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   └───x64
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   └───Version
+│       │       │           │   ├───Dsz
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   │   └───include
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   │       └───include
+│       │       │           │   │   ├───CoreSchemas
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   ├───disable
+│       │       │           │   │   │   │   └───local
+│       │       │           │   │   │   └───windows
+│       │       │           │   │   │       ├───disable
+│       │       │           │   │   │       │   └───local
+│       │       │           │   │   │       └───prompt
+│       │       │           │   │   │           └───remote
+│       │       │           │   │   ├───Databases
+│       │       │           │   │   ├───Gui
+│       │       │           │   │   │   ├───Config
+│       │       │           │   │   │   │   ├───Macros
+│       │       │           │   │   │   │   │   ├───DeveloperTools
+│       │       │           │   │   │   │   │   ├───FiveTerminals
+│       │       │           │   │   │   │   │   └───SystemStartup
+│       │       │           │   │   │   │   └───Modules
+│       │       │           │   │   │   └───lib
+│       │       │           │   │   │       └───java-j2se_1.6-sun
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   ├───Files
+│       │       │           │   │   │   │   ├───i386-winnt-vc9
+│       │       │           │   │   │   │   │   └───release
+│       │       │           │   │   │   │   ├───i386-winnt-vc9s
+│       │       │           │   │   │   │   │   └───release
+│       │       │           │   │   │   │   └───x64-winnt-vc9s
+│       │       │           │   │   │   │       └───release
+│       │       │           │   │   │   ├───Files-dsz
+│       │       │           │   │   │   │   ├───i386-winnt-vc9
+│       │       │           │   │   │   │   │   └───release
+│       │       │           │   │   │   │   ├───i386-winnt-vc9s
+│       │       │           │   │   │   │   │   └───release
+│       │       │           │   │   │   │   └───x64-winnt-vc9s
+│       │       │           │   │   │   │       └───release
+│       │       │           │   │   │   └───Techniques
+│       │       │           │   │   │       └───windows
+│       │       │           │   │   ├───Payloads
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───x64-winnt
+│       │       │           │   │   │   └───Files
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───HelperScripts
+│       │       │           │   │   │   ├───History
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   ├───dsz
+│       │       │           │   │   │   │   │   ├───data
+│       │       │           │   │   │   │   │   ├───file
+│       │       │           │   │   │   │   │   ├───lp
+│       │       │           │   │   │   │   │   │   ├───alias
+│       │       │           │   │   │   │   │   │   ├───cmdline
+│       │       │           │   │   │   │   │   │   └───gui
+│       │       │           │   │   │   │   │   │       └───terminal
+│       │       │           │   │   │   │   │   ├───mca
+│       │       │           │   │   │   │   │   │   ├───core
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───addresses
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───aliases
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───available
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───commands
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───cprpc
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───help
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───library
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───lpdirectory
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───lpgetenv
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───plugins
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───throttle
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───version
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───whoami
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───wrappers
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   ├───file
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───cd
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───copy
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───delete
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───dir
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───diskspace
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───drives
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───fileattributes
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───grep
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───logedit
+│       │       │           │   │   │   │   │   │   │       ├───matchfiletimes
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───mkdir
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───move
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───put
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───rmdir
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───strings
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───systempaths
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   ├───install
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───dllload
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───registrykeys
+│       │       │           │   │   │   │   │   │   │       └───shutdown
+│       │       │           │   │   │   │   │   │   ├───network
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───arp
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───banner
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───dns
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───firewall
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───ifconfig
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───nameserverlookup
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───netbios
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───netconnections
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───netmap
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───packetredirect
+│       │       │           │   │   │   │   │   │   │       ├───ping
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───portmap
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───route
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───traceroute
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   ├───process
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───environment
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───getadmin
+│       │       │           │   │   │   │   │   │   │       ├───kill
+│       │       │           │   │   │   │   │   │   │       ├───processes
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       ├───processinfo
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───processmodify
+│       │       │           │   │   │   │   │   │   │       ├───processoptions
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───processsuspend
+│       │       │           │   │   │   │   │   │   │       └───runaschild
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   ├───security
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───audit
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───eventlogclear
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───eventlogedit
+│       │       │           │   │   │   │   │   │   │       ├───eventlogfilter
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───eventlogquery
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───hide
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───permissions
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   ├───status
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───activity
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───currentusers
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───devicequery
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───handles
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───memory
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───objects
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───performance
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───scheduler
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───time
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       ├───uptime
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───windows
+│       │       │           │   │   │   │   │   │   │           └───data
+│       │       │           │   │   │   │   │   │   │               └───dsz
+│       │       │           │   │   │   │   │   │   └───survey
+│       │       │           │   │   │   │   │   │       └───cmd
+│       │       │           │   │   │   │   │   │           ├───activedirectory
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───domaincontroller
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───drivers
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───groups
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───language
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───ldap
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───packages
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───passworddump
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───registryhive
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───registryquery
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───services
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───sidlookup
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           ├───systemversion
+│       │       │           │   │   │   │   │   │           │   └───data
+│       │       │           │   │   │   │   │   │           │       └───dsz
+│       │       │           │   │   │   │   │   │           └───users
+│       │       │           │   │   │   │   │   │               └───data
+│       │       │           │   │   │   │   │   │                   └───dsz
+│       │       │           │   │   │   │   │   ├───mca_dsz
+│       │       │           │   │   │   │   │   │   ├───file
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───get
+│       │       │           │   │   │   │   │   │   │       │   └───data
+│       │       │           │   │   │   │   │   │   │       │       └───dsz
+│       │       │           │   │   │   │   │   │   │       └───papercut
+│       │       │           │   │   │   │   │   │   ├───network
+│       │       │           │   │   │   │   │   │   │   └───cmd
+│       │       │           │   │   │   │   │   │   │       ├───redirect
+│       │       │           │   │   │   │   │   │   │       └───serialredirect
+│       │       │           │   │   │   │   │   │   └───process
+│       │       │           │   │   │   │   │   │       └───cmd
+│       │       │           │   │   │   │   │   │           └───run
+│       │       │           │   │   │   │   │   ├───mcf
+│       │       │           │   │   │   │   │   │   ├───cmd
+│       │       │           │   │   │   │   │   │   │   └───processsuspend
+│       │       │           │   │   │   │   │   │   └───tasking
+│       │       │           │   │   │   │   │   │       └───dsz
+│       │       │           │   │   │   │   │   │           └───processsuspend
+│       │       │           │   │   │   │   │   ├───menu
+│       │       │           │   │   │   │   │   │   ├───input
+│       │       │           │   │   │   │   │   │   │   └───values
+│       │       │           │   │   │   │   │   │   └───output
+│       │       │           │   │   │   │   │   ├───operational
+│       │       │           │   │   │   │   │   ├───path
+│       │       │           │   │   │   │   │   │   └───windows
+│       │       │           │   │   │   │   │   ├───payload
+│       │       │           │   │   │   │   │   ├───process
+│       │       │           │   │   │   │   │   │   └───windows
+│       │       │           │   │   │   │   │   ├───ui
+│       │       │           │   │   │   │   │   ├───user
+│       │       │           │   │   │   │   │   │   ├───unix
+│       │       │           │   │   │   │   │   │   └───windows
+│       │       │           │   │   │   │   │   ├───version
+│       │       │           │   │   │   │   │   │   └───checks
+│       │       │           │   │   │   │   │   │       ├───unix
+│       │       │           │   │   │   │   │   │       └───windows
+│       │       │           │   │   │   │   │   └───windows
+│       │       │           │   │   │   │   │       ├───driver
+│       │       │           │   │   │   │   │       ├───registry
+│       │       │           │   │   │   │   │       └───sid
+│       │       │           │   │   │   │   ├───gui
+│       │       │           │   │   │   │   │   └───networkserver
+│       │       │           │   │   │   │   ├───mcl
+│       │       │           │   │   │   │   │   ├───data
+│       │       │           │   │   │   │   │   │   ├───env
+│       │       │           │   │   │   │   │   │   └───namespace
+│       │       │           │   │   │   │   │   │       ├───common
+│       │       │           │   │   │   │   │   │       └───payload
+│       │       │           │   │   │   │   │   ├───elevation
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   ├───framework
+│       │       │           │   │   │   │   │   │   ├───dsz
+│       │       │           │   │   │   │   │   │   └───ur
+│       │       │           │   │   │   │   │   ├───hiding
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   ├───imports
+│       │       │           │   │   │   │   │   ├───injection
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   ├───lp
+│       │       │           │   │   │   │   │   │   └───cmdparser
+│       │       │           │   │   │   │   │   ├───memory
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   ├───object
+│       │       │           │   │   │   │   │   ├───os
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   │       └───winnt
+│       │       │           │   │   │   │   │   ├───privilege
+│       │       │           │   │   │   │   │   │   └───errors
+│       │       │           │   │   │   │   │   ├───status
+│       │       │           │   │   │   │   │   │   └───framework
+│       │       │           │   │   │   │   │   ├───target
+│       │       │           │   │   │   │   │   ├───tasking
+│       │       │           │   │   │   │   │   │   ├───env
+│       │       │           │   │   │   │   │   │   ├───resource
+│       │       │           │   │   │   │   │   │   ├───technique
+│       │       │           │   │   │   │   │   │   └───virtualdir
+│       │       │           │   │   │   │   │   └───tools
+│       │       │           │   │   │   │   ├───mcl_platform
+│       │       │           │   │   │   │   │   ├───data
+│       │       │           │   │   │   │   │   │   ├───env
+│       │       │           │   │   │   │   │   │   └───namespace
+│       │       │           │   │   │   │   │   │       ├───common
+│       │       │           │   │   │   │   │   │       └───payload
+│       │       │           │   │   │   │   │   ├───tasking
+│       │       │           │   │   │   │   │   │   ├───env
+│       │       │           │   │   │   │   │   │   ├───resource
+│       │       │           │   │   │   │   │   │   ├───technique
+│       │       │           │   │   │   │   │   │   └───virtualdir
+│       │       │           │   │   │   │   │   └───tools
+│       │       │           │   │   │   │   └───policy
+│       │       │           │   │   │   ├───ModuleToggle
+│       │       │           │   │   │   ├───Peel
+│       │       │           │   │   │   ├───Policy
+│       │       │           │   │   │   ├───Screenshot
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───Connected
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   ├───Flav
+│       │       │           │   │   │   ├───HelperScripts
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   │   ├───linux
+│       │       │           │   │   │   │   ├───solaris
+│       │       │           │   │   │   │   ├───unix
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   ├───PSP
+│       │       │           │   │   │   └───RequestHandler
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   └───java-j2se_1.5
+│       │       │           │   │   └───Version
+│       │       │           │   ├───Ep
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Bootstrap
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   ├───Schema
+│       │       │           │   │   │   ├───Schemas
+│       │       │           │   │   │   │   └───OldSchemas
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───ExternalLibraries
+│       │       │           │   │   │   └───i386-winnt-vc71
+│       │       │           │   │   ├───Payloads
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───i386-winnt
+│       │       │           │   │   │   └───Files
+│       │       │           │   │   │       └───i386-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───Plugins
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   └───Files
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───BehavePeking
+│       │       │           │   │   │   ├───Capn
+│       │       │           │   │   │   │   └───Include
+│       │       │           │   │   │   ├───DarkSkyline
+│       │       │           │   │   │   │   └───Include
+│       │       │           │   │   │   ├───DoormanGauze
+│       │       │           │   │   │   ├───DoorwayNapkin
+│       │       │           │   │   │   ├───DraftyPlan
+│       │       │           │   │   │   ├───DrillerSkyline
+│       │       │           │   │   │   │   └───Include
+│       │       │           │   │   │   ├───EmptyKeg
+│       │       │           │   │   │   ├───ifthen
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   │   └───Old
+│       │       │           │   │   │   ├───JealousFruit
+│       │       │           │   │   │   ├───KeeperLatch
+│       │       │           │   │   │   │   └───Include
+│       │       │           │   │   │   ├───malfind
+│       │       │           │   │   │   ├───PeddleCheap
+│       │       │           │   │   │   ├───PSP
+│       │       │           │   │   │   ├───RoundupMast
+│       │       │           │   │   │   ├───RP
+│       │       │           │   │   │   ├───Services
+│       │       │           │   │   │   ├───ST
+│       │       │           │   │   │   ├───Tools
+│       │       │           │   │   │   ├───TouchScripts
+│       │       │           │   │   │   ├───XpFirewall
+│       │       │           │   │   │   └───ZippyBang
+│       │       │           │   │   └───Uploads
+│       │       │           │   ├───ExternalLibraries
+│       │       │           │   │   ├───i386-winnt-vc71
+│       │       │           │   │   ├───i386-winnt-vc9
+│       │       │           │   │   └───java-j2se_1.6-sun
+│       │       │           │   │       └───endorsed
+│       │       │           │   ├───FlAv
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   └───windows
+│       │       │           │   │   │       └───disable
+│       │       │           │   │   │           └───local
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───Install
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───flav
+│       │       │           │   │   │   │       └───flav
+│       │       │           │   │   │   │           └───cmd
+│       │       │           │   │   │   │               └───flavcontrol
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   ├───Uploads
+│       │       │           │   │   │   ├───i386
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   └───x64
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   └───Version
+│       │       │           │   ├───GaTh
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   └───Modules
+│       │       │           │   │       ├───Descriptions
+│       │       │           │   │       │   ├───linux
+│       │       │           │   │       │   └───windows
+│       │       │           │   │       └───Files
+│       │       │           │   │           ├───i386-winnt-vc9
+│       │       │           │   │           │   └───release
+│       │       │           │   │           ├───i386-winnt-vc9s
+│       │       │           │   │           │   └───release
+│       │       │           │   │           └───x64-winnt-vc9s
+│       │       │           │   │               └───release
+│       │       │           │   ├───GeZu
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   └───PyScripts
+│       │       │           │   │       ├───DataHandlers
+│       │       │           │   │       ├───Lib
+│       │       │           │   │       │   └───gezu
+│       │       │           │   │       │       └───mca
+│       │       │           │   │       │           └───gezu
+│       │       │           │   │       │               └───cmd
+│       │       │           │   │       │                   └───GeZu_KernelMemory
+│       │       │           │   │       │                       └───data
+│       │       │           │   │       │                           └───dsz
+│       │       │           │   │       └───Tasking
+│       │       │           │   ├───GRcl
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   └───Modules
+│       │       │           │   │       ├───Descriptions
+│       │       │           │   │       │   ├───linux
+│       │       │           │   │       │   └───windows
+│       │       │           │   │       └───Files
+│       │       │           │   │           ├───i386-winnt-vc9
+│       │       │           │   │           │   └───release
+│       │       │           │   │           ├───i386-winnt-vc9s
+│       │       │           │   │           │   └───release
+│       │       │           │   │           └───x64-winnt-vc9s
+│       │       │           │   │               └───release
+│       │       │           │   ├───GRDO
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   └───i386
+│       │       │           │   │   └───Uploads
+│       │       │           │   │       ├───i386
+│       │       │           │   │       │   └───winnt
+│       │       │           │   │       └───x64
+│       │       │           │   │           └───winnt
+│       │       │           │   ├───GROK
+│       │       │           │   │   ├───1.2.0.1
+│       │       │           │   │   │   ├───Offline
+│       │       │           │   │   │   └───Uploads
+│       │       │           │   │   ├───2.1.3.1
+│       │       │           │   │   │   ├───Offline
+│       │       │           │   │   │   └───Uploads
+│       │       │           │   │   └───PyScripts
+│       │       │           │   ├───Gui
+│       │       │           │   │   ├───Config
+│       │       │           │   │   │   ├───Console
+│       │       │           │   │   │   │   └───themes
+│       │       │           │   │   │   ├───FileBrowser
+│       │       │           │   │   │   ├───Modules
+│       │       │           │   │   │   ├───NetmapViewer
+│       │       │           │   │   │   ├───RequestHandler
+│       │       │           │   │   │   ├───ScreenShot
+│       │       │           │   │   │   ├───ScriptEditor
+│       │       │           │   │   │   │   └───modes
+│       │       │           │   │   │   ├───Shell
+│       │       │           │   │   │   ├───TargetDetails
+│       │       │           │   │   │   ├───TaskManager
+│       │       │           │   │   │   └───Terminal
+│       │       │           │   │   ├───lib
+│       │       │           │   │   │   └───java-j2se_1.6-sun
+│       │       │           │   │   └───Scripts
+│       │       │           │   │       └───RequestHandler
+│       │       │           │   ├───LegacyWindowsExploits
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Exploits
+│       │       │           │   │   │   ├───EAFU 2.2.0
+│       │       │           │   │   │   │   └───EAFU_SSL_exe
+│       │       │           │   │   │   ├───ECWI
+│       │       │           │   │   │   ├───ELV 2.1.3
+│       │       │           │   │   │   ├───ESKE 1.6.2
+│       │       │           │   │   │   ├───ETBL 1.1.1
+│       │       │           │   │   │   ├───ETRE 1.0.4
+│       │       │           │   │   │   ├───EVFR 3.2.0.2
+│       │       │           │   │   │   ├───EXPA 1.0.0.2
+│       │       │           │   │   │   └───ST 1.14
+│       │       │           │   │   ├───Resources
+│       │       │           │   │   │   ├───Pc
+│       │       │           │   │   │   │   └───i386-winnt
+│       │       │           │   │   │   ├───Perl
+│       │       │           │   │   │   └───Tools
+│       │       │           │   │   └───Scripts
+│       │       │           │   ├───Ops
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   ├───database_plans
+│       │       │           │   │   │   │   ├───Oracle
+│       │       │           │   │   │   │   │   ├───Detailed Audit Check
+│       │       │           │   │   │   │   │   └───Survey
+│       │       │           │   │   │   │   ├───SQL Server
+│       │       │           │   │   │   │   │   ├───Kaspersky 6
+│       │       │           │   │   │   │   │   ├───Kaspersky 8
+│       │       │           │   │   │   │   │   ├───SolarWinds
+│       │       │           │   │   │   │   │   ├───Survey (Ver 9+)
+│       │       │           │   │   │   │   │   └───WSUS Server
+│       │       │           │   │   │   │   └───SQLite
+│       │       │           │   │   │   │       └───Survey
+│       │       │           │   │   │   └───pspFPs
+│       │       │           │   │   ├───Databases
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───Connected
+│       │       │           │   │   │   ├───database
+│       │       │           │   │   │   ├───lib
+│       │       │           │   │   │   │   ├───ops
+│       │       │           │   │   │   │   │   ├───cmd
+│       │       │           │   │   │   │   │   ├───data
+│       │       │           │   │   │   │   │   ├───files
+│       │       │           │   │   │   │   │   ├───networking
+│       │       │           │   │   │   │   │   ├───override
+│       │       │           │   │   │   │   │   ├───processes
+│       │       │           │   │   │   │   │   ├───project
+│       │       │           │   │   │   │   │   ├───psp
+│       │       │           │   │   │   │   │   ├───security
+│       │       │           │   │   │   │   │   ├───survey
+│       │       │           │   │   │   │   │   │   └───engine
+│       │       │           │   │   │   │   │   │       └───tags
+│       │       │           │   │   │   │   │   │           └───section
+│       │       │           │   │   │   │   │   └───system
+│       │       │           │   │   │   │   ├───opsdata
+│       │       │           │   │   │   │   ├───util
+│       │       │           │   │   │   │   └───xops
+│       │       │           │   │   │   ├───overseer
+│       │       │           │   │   │   │   └───plugins
+│       │       │           │   │   │   ├───ripper
+│       │       │           │   │   │   │   └───plugins
+│       │       │           │   │   │   ├───scansweep
+│       │       │           │   │   │   │   ├───monitorengine
+│       │       │           │   │   │   │   └───scanengine2
+│       │       │           │   │   │   ├───survey
+│       │       │           │   │   │   ├───windows
+│       │       │           │   │   │   │   ├───psp
+│       │       │           │   │   │   │   └───sentinel
+│       │       │           │   │   │   └───wrappers
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───Connected
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───windows
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───yak2
+│       │       │           │   │   │   └───ZiPo
+│       │       │           │   │   ├───Uploads
+│       │       │           │   │   │   └───i386
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   │           └───Yak2
+│       │       │           │   │   └───Utils
+│       │       │           │   ├───PaCu
+│       │       │           │   │   └───Uploads
+│       │       │           │   │       └───i386
+│       │       │           │   │           └───winnt
+│       │       │           │   ├───Pc
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   ├───i386-winnt-wow64
+│       │       │           │   │   │   │   └───disable
+│       │       │           │   │   │   │       └───all
+│       │       │           │   │   │   └───windows
+│       │       │           │   │   │       └───disable
+│       │       │           │   │   │           └───local
+│       │       │           │   │   ├───Eggs
+│       │       │           │   │   │   └───i386-winnt
+│       │       │           │   │   │       ├───LoadFromFileW
+│       │       │           │   │   │       └───LoadFromMemory
+│       │       │           │   │   ├───Gui
+│       │       │           │   │   │   ├───Config
+│       │       │           │   │   │   │   └───Modules
+│       │       │           │   │   │   └───lib
+│       │       │           │   │   │       └───java-j2se_1.6-sun
+│       │       │           │   │   ├───Keys
+│       │       │           │   │   │   └───Default
+│       │       │           │   │   ├───Legacy
+│       │       │           │   │   │   ├───Bin
+│       │       │           │   │   │   ├───Exploits
+│       │       │           │   │   │   │   └───PC_Trigger
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───release
+│       │       │           │   │   │   └───Resources
+│       │       │           │   │   │       └───PC
+│       │       │           │   │   │           ├───Eggs
+│       │       │           │   │   │           │   ├───LoadFromFile
+│       │       │           │   │   │           │   ├───LoadFromFile_1_2
+│       │       │           │   │   │           │   ├───LoadFromFile_1_3
+│       │       │           │   │   │           │   ├───LoadFromMemory
+│       │       │           │   │   │           │   ├───LoadFromResource
+│       │       │           │   │   │           │   └───LoadFromResourceFile
+│       │       │           │   │   │           ├───Keys
+│       │       │           │   │   │           │   └───Default
+│       │       │           │   │   │           ├───Payloads
+│       │       │           │   │   │           │   └───PC2
+│       │       │           │   │   │           └───Tools
+│       │       │           │   │   ├───Level3
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───release
+│       │       │           │   │   │   ├───legacy
+│       │       │           │   │   │   └───x64-winnt
+│       │       │           │   │   │       └───release
+│       │       │           │   │   ├───Level4
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───release
+│       │       │           │   │   │   └───x64-winnt
+│       │       │           │   │   │       └───release
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───Payloads
+│       │       │           │   │   │   └───winnt
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───Install
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   │       └───KiSu
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───pc
+│       │       │           │   │   │   │       ├───payload
+│       │       │           │   │   │   │       └───pc
+│       │       │           │   │   │   │           └───cmd
+│       │       │           │   │   │   │               ├───appcompat
+│       │       │           │   │   │   │               ├───injectdll
+│       │       │           │   │   │   │               └───pcstatus
+│       │       │           │   │   │   ├───Payload
+│       │       │           │   │   │   ├───PortKnock
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   └───Install
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   │           ├───AppCompat
+│       │       │           │   │   │           ├───AppInit
+│       │       │           │   │   │           └───WinsockHelp
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   ├───java-j2se_1.5
+│       │       │           │   │   │   │   ├───data
+│       │       │           │   │   │   │   └───lib
+│       │       │           │   │   │   └───legacy
+│       │       │           │   │   └───Version
+│       │       │           │   ├───Pc2.2
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Level3
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───release
+│       │       │           │   │   │   └───x64-winnt
+│       │       │           │   │   │       └───release
+│       │       │           │   │   ├───Level4
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   │   └───release
+│       │       │           │   │   │   └───x64-winnt
+│       │       │           │   │   │       └───release
+│       │       │           │   │   ├───Payloads
+│       │       │           │   │   │   └───winnt
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───Install
+│       │       │           │   │   │   │   └───winnt
+│       │       │           │   │   │   │       └───KiSu
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───pc2_2
+│       │       │           │   │   │   │       └───payload
+│       │       │           │   │   │   └───Payload
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   └───Install
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   │           ├───AppInit
+│       │       │           │   │   │           └───WinsockHelp
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   ├───i386-linux
+│       │       │           │   │   │   ├───i386-winnt
+│       │       │           │   │   │   └───java-j2se_1.5
+│       │       │           │   │   │       ├───data
+│       │       │           │   │   │       └───lib
+│       │       │           │   │   └───Version
+│       │       │           │   ├───PFre
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Data
+│       │       │           │   │   │   ├───unix
+│       │       │           │   │   │   │   └───disable
+│       │       │           │   │   │   │       └───all
+│       │       │           │   │   │   └───windows
+│       │       │           │   │   │       └───disable
+│       │       │           │   │   │           └───local
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   └───include
+│       │       │           │   │   └───Uploads
+│       │       │           │   ├───Python
+│       │       │           │   │   ├───Core
+│       │       │           │   │   │   ├───DLLs
+│       │       │           │   │   │   └───Lib
+│       │       │           │   │   │       ├───bsddb
+│       │       │           │   │   │       ├───compiler
+│       │       │           │   │   │       ├───ctypes
+│       │       │           │   │   │       │   └───macholib
+│       │       │           │   │   │       ├───curses
+│       │       │           │   │   │       ├───distutils
+│       │       │           │   │   │       │   └───command
+│       │       │           │   │   │       ├───email
+│       │       │           │   │   │       │   └───mime
+│       │       │           │   │   │       ├───encodings
+│       │       │           │   │   │       ├───hotshot
+│       │       │           │   │   │       ├───idlelib
+│       │       │           │   │   │       │   └───Icons
+│       │       │           │   │   │       ├───importlib
+│       │       │           │   │   │       ├───json
+│       │       │           │   │   │       ├───lib-tk
+│       │       │           │   │   │       ├───lib2to3
+│       │       │           │   │   │       │   ├───fixes
+│       │       │           │   │   │       │   └───pgen2
+│       │       │           │   │   │       ├───logging
+│       │       │           │   │   │       ├───msilib
+│       │       │           │   │   │       ├───multiprocessing
+│       │       │           │   │   │       │   └───dummy
+│       │       │           │   │   │       ├───pydoc_data
+│       │       │           │   │   │       ├───site-packages
+│       │       │           │   │   │       ├───sqlite3
+│       │       │           │   │   │       ├───unittest
+│       │       │           │   │   │       ├───wsgiref
+│       │       │           │   │   │       └───xml
+│       │       │           │   │   │           ├───dom
+│       │       │           │   │   │           ├───etree
+│       │       │           │   │   │           ├───parsers
+│       │       │           │   │   │           └───sax
+│       │       │           │   │   └───Override
+│       │       │           │   │       └───Lib
+│       │       │           │   │           └───multiprocessing
+│       │       │           │   ├───ScRe
+│       │       │           │   │   ├───Commands
+│       │       │           │   │   │   ├───CommandLine
+│       │       │           │   │   │   ├───Display
+│       │       │           │   │   │   └───Storage
+│       │       │           │   │   ├───Modules
+│       │       │           │   │   │   ├───Descriptions
+│       │       │           │   │   │   │   └───windows
+│       │       │           │   │   │   └───Files-dsz
+│       │       │           │   │   │       ├───i386-winnt-vc9
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       ├───i386-winnt-vc9s
+│       │       │           │   │   │       │   └───release
+│       │       │           │   │   │       └───x64-winnt-vc9s
+│       │       │           │   │   │           └───release
+│       │       │           │   │   ├───PyLp
+│       │       │           │   │   │   └───DataHandlers
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   ├───DataHandlers
+│       │       │           │   │   │   ├───Lib
+│       │       │           │   │   │   │   └───scre
+│       │       │           │   │   │   │       └───mca
+│       │       │           │   │   │   │           └───scre
+│       │       │           │   │   │   │               └───cmd
+│       │       │           │   │   │   │                   └───sql
+│       │       │           │   │   │   │                       └───data
+│       │       │           │   │   │   │                           └───dsz
+│       │       │           │   │   │   └───Tasking
+│       │       │           │   │   └───Version
+│       │       │           │   ├───ST1.14
+│       │       │           │   │   ├───installer32eggs
+│       │       │           │   │   ├───installer64eggs
+│       │       │           │   │   └───Tools
+│       │       │           │   ├───StLa
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   ├───Tools
+│       │       │           │   │   │   └───i386-winnt
+│       │       │           │   │   └───Uploads
+│       │       │           │   │       ├───i386
+│       │       │           │   │       └───x64
+│       │       │           │   ├───Tasking
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───PyScripts
+│       │       │           │   │   │   └───Lib
+│       │       │           │   │   │       └───tasking
+│       │       │           │   │   └───Scripts
+│       │       │           │   │       └───Include
+│       │       │           │   ├───TeDi
+│       │       │           │   │   └───PyScripts
+│       │       │           │   ├───UtBu
+│       │       │           │   │   ├───Aliases
+│       │       │           │   │   ├───Scripts
+│       │       │           │   │   │   ├───Include
+│       │       │           │   │   │   └───Install
+│       │       │           │   │   ├───Uploads
+│       │       │           │   │   │   └───i386
+│       │       │           │   │   │       └───winnt
+│       │       │           │   │   └───Version
+│       │       │           │   └───ZBng
+│       │       │           │       ├───Aliases
+│       │       │           │       ├───Commands
+│       │       │           │       │   ├───CommandLine
+│       │       │           │       │   ├───Display
+│       │       │           │       │   └───Storage
+│       │       │           │       ├───Data
+│       │       │           │       │   ├───i386-winnt-wow64
+│       │       │           │       │   │   └───disable
+│       │       │           │       │   │       └───all
+│       │       │           │       │   ├───windows
+│       │       │           │       │   │   └───disable
+│       │       │           │       │   │       └───local
+│       │       │           │       │   └───x64-winnt
+│       │       │           │       │       └───disable
+│       │       │           │       │           └───all
+│       │       │           │       ├───Modules
+│       │       │           │       │   ├───Descriptions
+│       │       │           │       │   │   └───windows
+│       │       │           │       │   └───Files-dsz
+│       │       │           │       │       ├───i386-winnt-vc9
+│       │       │           │       │       │   └───release
+│       │       │           │       │       ├───i386-winnt-vc9s
+│       │       │           │       │       │   └───release
+│       │       │           │       │       └───x64-winnt-vc9s
+│       │       │           │       │           └───release
+│       │       │           │       ├───PyLp
+│       │       │           │       │   └───DataHandlers
+│       │       │           │       ├───PyScripts
+│       │       │           │       │   ├───DataHandlers
+│       │       │           │       │   ├───Lib
+│       │       │           │       │   │   └───zbng
+│       │       │           │       │   │       ├───lib_exba
+│       │       │           │       │   │       └───mca
+│       │       │           │       │   │           ├───network
+│       │       │           │       │   │           │   └───cmd
+│       │       │           │       │   │           │       └───shares
+│       │       │           │       │   │           │           └───data
+│       │       │           │       │   │           │               └───dsz
+│       │       │           │       │   │           ├───process
+│       │       │           │       │   │           │   └───cmd
+│       │       │           │       │   │           │       └───remoteexecute
+│       │       │           │       │   │           │           └───data
+│       │       │           │       │   │           │               └───dsz
+│       │       │           │       │   │           ├───security
+│       │       │           │       │   │           │   └───cmd
+│       │       │           │       │   │           │       ├───duplicatetoken
+│       │       │           │       │   │           │       │   └───data
+│       │       │           │       │   │           │       │       └───dsz
+│       │       │           │       │   │           │       └───logonasuser
+│       │       │           │       │   │           │           └───data
+│       │       │           │       │   │           │               └───dsz
+│       │       │           │       │   │           └───zbng
+│       │       │           │       │   │               └───cmd
+│       │       │           │       │   │                   └───authentication
+│       │       │           │       │   └───Tasking
+│       │       │           │       ├───Scripts
+│       │       │           │       │   ├───Connected
+│       │       │           │       │   └───Include
+│       │       │           │       └───Version
+│       │       │           ├───specials
+│       │       │           ├───storage
+│       │       │           └───touches
+│       │       ├───Files
+│       │       │   └───Files
+│       │       └───Vault 8
+│       │           └───hive
+│       │               └───.git
+│       │                   ├───hooks
+│       │                   │   ├───post-receive.d
+│       │                   │   └───pre-receive.d
+│       │                   ├───info
+│       │                   ├───logs
+│       │                   ├───objects
+│       │                   │   ├───00
+│       │                   │   ├───01
+│       │                   │   ├───02
+│       │                   │   ├───03
+│       │                   │   ├───04
+│       │                   │   ├───05
+│       │                   │   ├───06
+│       │                   │   ├───07
+│       │                   │   ├───08
+│       │                   │   ├───09
+│       │                   │   ├───0a
+│       │                   │   ├───0b
+│       │                   │   ├───0c
+│       │                   │   ├───0d
+│       │                   │   ├───0e
+│       │                   │   ├───0f
+│       │                   │   ├───10
+│       │                   │   ├───11
+│       │                   │   ├───12
+│       │                   │   ├───13
+│       │                   │   ├───14
+│       │                   │   ├───15
+│       │                   │   ├───16
+│       │                   │   ├───17
+│       │                   │   ├───18
+│       │                   │   ├───19
+│       │                   │   ├───1a
+│       │                   │   ├───1b
+│       │                   │   ├───1c
+│       │                   │   ├───1d
+│       │                   │   ├───1e
+│       │                   │   ├───1f
+│       │                   │   ├───20
+│       │                   │   ├───21
+│       │                   │   ├───22
+│       │                   │   ├───23
+│       │                   │   ├───24
+│       │                   │   ├───25
+│       │                   │   ├───26
+│       │                   │   ├───27
+│       │                   │   ├───28
+│       │                   │   ├───29
+│       │                   │   ├───2a
+│       │                   │   ├───2b
+│       │                   │   ├───2c
+│       │                   │   ├───2d
+│       │                   │   ├───2e
+│       │                   │   ├───2f
+│       │                   │   ├───30
+│       │                   │   ├───31
+│       │                   │   ├───32
+│       │                   │   ├───33
+│       │                   │   ├───34
+│       │                   │   ├───35
+│       │                   │   ├───36
+│       │                   │   ├───37
+│       │                   │   ├───38
+│       │                   │   ├───39
+│       │                   │   ├───3a
+│       │                   │   ├───3b
+│       │                   │   ├───3c
+│       │                   │   ├───3d
+│       │                   │   ├───3e
+│       │                   │   ├───3f
+│       │                   │   ├───40
+│       │                   │   ├───41
+│       │                   │   ├───42
+│       │                   │   ├───43
+│       │                   │   ├───44
+│       │                   │   ├───45
+│       │                   │   ├───46
+│       │                   │   ├───47
+│       │                   │   ├───48
+│       │                   │   ├───49
+│       │                   │   ├───4a
+│       │                   │   ├───4b
+│       │                   │   ├───4c
+│       │                   │   ├───4d
+│       │                   │   ├───4e
+│       │                   │   ├───4f
+│       │                   │   ├───50
+│       │                   │   ├───51
+│       │                   │   ├───52
+│       │                   │   ├───53
+│       │                   │   ├───54
+│       │                   │   ├───55
+│       │                   │   ├───56
+│       │                   │   ├───57
+│       │                   │   ├───58
+│       │                   │   ├───59
+│       │                   │   ├───5a
+│       │                   │   ├───5b
+│       │                   │   ├───5c
+│       │                   │   ├───5d
+│       │                   │   ├───5e
+│       │                   │   ├───5f
+│       │                   │   ├───60
+│       │                   │   ├───61
+│       │                   │   ├───62
+│       │                   │   ├───63
+│       │                   │   ├───64
+│       │                   │   ├───65
+│       │                   │   ├───66
+│       │                   │   ├───67
+│       │                   │   ├───68
+│       │                   │   ├───69
+│       │                   │   ├───6a
+│       │                   │   ├───6b
+│       │                   │   ├───6c
+│       │                   │   ├───6d
+│       │                   │   ├───6e
+│       │                   │   ├───6f
+│       │                   │   ├───70
+│       │                   │   ├───71
+│       │                   │   ├───72
+│       │                   │   ├───73
+│       │                   │   ├───74
+│       │                   │   ├───75
+│       │                   │   ├───76
+│       │                   │   ├───77
+│       │                   │   ├───78
+│       │                   │   ├───79
+│       │                   │   ├───7a
+│       │                   │   ├───7b
+│       │                   │   ├───7c
+│       │                   │   ├───7d
+│       │                   │   ├───7e
+│       │                   │   ├───7f
+│       │                   │   ├───80
+│       │                   │   ├───81
+│       │                   │   ├───82
+│       │                   │   ├───83
+│       │                   │   ├───84
+│       │                   │   ├───85
+│       │                   │   ├───86
+│       │                   │   ├───87
+│       │                   │   ├───88
+│       │                   │   ├───89
+│       │                   │   ├───8a
+│       │                   │   ├───8b
+│       │                   │   ├───8c
+│       │                   │   ├───8d
+│       │                   │   ├───8e
+│       │                   │   ├───8f
+│       │                   │   ├───90
+│       │                   │   ├───91
+│       │                   │   ├───92
+│       │                   │   ├───93
+│       │                   │   ├───94
+│       │                   │   ├───95
+│       │                   │   ├───96
+│       │                   │   ├───97
+│       │                   │   ├───98
+│       │                   │   ├───99
+│       │                   │   ├───9a
+│       │                   │   ├───9b
+│       │                   │   ├───9c
+│       │                   │   ├───9d
+│       │                   │   ├───9e
+│       │                   │   ├───9f
+│       │                   │   ├───a0
+│       │                   │   ├───a1
+│       │                   │   ├───a2
+│       │                   │   ├───a3
+│       │                   │   ├───a4
+│       │                   │   ├───a5
+│       │                   │   ├───a6
+│       │                   │   ├───a7
+│       │                   │   ├───a8
+│       │                   │   ├───a9
+│       │                   │   ├───aa
+│       │                   │   ├───ab
+│       │                   │   ├───ac
+│       │                   │   ├───ad
+│       │                   │   ├───ae
+│       │                   │   ├───af
+│       │                   │   ├───b0
+│       │                   │   ├───b1
+│       │                   │   ├───b2
+│       │                   │   ├───b3
+│       │                   │   ├───b4
+│       │                   │   ├───b5
+│       │                   │   ├───b6
+│       │                   │   ├───b7
+│       │                   │   ├───b8
+│       │                   │   ├───b9
+│       │                   │   ├───ba
+│       │                   │   ├───bb
+│       │                   │   ├───bc
+│       │                   │   ├───bd
+│       │                   │   ├───be
+│       │                   │   ├───bf
+│       │                   │   ├───c0
+│       │                   │   ├───c1
+│       │                   │   ├───c2
+│       │                   │   ├───c3
+│       │                   │   ├───c4
+│       │                   │   ├───c5
+│       │                   │   ├───c6
+│       │                   │   ├───c7
+│       │                   │   ├───c8
+│       │                   │   ├───c9
+│       │                   │   ├───ca
+│       │                   │   ├───cb
+│       │                   │   ├───cc
+│       │                   │   ├───cd
+│       │                   │   ├───ce
+│       │                   │   ├───cf
+│       │                   │   ├───d0
+│       │                   │   ├───d1
+│       │                   │   ├───d2
+│       │                   │   ├───d3
+│       │                   │   ├───d4
+│       │                   │   ├───d5
+│       │                   │   ├───d6
+│       │                   │   ├───d7
+│       │                   │   ├───d8
+│       │                   │   ├───d9
+│       │                   │   ├───da
+│       │                   │   ├───db
+│       │                   │   ├───dc
+│       │                   │   ├───dd
+│       │                   │   ├───de
+│       │                   │   ├───df
+│       │                   │   ├───e0
+│       │                   │   ├───e1
+│       │                   │   ├───e2
+│       │                   │   ├───e3
+│       │                   │   ├───e4
+│       │                   │   ├───e5
+│       │                   │   ├───e6
+│       │                   │   ├───e7
+│       │                   │   ├───e8
+│       │                   │   ├───e9
+│       │                   │   ├───ea
+│       │                   │   ├───eb
+│       │                   │   ├───ec
+│       │                   │   ├───ed
+│       │                   │   ├───ee
+│       │                   │   ├───ef
+│       │                   │   ├───f0
+│       │                   │   ├───f1
+│       │                   │   ├───f2
+│       │                   │   ├───f3
+│       │                   │   ├───f4
+│       │                   │   ├───f5
+│       │                   │   ├───f6
+│       │                   │   ├───f7
+│       │                   │   ├───f8
+│       │                   │   ├───f9
+│       │                   │   ├───fa
+│       │                   │   ├───fb
+│       │                   │   ├───fc
+│       │                   │   ├───fd
+│       │                   │   ├───fe
+│       │                   │   ├───ff
+│       │                   │   └───pack
+│       │                   └───refs
+│       │                       ├───heads
+│       │                       ├───original
+│       │                       │   └───refs
+│       │                       │       ├───heads
+│       │                       │       └───tags
+│       │                       └───tags
+│       ├───rotary
+│       │   ├───Blog Belgeler
+│       │   │   └───Pepper&Rogers
+│       │   ├───Rotary
+│       │   │   ├───2016-2017
+│       │   │   │   ├───banka
+│       │   │   │   │   └───koseleciler 2015
+│       │   │   │   ├───başarı ödülü
+│       │   │   │   ├───burs
+│       │   │   │   │   └───evrak
+│       │   │   │   ├───GENEL KURUL
+│       │   │   │   └───KARAR DEFTERİ
+│       │   │   └───fatura ur
+│       │   ├───rotary 2016
+│       │   └───Rotary 2025
+│       └───USCC - DOD
+├───docs
+├───KOD8_ENC
+│   └───__pycache__
+├───legacy_modules
+│   ├───D-ARCADE CLASS
+│   │   ├───D-ARCADE-CHESS-main
+│   │   │   ├───.github
+│   │   │   │   └───workflows
+│   │   │   └───pieces
+│   │   │       └───neo
+│   │   ├───D-ARCADE-MAZE-DEMO
+│   │   ├───D-ARCADE-TETRIS-main
+│   │   ├───D-ARCADE-Trolightcycle-main
+│   │   └───magenta-tictactoe-main
+│   ├───dilara 1.0
+│   ├───DilaraLLM_demo-main
+│   │   └───databank
+│   └───LS-CLASS
+├───references
+├───runtime
+│   └───active_vaults
+│       ├───dilara-vault-699_g1wm
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-69sh95y3
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-71m7ectt
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-7l9ujcss
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-97e706t8
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-bi0i01bj
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-dsk4q1ba
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-e09gej1_
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-k7kvo3ic
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-kl4x8tee
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   │   └───profile
+│       │       │   │       └───storage
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       ├───dilara-vault-lzhv56na
+│       │   └───root
+│       │       ├───Applications
+│       │       │   ├───Browser
+│       │       │   ├───DILARA
+│       │       │   ├───Notepad
+│       │       │   └───Registry
+│       │       │       ├───apps
+│       │       │       └───config
+│       │       ├───D-ARCADE
+│       │       ├───D-LLM
+│       │       ├───Desktop
+│       │       ├───Documents
+│       │       ├───Recycle Bin
+│       │       └───Workspace
+│       └───dilara-vault-vul7xgo8
+│           └───root
+│               ├───Applications
+│               │   ├───Browser
+│               │   ├───DILARA
+│               │   ├───Notepad
+│               │   └───Registry
+│               │       ├───apps
+│               │       └───config
+│               ├───D-ARCADE
+│               ├───D-LLM
+│               ├───Desktop
+│               ├───Documents
+│               ├───Recycle Bin
+│               └───Workspace
+├───services
+│   └───__pycache__
+├───tests
+└───vaults
